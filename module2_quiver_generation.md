@@ -26,11 +26,11 @@ For **undirected** edges between nodes of the same gauge group type, orientation
 
 ## 2. Allowed Gauge Groups
 
-| Type | Group | Fundamental dim | $T(\mathrm{adj})$ |
-|------|-------|-----------------|-------------------|
-| SU | SU(N) | $N$ | $N$ |
-| SO | SO(N) | $N$ | $N-2$ |
-| Sp | USp(2N) | $2N$ | $N+1$ |
+| Type | Group |
+|------|-------|
+| SU | SU(N) |
+| SO | SO(N) |
+| Sp | USp(2N) |
 
 All nodes share the **same parameter N**. $b_0^{(a)} > 0$ must hold for all valid N at every node (see Module 1).
 
