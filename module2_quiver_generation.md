@@ -20,7 +20,7 @@ A quiver $Q = (V, E, \ell_V, \ell_E, \ell_{\mathrm{node}})$ consists of:
 - **$\ell_E : E \to \mathcal{R}_{\mathrm{bif}}$** — bifundamental representation on each edge
 - **$\ell_{\mathrm{node}} : V \to \mathrm{MultiSet}(\mathcal{R}_{\mathrm{node}})$** — non-bifundamental matter at each node (adjoints, symmetric, antisymmetric)
 
-For **undirected** edges between nodes of the same gauge group type, orientation encodes which copy is fundamental vs. anti-fundamental (for SU(N)); for SO and Sp the orientation is unphysical.
+The **degree** $\deg(v)$ of a node $v$ is the total number of bifundamental edges incident to $v$ (counting both in- and out-edges, with multiplicity).
 
 ---
 
