@@ -26,15 +26,13 @@ For **undirected** edges between nodes of the same gauge group type, orientation
 
 ## 2. Allowed Gauge Groups
 
-| Type | Group | Fundamental dim | Large N scaling of $T(\mathrm{adj})$ |
-|------|-------|-----------------|--------------------------------------|
+| Type | Group | Fundamental dim | $T(\mathrm{adj})$ |
+|------|-------|-----------------|-------------------|
 | SU | SU(N) | $N$ | $N$ |
-| SO | SO(N) | $N$ | $N$ |
-| Sp | USp(2N) | $2N$ | $N$ |
+| SO | SO(N) | $N$ | $N-2$ |
+| Sp | USp(2N) | $2N$ | $N+1$ |
 
-All nodes share the **same parameter N**. The theory admits a large N limit (planar limit) only when:
-- The 't Hooft coupling $\lambda_a = g_a^2 N$ is kept fixed as $N \to \infty$
-- $b_0^{(a)} > 0$ for all nodes even as $N \to \infty$ (see Module 1)
+All nodes share the **same parameter N**. $b_0^{(a)} > 0$ must hold for all valid N at every node (see Module 1).
 
 ---
 
@@ -42,23 +40,23 @@ All nodes share the **same parameter N**. The theory admits a large N limit (pla
 
 ### Node matter (at a single gauge node)
 
-| Gauge group | Representation | Notation | Large N scaling of $T$ |
-|-------------|---------------|---------|------------------------|
-| SU(N) | Fundamental | $\square$ | $1/2$ |
-| SU(N) | Anti-fundamental | $\bar{\square}$ | $1/2$ |
+| Gauge group | Representation | Notation | Dynkin index $T$ |
+|-------------|---------------|----------|------------------|
+| SU(N) | Fundamental | $\square$ | $\frac{1}{2}$ |
+| SU(N) | Anti-fundamental | $\bar{\square}$ | $\frac{1}{2}$ |
 | SU(N) | Adjoint | $\mathrm{adj}$ | $N$ |
-| SU(N) | Rank-2 symmetric | $S$ | $N/2$ |
-| SU(N) | Rank-2 sym conjugate | $\bar{S}$ | $N/2$ |
-| SU(N) | Rank-2 antisymmetric | $A$ | $N/2$ |
-| SU(N) | Rank-2 antisym conjugate | $\bar{A}$ | $N/2$ |
+| SU(N) | Rank-2 symmetric | $S$ | $\frac{N+2}{2}$ |
+| SU(N) | Rank-2 sym conjugate | $\bar{S}$ | $\frac{N+2}{2}$ |
+| SU(N) | Rank-2 antisymmetric | $A$ | $\frac{N-2}{2}$ |
+| SU(N) | Rank-2 antisym conjugate | $\bar{A}$ | $\frac{N-2}{2}$ |
 | SO(N) | Vector | $V$ | $1$ |
-| SO(N) | Adjoint | $\mathrm{adj}$ | $N$ |
-| SO(N) | Rank-2 symmetric (traceless) | $S$ | $N$ |
-| Sp(N) | Fundamental | $f$ | $1/2$ |
-| Sp(N) | Adjoint | $\mathrm{adj}$ | $N$ |
-| Sp(N) | Rank-2 antisymmetric (traceless) | $A$ | $N$ |
+| SO(N) | Adjoint | $\mathrm{adj}$ | $N-2$ |
+| SO(N) | Rank-2 symmetric (traceless) | $S$ | $N+2$ |
+| Sp(N) | Fundamental | $f$ | $\frac{1}{2}$ |
+| Sp(N) | Adjoint | $\mathrm{adj}$ | $N+1$ |
+| Sp(N) | Rank-2 antisymmetric (traceless) | $A$ | $N-1$ |
 
-> Spinors of SO(N) are excluded at large N (exponential growth of $T$).
+> Spinors of SO(N) are excluded because their Dynkin index grows exponentially with N.
 
 ### Bifundamental matter (edge between two nodes)
 
@@ -93,8 +91,6 @@ where $A(r)$ is the anomaly coefficient (third-order Dynkin index):
 | $A$ | $+(N-4)$ |
 | $\bar{A}$ | $-(N-4)$ |
 
-> Note: $A(A)$ changes sign for $N < 4$. For large N both $S$ and $A$ have $|A| \sim N$. The conjugates $\bar{S}$ and $\bar{A}$ carry opposite anomaly coefficients.
-
 **For a purely bifundamental SU(N) quiver:**
 
 A bifundamental $(\square_a, \bar{\square}_b)$:
@@ -121,11 +117,6 @@ where $n_f, n_{\bar{f}}$ are the numbers of standalone fundamental and anti-fund
 
 Note: $(\square, \square)$ edges contribute $+N$ to both endpoints and must be compensated by net incoming $(\square, \bar{\square})$ arrows, anti-fundamentals $\bar{\square}$, or $\bar{S}/\bar{A}$ at the node.
 
-For large N, the leading $\mathcal{O}(N)$ condition is:
-$$\sum_{b \neq a} \Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_S - n_{\bar{S}}) + (n_A - n_{\bar{A}}) = 0$$
-
-The $(n_f - n_{\bar{f}})$ term is $\mathcal{O}(1)$ and only enters at subleading order in $N$.
-
 ### 4b. SO(N) and Sp(N) Anomalies
 
 **SO(N):** No cubic gauge anomaly (gauge group is real/pseudo-real for odd N; for SO(N) the third-order Dynkin index vanishes). No constraint from anomaly cancellation.
@@ -139,37 +130,25 @@ i.e., the total number of fundamental chiral multiplets at each Sp(N) node must 
 
 ## 5. Asymptotic Freedom Conditions
 
-The correct condition is $b_0^{(a)} > 0$ for **all** $N \geq N_{\min}$ at every node $a$. Anomaly cancellation must also be verified exactly for all $N$. The large N leading coefficient $B_0^{(a)}$ is a useful preliminary screen but is **not sufficient**: theories with $B_0^{(a)} = 0$ may still be asymptotically free due to positive subleading constants (see Module 1 §5 for an explicit example).
+$b_0^{(a)} > 0$ must hold for all valid $N$ at every node ($N \geq 2$ for SU(N), $N \geq 3$ for SO(N), $N \geq 1$ for Sp(N)). The exact formulas, using the bifundamental contributions from the table in §3, are:
 
-Define:
-$$B_0^{(a)} \equiv \lim_{N\to\infty} \frac{b_0^{(a)}}{N}$$
+**SU(N):**
+$$b_0 = 3N - \frac{n_f + n_{\bar{f}}}{2} - N n_{\mathrm{adj}} - \frac{N+2}{2}(n_S + n_{\bar{S}}) - \frac{N-2}{2}(n_A + n_{\bar{A}}) - \sum_{\text{bif. edges}} T_{G_a}$$
 
-The expressions for $B_0$ (used as a necessary preliminary filter):
-- **SU(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \sum_{b \sim a} c_{ab}$
-  - where $c_{ab} = 1/2$ for each SU-SU, SU-SO edge at the SU end; $c_{ab} = 1$ for SU-Sp edge at the SU end
-- **SO(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - n_S - \sum_{b\sim a}c_{ab}$
-  - $c_{ab} = 1$ for SO-SU and SO-SO edges; $c_{ab} = 2$ for SO-Sp edge
-- **Sp(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - n_A - \sum_{b\sim a}c_{ab}$
-  - $c_{ab} = 1/2$ for Sp-SU and Sp-SO edges; $c_{ab} = 1$ for Sp-Sp edge
+**SO(N):**
+$$b_0 = 3(N-2) - n_V - (N-2)n_{\mathrm{adj}} - (N+2)n_S - \sum_{\text{bif. edges}} T_{G_a}$$
 
-Candidates with $B_0^{(a)} < 0$ are immediately rejected. Those with $B_0^{(a)} \geq 0$ must be checked with the exact $b_0$ formula for all $N \geq N_{\min}$.
+**Sp(N):**
+$$b_0 = 3(N+1) - \frac{n_f}{2} - (N+1)n_{\mathrm{adj}} - (N-1)n_A - \sum_{\text{bif. edges}} T_{G_a}$$
+
+where the bifundamental contribution $T_{G_a}$ per edge is read from the table in §3.
 
 ---
 
 ## 6. Enumeration Strategy
 
-### Step 1: Preliminary bound on quiver size
-$B_0^{(a)} < 0$ is a quick rejection criterion. The table below gives the maximum neighbor count such that $B_0 \geq 0$ (necessary for exact AF to be possible). Candidates with $B_0^{(a)} \geq 0$ must subsequently pass the exact $b_0 > 0$ check for all $N$.
-
-**Maximum neighbor count with $B_0 \geq 0$ (pure bifundamental, no node matter):**
-
-| Node type | Edge type to neighbor | Max neighbors for $B_0 \geq 0$ |
-|-----------|----------------------|------------------------------|
-| SU(N) | all SU-SU | 6 |
-| SU(N) | all SU-Sp | 3 (since $c=1$ each) |
-| SO(N) | all SO-SU | 3 |
-| Sp(N) | all Sp-SU | 6 |
-| Sp(N) | all Sp-Sp | 3 |
+### Step 1: Enumerate graphs
+Enumerate all connected directed multigraphs up to isomorphism with $|V| \leq V_{\max}$. The maximum degree per node is bounded by requiring $b_0 > 0$ for some $N$: since each bifundamental edge contributes at least $T_{G_a} \geq N/2$ (from §3), the degree is finite for any fixed matter content.
 
 ### Step 2: Enumerate graphs
 Enumerate all connected directed multigraphs $G = (V, E)$ up to isomorphism with $|V| \leq V_{\max}$ and $\deg(v) \leq d_{\max}(v)$ for each node.
@@ -185,8 +164,7 @@ Enumerate additional matter at each node: adjoints, symmetric tensors, antisymme
 
 ### Step 6: Apply all constraints
 For each candidate quiver:
-- Check large N $b_0 > 0$ at each node (Module 1)
-- Check exact $b_0 > 0$ at each node (Module 1)
+- Check $b_0 > 0$ at each node (Module 1)
 - Check SU(N) anomaly cancellation
 - Check Sp(N) Witten anomaly condition
 - (Optionally) check theory is connected and irreducible
@@ -199,7 +177,6 @@ For each candidate quiver:
 - 1 node (SU(N)), $N_f$ flavor fundamentals + $N_f$ anti-fundamentals
 - AF: $b_0 = 3N - N_f > 0 \Rightarrow N_f < 3N$
 - Anomaly: $N_f \cdot 1 + N_f \cdot(-1) = 0$ ✓
-- Large N: $N_f = \kappa N$ with $\kappa < 3$
 
 ### Example B: $\mathcal{N}=2$ SQCD — SU(N) with adjoint + $N_f$ fund
 - 1 node, 1 adjoint + $N_f$ fundamentals + $N_f$ anti-fundamentals
@@ -223,9 +200,7 @@ For each candidate quiver:
 ## 8. Known Classification for Special Cases
 
 ### Single-node theories (quivers with one gauge group)
-- **SU(N):** $(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}}) < 6$ (rank-2 tensors), $n_f < 6N - \frac{N+2}{2}(n_S+n_{\bar{S}}) - \frac{N-2}{2}(n_A+n_{\bar{A}})$ (fundamentals)
-- **SO(N):** only vectors and symmetric tensors; $n_S = 0$ for AF in large N (since $T(S) = N+2 \approx N$)
-- **Sp(N):** similar analysis; adjoints very costly
+The complete classification of single-node 4D $\mathcal{N}=1$ theories (with gauge anomaly cancellation, UV asymptotic freedom, and non-trivial IR fixed point) is given in arXiv:2007.16165 and arXiv:2510.19136.
 
 ### Two-node theories
 The full analysis must also pass Module 4 (non-trivial IR fixed point check).
@@ -246,16 +221,16 @@ def enumerate_quivers(max_nodes, max_edges_per_node):
             for edge_reps in assign_edge_representations(G, gauge_assignment):
                 for node_matter in assign_node_matter(G, gauge_assignment):
                     q = Quiver(G, gauge_assignment, edge_reps, node_matter)
-                    if check_large_N_AF(q) and check_anomalies(q):
+                    if check_af(q) and check_anomalies(q):
                         valid_quivers.append(q)
 
     return valid_quivers
 
 
-def check_large_N_AF(quiver):
+def check_af(quiver):
     for node in quiver.nodes:
-        B0 = compute_large_N_beta(quiver, node)
-        if B0 <= 0:
+        b0 = compute_beta(quiver, node)
+        if b0 <= 0:
             return False
     return True
 
