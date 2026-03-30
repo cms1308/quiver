@@ -18,7 +18,7 @@ A quiver $Q = (V, E, \ell_V, \ell_E, \ell_{\mathrm{node}})$ consists of:
 - **$E \subseteq V \times V$** — directed edges (bifundamental matter)
 - **$\ell_V : V \to \{\mathrm{SU}, \mathrm{SO}, \mathrm{Sp}\}$** — gauge group type at each node
 - **$\ell_E : E \to \mathcal{R}_{\mathrm{bif}}$** — bifundamental representation on each edge
-- **$\ell_{\mathrm{node}} : V \to \mathrm{MultiSet}(\mathcal{R}_{\mathrm{node}})$** — non-bifundamental matter at each node (fundamentals, adjoints, symmetric, antisymmetric)
+- **$\ell_{\mathrm{node}} : V \to \mathrm{MultiSet}(\mathcal{R}_{\mathrm{node}})$** — non-bifundamental matter at each node (adjoints, symmetric, antisymmetric)
 
 For **undirected** edges between nodes of the same gauge group type, orientation encodes which copy is fundamental vs. anti-fundamental (for SU(N)); for SO and Sp the orientation is unphysical.
 
@@ -32,7 +32,8 @@ For **undirected** edges between nodes of the same gauge group type, orientation
 | SO | SO(N) | $N$ | $N$ |
 | Sp | USp(2N) | $2N$ | $N$ |
 
-All nodes share the **same parameter N**. The theory admits a large N limit (planar limit) when:
+All nodes share the **same parameter N**. The theory admits a large N limit (planar limit) only when:
+- The 't Hooft coupling $\lambda_a = g_a^2 N$ is kept fixed as $N \to \infty$
 - $b_0^{(a)} > 0$ for all nodes even as $N \to \infty$ (see Module 1)
 
 ---
@@ -64,17 +65,14 @@ All nodes share the **same parameter N**. The theory admits a large N limit (pla
 | Node $a$ | Node $b$ | Bifundamental representation | $T_{G_a}$ | $T_{G_b}$ |
 |----------|----------|------------------------------|-----------|-----------|
 | SU(N) | SU(N) | $(\square, \bar{\square})$ | $N/2$ | $N/2$ |
+| SU(N) | SU(N) | $(\square, \square)$ | $N/2$ | $N/2$ |
 | SU(N) | SO(N) | $(\square, V)$ | $N/2$ | $N$ |
 | SU(N) | Sp(N) | $(\square, f)$ | $N$ | $N/2$ |
 | SO(N) | SO(N) | $(V, V)$ | $N$ | $N$ |
 | SO(N) | Sp(N) | $(V, f)$ | $2N$ | $N/2$ |
 | Sp(N) | Sp(N) | $(f, f)$ | $N$ | $N$ |
 
-> **Note on SU(N)–SU(N) bifundamentals:** Only $(\square, \bar{\square})$ appears; $(\square, \square)$ is not a distinct case. A $(\square_a, \square_b)$ field is equivalent to $(\square_a, \bar{\square}_b)$ by **charge conjugation of node $b$**: flipping the representation convention at $b$ ($\square_b \leftrightarrow \bar{\square}_b$) is a legal relabeling that leaves all physical observables unchanged while converting any $(\square, \square)$ edge to $(\square, \bar{\square})$. Including $(\square, \square)$ separately would double-count theories.
->
-> This ambiguity does not arise for SO(N) or Sp(N) edges because their fundamental representations are **real** ($V_{SO} \cong \bar{V}_{SO}$) and **pseudoreal** ($f_{Sp} \cong \bar{f}_{Sp}$) respectively, so there is only one case.
-
-> **Note on SO(N)–Sp(N) bifundamentals:** contribute $T_{SO} = 2N$ to the SO node, which is very costly for asymptotic freedom.
+> Note: SO(N)–Sp(N) bifundamentals contribute $T_{SO} = 2N$ to the SO node, which is very costly for asymptotic freedom.
 
 ---
 
@@ -97,6 +95,7 @@ where $A(r)$ is the anomaly coefficient (third-order Dynkin index):
 | $A$ | $+(N-4)$ |
 | $\bar{A}$ | $-(N-4)$ |
 
+> Note: $A(A)$ changes sign for $N < 4$. For large N both $S$ and $A$ have $|A| \sim N$. The conjugates $\bar{S}$ and $\bar{A}$ carry opposite anomaly coefficients.
 
 **For a purely bifundamental SU(N) quiver:**
 
