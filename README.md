@@ -45,7 +45,7 @@ Edges and node decorations can carry:
 Bifundamentals between nodes carry representations of both gauge groups simultaneously.
 
 ### Asymptotic Freedom Condition
-$$b_0^{(a)} = 3\,T(\mathrm{adj}_a) - \sum_{i}\,T_{G_a}(r_i) > 0 \quad \forall\, a$$
+$$b_0^{(a)} = 3 T(\mathrm{adj}_a) - \sum_{i} T_{G_a}(r_i) > 0 \quad \forall  a$$
 
 ### Large N Condition
 $b_0^{(a)} > 0$ must hold for all N and in particular as N → ∞. This restricts the total matter content at each node to be sub-leading relative to $3T(\mathrm{adj})$.

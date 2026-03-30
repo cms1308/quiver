@@ -8,11 +8,11 @@ For each UV-AF quiver (from Module 2), determine the exact superconformal R-char
 ## 1. Background: a-Maximization
 
 For a 4D N=1 SCFT, the superconformal R-symmetry is the **unique** R-symmetry that:
-- Is in the kernel of all gauge anomalies: $\mathrm{Tr}[R\,G_a^2] = 0$ for all gauge groups
+- Is in the kernel of all gauge anomalies: $\mathrm{Tr}[R G_a^2] = 0$ for all gauge groups
 - Maximizes the trial $a$-function among all admissible R-symmetries (Intriligator–Wecht, hep-th/0304128)
 
 The exact IR $a$ central charge is:
-$$a = \frac{3}{32}\big(3\,\mathrm{Tr}\,R^3 - \mathrm{Tr}\,R\big)$$
+$$a = \frac{3}{32}\big(3 \mathrm{Tr} R^3 - \mathrm{Tr} R\big)$$
 
 where the traces are over all Weyl fermions in the theory.
 
@@ -28,7 +28,7 @@ where the traces are over all Weyl fermions in the theory.
 Assign trial R-charge $R[\Phi_i]$ to each chiral superfield $\Phi_i$. The fermion in $\Phi_i$ has R-charge $R[\Phi_i] - 1$.
 
 The trial R-symmetry must lie in the flavor symmetry group of the theory. Parameterize:
-$$R[\Phi_i] = R^{(0)}[\Phi_i] + \sum_\alpha s_\alpha\,[F_\alpha]_i$$
+$$R[\Phi_i] = R^{(0)}[\Phi_i] + \sum_\alpha s_\alpha [F_\alpha]_i$$
 
 where $R^{(0)}$ is a reference R-charge assignment, $F_\alpha$ are Cartan generators of the flavor symmetry, and $s_\alpha$ are free parameters to be determined by maximization.
 
@@ -37,14 +37,14 @@ where $R^{(0)}$ is a reference R-charge assignment, $F_\alpha$ are Cartan genera
 ## 3. Anomaly-Free Constraints (Gauge Non-Anomaly Conditions)
 
 For each gauge group $G_a$, the R-symmetry must satisfy:
-$$\mathrm{Tr}[R\,G_a^2] = 0$$
+$$\mathrm{Tr}[R G_a^2] = 0$$
 
 This ABJ anomaly condition counts:
 
-$$\mathrm{Tr}[R\,G_a^2] = T(\mathrm{adj}_a) \cdot \underbrace{R[\lambda_a]}_{=\,1} + \sum_{i:\,\text{charged under }G_a} T_{G_a}(r_i)\,(R[\Phi_i] - 1) = 0$$
+$$\mathrm{Tr}[R G_a^2] = T(\mathrm{adj}_a) \cdot \underbrace{R[\lambda_a]}_{= 1} + \sum_{i: \text{charged under }G_a} T_{G_a}(r_i) (R[\Phi_i] - 1) = 0$$
 
 Rearranging:
-$$\boxed{T(\mathrm{adj}_a) + \sum_i T_{G_a}(r_i)\,(R[\Phi_i] - 1) = 0}$$
+$$\boxed{T(\mathrm{adj}_a) + \sum_i T_{G_a}(r_i) (R[\Phi_i] - 1) = 0}$$
 
 This gives **one linear constraint per gauge node** on the R-charges.
 
@@ -58,10 +58,10 @@ These are additional linear constraints on the R-charges.
 
 ## 4. Traces Over Fermions
 
-The traces $\mathrm{Tr}\,R$ and $\mathrm{Tr}\,R^3$ include all Weyl fermions:
+The traces $\mathrm{Tr} R$ and $\mathrm{Tr} R^3$ include all Weyl fermions:
 
 ### Contribution from gauge sector (gauginos):
-$$\mathrm{Tr}_{\mathrm{gauge}}\,R^k = \sum_a \dim(G_a) \cdot 1^k = \sum_a \dim(G_a)$$
+$$\mathrm{Tr}_{\mathrm{gauge}} R^k = \sum_a \dim(G_a) \cdot 1^k = \sum_a \dim(G_a)$$
 
 | Group | $\dim(G)$ |
 |-------|-----------|
@@ -75,11 +75,11 @@ The fermion in $\Phi_i$ has R-charge $R_i - 1$. The dimension of the representat
 $$d_i = \dim(r_i^{(a)}) \times \dim(r_i^{(b)}) \times \cdots$$
 
 Contribution to traces:
-$$\mathrm{Tr}_{\Phi_i}\,R^k = d_i \cdot (R_i - 1)^k$$
+$$\mathrm{Tr}_{\Phi_i} R^k = d_i \cdot (R_i - 1)^k$$
 
 ### Full traces:
-$$\mathrm{Tr}\,R = \sum_a \dim(G_a) + \sum_i d_i\,(R_i - 1)$$
-$$\mathrm{Tr}\,R^3 = \sum_a \dim(G_a) + \sum_i d_i\,(R_i - 1)^3$$
+$$\mathrm{Tr} R = \sum_a \dim(G_a) + \sum_i d_i (R_i - 1)$$
+$$\mathrm{Tr} R^3 = \sum_a \dim(G_a) + \sum_i d_i (R_i - 1)^3$$
 
 ---
 
@@ -103,12 +103,12 @@ $$R[\Phi_i] = R^{(0)}_i + \sum_\alpha s_\alpha [F_\alpha]_i$$
 where $R^{(0)}_i$ satisfies all linear constraints (superpotential + some gauge anomaly conditions by initial assignment), and $F_\alpha$ span the remaining flat directions.
 
 **Step 2:** Impose gauge anomaly-free conditions
-$$\mathrm{Tr}[R\,G_a^2] = 0 \quad \forall\,a$$
+$$\mathrm{Tr}[R G_a^2] = 0 \quad \forall a$$
 
 These are linear in $s_\alpha$, so they reduce the free parameters to a lower-dimensional space.
 
 **Step 3:** Maximize $a_{\mathrm{trial}}(s_\alpha)$ over the remaining free parameters:
-$$\frac{\partial a_{\mathrm{trial}}}{\partial s_\alpha} = 0 \quad \forall\,\alpha$$
+$$\frac{\partial a_{\mathrm{trial}}}{\partial s_\alpha} = 0 \quad \forall \alpha$$
 
 Since $a_{\mathrm{trial}}$ is cubic in $s_\alpha$, these are quadratic equations. Typically the physical solution is a maximum (not saddle point or minimum).
 
@@ -123,7 +123,7 @@ Since $a_{\mathrm{trial}}$ is cubic in $s_\alpha$, these are quadratic equations
 ## 7. The c Central Charge
 
 Similarly:
-$$c = \frac{1}{32}\big(9\,\mathrm{Tr}\,R^3 - 5\,\mathrm{Tr}\,R\big)$$
+$$c = \frac{1}{32}\big(9 \mathrm{Tr} R^3 - 5 \mathrm{Tr} R\big)$$
 
 with the same traces as above.
 
@@ -134,7 +134,7 @@ At any RG fixed point: $a = c$ is not generally true (it holds only for $\mathca
 ## 8. Anomaly Coefficients (for completeness)
 
 The 't Hooft anomalies of the IR SCFT are characterized by:
-$$\kappa_{RRR} = \mathrm{Tr}\,R^3, \quad \kappa_R = \mathrm{Tr}\,R, \quad \kappa_{RFF} = \mathrm{Tr}[R\,F_\alpha F_\beta], \quad \ldots$$
+$$\kappa_{RRR} = \mathrm{Tr} R^3, \quad \kappa_R = \mathrm{Tr} R, \quad \kappa_{RFF} = \mathrm{Tr}[R F_\alpha F_\beta], \quad \ldots$$
 
 For classifying fixed points, the key outputs are $a$, $c$, and the exact R-charges.
 

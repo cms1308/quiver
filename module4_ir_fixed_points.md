@@ -8,7 +8,7 @@ For each UV-AF quiver that passed Module 2, determine whether it flows to a **no
 ## 1. The Problem: Existence of an IR Fixed Point
 
 A theory with gauge couplings $g_1, g_2, \ldots, g_k$ (one per gauge node) has a non-trivial IR fixed point if there exist **simultaneously** non-zero fixed-point couplings $g_a^* \neq 0$ for all $a$ such that all beta functions vanish:
-$$\beta_{g_a}(g_1^*, \ldots, g_k^*) = 0 \quad \forall\,a$$
+$$\beta_{g_a}(g_1^*, \ldots, g_k^*) = 0 \quad \forall a$$
 
 Simply having UV asymptotic freedom ($b_0^{(a)} > 0$) is necessary but **not sufficient**. One must also rule out the possibilities:
 - The theory flows to a free IR fixed point (all $g_a^* = 0$)
@@ -28,7 +28,7 @@ The coupling space $(g, g')$ has boundaries:
 
 For a non-trivial IR fixed point $(g^*, g'^*) \neq (0,0)$ to exist, **both gauge groups must want to be interacting** near the free boundary. Concretely:
 
-> **Criterion:** At each boundary where $g_a = 0$ (with all other couplings at their fixed-point values), the remaining beta function $\beta_{g_a}$ must be negative (i.e., $g_a$ is driven to grow). Equivalently, the one-loop Tr$[R\,G_a^2]$ must be negative.
+> **Criterion:** At each boundary where $g_a = 0$ (with all other couplings at their fixed-point values), the remaining beta function $\beta_{g_a}$ must be negative (i.e., $g_a$ is driven to grow). Equivalently, the one-loop Tr$[R G_a^2]$ must be negative.
 
 ---
 
@@ -44,10 +44,10 @@ At a **boundary fixed point** where $g_a \to 0$ and $g_b \to g_b^*$:
 - Matter fields charged under $G_b$ (and possibly $G_a$) sit at the $G_b$ fixed point: their anomalous dimensions are determined by $g_b^*$
 
 The condition for $G_a$ to be driven away from $g_a = 0$ is:
-$$\mathrm{Tr}[R_{\mathrm{bdy}}\,G_a^2] < 0$$
+$$\mathrm{Tr}[R_{\mathrm{bdy}} G_a^2] < 0$$
 
 where $R_{\mathrm{bdy}}$ is the R-charge at the boundary fixed point:
-$$\mathrm{Tr}[R_{\mathrm{bdy}}\,G_a^2] = T(\mathrm{adj}_a) + \sum_i T_{G_a}(r_i)\,(R_i^{\mathrm{bdy}} - 1)$$
+$$\mathrm{Tr}[R_{\mathrm{bdy}} G_a^2] = T(\mathrm{adj}_a) + \sum_i T_{G_a}(r_i) (R_i^{\mathrm{bdy}} - 1)$$
 
 ---
 
@@ -56,7 +56,7 @@ $$\mathrm{Tr}[R_{\mathrm{bdy}}\,G_a^2] = T(\mathrm{adj}_a) + \sum_i T_{G_a}(r_i)
 ### Setup
 Let the quiver have gauge nodes $\{G_1, \ldots, G_k\}$.
 
-### For each node $a$, evaluate $\mathrm{Tr}[R\,G_a^2]$ at the fixed point where $G_a$ is free:
+### For each node $a$, evaluate $\mathrm{Tr}[R G_a^2]$ at the fixed point where $G_a$ is free:
 
 **Step 1:** Set $g_a = 0$. The theory decomposes into:
 - A free sector: all matter charged under $G_a$ and not under any $G_b$, $b\neq a$
@@ -65,7 +65,7 @@ Let the quiver have gauge nodes $\{G_1, \ldots, G_k\}$.
 **Step 2:** Find the R-charges at the sub-quiver fixed point $(g_b^*)_{b\neq a}$ using a-maximization (Module 3). Call these R-charges $R_i^{(a)}$ (R-charges at the fixed point where $G_a$ is decoupled).
 
 **Step 3:** Compute:
-$$\mathcal{B}_a \equiv \mathrm{Tr}[R^{(a)}\,G_a^2] = T(\mathrm{adj}_a) + \sum_i T_{G_a}(r_i)\,\bigl(R_i^{(a)} - 1\bigr)$$
+$$\mathcal{B}_a \equiv \mathrm{Tr}[R^{(a)} G_a^2] = T(\mathrm{adj}_a) + \sum_i T_{G_a}(r_i) \bigl(R_i^{(a)} - 1\bigr)$$
 
 Note: for matter fields that are only charged under $G_a$ (not under any other node), $R_i^{(a)} = 2/3$ (free field value, since they are free at this boundary).
 
@@ -75,7 +75,7 @@ $$\mathcal{B}_a < 0 \quad \Leftrightarrow \quad G_a \text{ is IR free at its dec
 More precisely: if $\mathcal{B}_a < 0$ at the boundary $(g_a = 0)$, the beta function for $g_a$ is **negative** at small $g_a$, driving $g_a$ to grow. This is a necessary condition for the full theory to have a non-trivial IR fixed point with $g_a^* \neq 0$.
 
 ### Non-trivial IR fixed point condition:
-$$\mathcal{B}_a < 0 \quad \forall\, a = 1, \ldots, k$$
+$$\mathcal{B}_a < 0 \quad \forall  a = 1, \ldots, k$$
 
 If this holds for all nodes, the theory is expected to flow to a non-trivial SCFT.
 
@@ -85,11 +85,11 @@ If this holds for all nodes, the theory is expected to flow to a non-trivial SCF
 
 For a single gauge group $G$ with $N_f$ matter fields (SQCD-like), the analysis reduces to the **conformal window**:
 - UV AF boundary: $b_0 > 0$, i.e., $N_f < N_f^{\mathrm{UV}}$
-- IR non-trivial FP boundary: $\mathrm{Tr}[R^{\mathrm{free}}\,G^2] < 0$ at $g = 0$ (all fields free)
+- IR non-trivial FP boundary: $\mathrm{Tr}[R^{\mathrm{free}} G^2] < 0$ at $g = 0$ (all fields free)
 
 At $g = 0$, all matter fields are free: $R_i^{\mathrm{free}} = 2/3$.
 
-$$\mathcal{B} = T(\mathrm{adj}) + \sum_i T(r_i)\,(2/3 - 1) = T(\mathrm{adj}) - \frac{1}{3}\sum_i T(r_i) = \frac{b_0^{\mathrm{IR}}}{3}$$
+$$\mathcal{B} = T(\mathrm{adj}) + \sum_i T(r_i) (2/3 - 1) = T(\mathrm{adj}) - \frac{1}{3}\sum_i T(r_i) = \frac{b_0^{\mathrm{IR}}}{3}$$
 
 where $b_0^{\mathrm{IR}} = 3T(\mathrm{adj}) - \sum_i T(r_i)$ is the naive one-loop beta function evaluated at $R = 2/3$.
 
