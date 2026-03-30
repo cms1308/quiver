@@ -82,7 +82,38 @@ $$b_0^{Sp(N)} = 3(N+1) - \frac{n_f}{2} - n_{\mathrm{adj}}(N+1) - n_A(N-1) - [\te
 
 ---
 
-## 3. Bifundamental Contributions
+## 3. Restriction to Bifundamental Inter-Node Matter
+
+### Why only bifundamentals?
+
+In principle, a chiral superfield can transform in any representation of the product gauge group $G_a \times G_b$. For example, a field in $(\square_a, \mathrm{adj}_b)$ is gauge-invariant and consistent as a quantum field theory. However, **for theories admitting a large N limit, only bifundamental representations are allowed as inter-node matter.** The reason is a strict constraint from asymptotic freedom at large N.
+
+The Dynkin index contribution of a field in representation $(r_a, r_b)$ of $G_a \times G_b$ to node $G_a$'s beta function is:
+$$\Delta b_0^{(a)} = T_{G_a}(r_a) \cdot \dim(r_b)$$
+
+The factor $\dim(r_b)$ counts the multiplicity: for each color state of $G_b$, there is an independent copy of $r_a$ under $G_a$.
+
+**Scaling with N for different choices of $r_b$:**
+
+| $r_b$ (under $G_b = \mathrm{SU}(N)$) | $\dim(r_b)$ | $\Delta b_0^{(a)}$ scaling |
+|--------------------------------------|-------------|----------------------------|
+| Fundamental $\square$ | $N$ | $\sim N$ |
+| Adjoint $\mathrm{adj}$ | $N^2 - 1$ | $\sim N^2$ |
+| Rank-2 symmetric $S$ | $N(N+1)/2$ | $\sim N^2$ |
+| Rank-2 antisymmetric $A$ | $N(N-1)/2$ | $\sim N^2$ |
+
+Since $3T(\mathrm{adj}_a) \sim 3N$ at large N, any inter-node matter with $\dim(r_b) \sim N^2$ would contribute $\Delta b_0^{(a)} \sim N^2$ to node $a$'s beta function — overwhelming the $3N$ gauge contribution and making $b_0^{(a)} \to -\infty$. Such theories are **never asymptotically free at large N**.
+
+> **Conclusion:** For a theory to remain asymptotically free as $N \to \infty$, every inter-node matter field must transform in representations $r_a$, $r_b$ such that both $\dim(r_a)$ and $\dim(r_b)$ scale at most as $N^1$. This restricts inter-node matter to:
+> - $r_a, r_b \in \{\square, \bar{\square}, V, f\}$ (fundamental/vector representations of each group)
+
+This is precisely the **bifundamental** matter: the field transforms in the fundamental (or anti-fundamental/vector) of each of the two gauge groups it connects. Higher representations — e.g. $(\square_a, \mathrm{adj}_b)$, $(\mathrm{adj}_a, \mathrm{adj}_b)$, $(S_a, \square_b)$ — are excluded by large N asymptotic freedom.
+
+**Node matter** (a field charged under only one gauge group $G_a$) is not subject to this cross-node constraint. Adjoints, symmetric, and antisymmetric representations at a single node are allowed because their Dynkin index contribution scales at most as $N$ (see Section 2 and 4).
+
+---
+
+## 4. Bifundamental Contributions (Large N Allowed Cases)
 
 When two gauge nodes $G_a$ and $G_b$ are connected by a bifundamental edge, the matter field is charged under both groups. The contribution to each node's beta function:
 
@@ -104,7 +135,7 @@ When two gauge nodes $G_a$ and $G_b$ are connected by a bifundamental edge, the 
 
 ---
 
-## 4. Large N Asymptotics
+## 5. Large N Asymptotics
 
 At large N, the leading-N behavior of $b_0$ determines whether the theory remains AF.
 
@@ -126,7 +157,7 @@ where $k$ = number of bifundamental edges to other nodes (each contributing $N/2
 
 ---
 
-## 5. Algorithm
+## 6. Algorithm
 
 ```
 for each quiver candidate Q:
@@ -150,7 +181,7 @@ for each quiver candidate Q:
 
 ---
 
-## 6. Simple Examples
+## 7. Simple Examples
 
 ### Example 1: SU(N) with $N_f$ fundamentals
 $$b_0 = 3N - \frac{N_f}{2}$$
@@ -175,7 +206,7 @@ $$b_0 = 3N - \frac{N+2}{2} = \frac{5N-2}{2} > 0 \checkmark$$
 
 ---
 
-## 7. Notes on the NSVZ Exact Beta Function
+## 8. Notes on the NSVZ Exact Beta Function
 
 At higher loops (and exactly via NSVZ):
 $$\beta(g) = -\frac{g^3}{16\pi^2}\,\frac{3T(\mathrm{adj}) - \sum_i T(r_i)(1 - 2\gamma_i)}{1 - T(\mathrm{adj})\,g^2/(8\pi^2)}$$
