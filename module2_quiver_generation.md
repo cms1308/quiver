@@ -72,8 +72,6 @@ All nodes share the **same parameter N**. The theory admits a large N limit (pla
 | SO(N) | Sp(N) | $(V, f)$ | $2N$ | $N/2$ |
 | Sp(N) | Sp(N) | $(f, f)$ | $N$ | $N$ |
 
-> Note: SO(N)–Sp(N) bifundamentals contribute $T_{SO} = 2N$ to the SO node, which is very costly for asymptotic freedom.
-
 ---
 
 ## 4. Anomaly Cancellation
@@ -109,19 +107,26 @@ A bifundamental $(\square_a, \square_b)$ (both fundamentals):
 
 **Anomaly-free condition for SU(N)$^k$ quiver:**
 
-Assigning each edge a direction $a \to b$ meaning $(\square_a, \bar{\square}_b)$:
-$$\sum_{\text{edges } e: a \to b} N - \sum_{\text{edges } e: b \to a} N + \sum_{\text{node reps at } a} A(r) \cdot d_{\text{other}} = 0$$
+Denote:
+- $n_{ab}^{+-}$: number of $(\square_a, \bar{\square}_b)$ bifundamentals from node $a$ to node $b$ (directed)
+- $n_{ab}^{++}$: number of $(\square_a, \square_b)$ bifundamentals between nodes $a$ and $b$ (undirected; $n_{ab}^{++} = n_{ba}^{++}$)
 
-For pure bifundamental quivers with all $(\square, \bar{\square})$ edges: the quiver must be **balanced** at each node:
-$$\deg^+(a) = \deg^-(a) \quad \forall\, a \in V$$
+Each $(\square_a, \bar{\square}_b)$ contributes $+N$ to node $a$ and $-N$ to node $b$.
+Each $(\square_a, \square_b)$ contributes $+N$ to **both** node $a$ and node $b$.
 
-This means the underlying directed graph must have equal in-degree and out-degree at every SU(N) node.
+The anomaly-free condition at node $a$:
+$$N\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + \sum_{\text{node reps at }a} A(r) \cdot d_{\text{other}} = 0$$
+
+For a **pure bifundamental quiver** (no node-level rank-2 matter):
+$$\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) = 0 \quad \forall\, a$$
+
+Note: $(\square, \square)$ edges contribute $+1$ to both their endpoints, so they always increase the anomaly at both ends — they must be compensated by net incoming $(\square, \bar{\square})$ arrows. A node with no $(\square, \square)$ edges must be balanced ($\deg^+ = \deg^-$); a node with $k^{++}$ symmetric bifundamentals must have $k^{++}$ more incoming $(\square, \bar{\square})$ arrows than outgoing ones.
 
 **With rank-2 tensors $S, \bar{S}, A, \bar{A}$ at node $a$:**
-$$N\big(\deg^+(a) - \deg^-(a)\big) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
+$$N\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
 
 For large N, the leading condition is:
-$$\deg^+(a) - \deg^-(a) + (n_S - n_{\bar{S}}) + (n_A - n_{\bar{A}}) = 0$$
+$$\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_S - n_{\bar{S}}) + (n_A - n_{\bar{A}}) = 0$$
 
 ### 4b. SO(N) and Sp(N) Anomalies
 
