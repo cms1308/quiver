@@ -117,7 +117,7 @@ Each $(\square_a, \square_b)$ contributes $+N$ to **both** node $a$ and node $b$
 The general anomaly-free condition at node $a$:
 $$N\sum_{b \neq a} \Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_f - n_{\bar{f}}) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
 
-where $n_f, n_{\bar{f}}$ are the numbers of standalone fundamental and anti-fundamental chirals at node $a$ (node-level matter, not bifundamentals). This single formula covers all cases uniformly; pure bifundamental theories simply set $n_f = n_{\bar{f}} = n_S = n_{\bar{S}} = n_A = n_{\bar{A}} = 0$.
+where $n_f, n_{\bar{f}}$ are the numbers of standalone fundamental and anti-fundamental chirals at node $a$ (node-level matter, not bifundamentals).
 
 Note: $(\square, \square)$ edges contribute $+N$ to both endpoints and must be compensated by net incoming $(\square, \bar{\square})$ arrows, anti-fundamentals $\bar{\square}$, or $\bar{S}/\bar{A}$ at the node.
 
@@ -137,36 +137,39 @@ i.e., the total number of fundamental chiral multiplets at each Sp(N) node must 
 
 ---
 
-## 5. Large N Constraints Summary
+## 5. Asymptotic Freedom Conditions
 
-For the quiver to admit a large N limit, at each node $a$ the leading-N contribution to $b_0$ must be positive. Define:
+The correct condition is $b_0^{(a)} > 0$ for **all** $N \geq N_{\min}$ at every node $a$. Anomaly cancellation must also be verified exactly for all $N$. The large N leading coefficient $B_0^{(a)}$ is a useful preliminary screen but is **not sufficient**: theories with $B_0^{(a)} = 0$ may still be asymptotically free due to positive subleading constants (see Module 1 §5 for an explicit example).
 
+Define:
 $$B_0^{(a)} \equiv \lim_{N\to\infty} \frac{b_0^{(a)}}{N}$$
 
-Requirements:
-- **SU(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \sum_{b \sim a} c_{ab} > 0$
+The expressions for $B_0$ (used as a necessary preliminary filter):
+- **SU(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \sum_{b \sim a} c_{ab}$
   - where $c_{ab} = 1/2$ for each SU-SU, SU-SO edge at the SU end; $c_{ab} = 1$ for SU-Sp edge at the SU end
-- **SO(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - n_S - \sum_{b\sim a}c_{ab} > 0$
+- **SO(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - n_S - \sum_{b\sim a}c_{ab}$
   - $c_{ab} = 1$ for SO-SU and SO-SO edges; $c_{ab} = 2$ for SO-Sp edge
-- **Sp(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - n_A - \sum_{b\sim a}c_{ab} > 0$
+- **Sp(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - n_A - \sum_{b\sim a}c_{ab}$
   - $c_{ab} = 1/2$ for Sp-SU and Sp-SO edges; $c_{ab} = 1$ for Sp-Sp edge
+
+Candidates with $B_0^{(a)} < 0$ are immediately rejected. Those with $B_0^{(a)} \geq 0$ must be checked with the exact $b_0$ formula for all $N \geq N_{\min}$.
 
 ---
 
 ## 6. Enumeration Strategy
 
-### Step 1: Bound on quiver size
-From large N asymptotics, $B_0 > 0$ gives an upper bound on the number of edges and node matter at each node. For example, an SU(N) node with no node matter can have at most **5 bifundamental neighbors** connected via SU-SU edges (since $B_0 = 3 - 5/2 = 1/2 > 0$ but $3 - 6/2 = 0$).
+### Step 1: Preliminary bound on quiver size
+$B_0^{(a)} < 0$ is a quick rejection criterion. The table below gives the maximum neighbor count such that $B_0 \geq 0$ (necessary for exact AF to be possible). Candidates with $B_0^{(a)} \geq 0$ must subsequently pass the exact $b_0 > 0$ check for all $N$.
 
-**Upper bounds on neighbor count per node type (pure bifundamental case):**
+**Maximum neighbor count with $B_0 \geq 0$ (pure bifundamental, no node matter):**
 
-| Node type | Edge type to neighbor | Max neighbors for $B_0 > 0$ |
+| Node type | Edge type to neighbor | Max neighbors for $B_0 \geq 0$ |
 |-----------|----------------------|------------------------------|
-| SU(N) | all SU-SU | 5 |
-| SU(N) | all SU-Sp | 2 (since $c=1$ each) |
-| SO(N) | all SO-SU | 2 |
-| Sp(N) | all Sp-SU | 5 |
-| Sp(N) | all Sp-Sp | 2 |
+| SU(N) | all SU-SU | 6 |
+| SU(N) | all SU-Sp | 3 (since $c=1$ each) |
+| SO(N) | all SO-SU | 3 |
+| Sp(N) | all Sp-SU | 6 |
+| Sp(N) | all Sp-Sp | 3 |
 
 ### Step 2: Enumerate graphs
 Enumerate all connected directed multigraphs $G = (V, E)$ up to isomorphism with $|V| \leq V_{\max}$ and $\deg(v) \leq d_{\max}(v)$ for each node.

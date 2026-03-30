@@ -60,14 +60,12 @@ We organize results by the structure of the quiver graph.
 
 ### 2a. Single-Node Theories
 
-| Gauge Group | Matter Content | UV AF Condition | IR FP Condition | Notes |
-|-------------|----------------|-----------------|-----------------|-------|
-| SU(N) | $N_f$ fund + $\bar{N}_f$ anti-fund | $N_f < 3N$ | $N_f > \frac{3N}{2}$ | SQCD conformal window |
-| SU(N) | 1 adjoint + $N_f$ fund + $\bar{N}_f$ anti-fund | $N_f < 2N$ | $N_f > N$ | $\mathcal{N}=2$ SQCD at $N_f = 2N$ marginal |
-| SU(N) | $S$ (or $\bar{S}$) + $N_f$ fund + $\bar{N}_f$ anti-fund | check AF + anomaly | from bdry analysis | Kutasov-type |
-| SU(N) | $A$ (or $\bar{A}$) + $N_f$ fund + $\bar{N}_f$ anti-fund | check AF + anomaly | from bdry analysis | Kutasov-type |
-| SO(N) | $N_f$ vectors | $N_f < 3(N-2)$ | $N_f > \frac{3(N-2)}{2}$... | Intriligator-Seiberg |
-| Sp(N) | $2N_f$ fundamentals (even) | $2N_f < 3(N+1)$ | from bdry analysis | Intriligator-Seiberg |
+The complete classification of single-node theories (SU(N), SO(N), Sp(N) with matter in fundamental, adjoint, rank-2 symmetric, and rank-2 antisymmetric representations) that are asymptotically free and have non-trivial IR fixed points is carried out in:
+
+- **arXiv:2007.16165** — classification of 4D $\mathcal{N}=1$ gauge theories with rank-2 matter
+- **arXiv:2510.19136** — further classification results
+
+These references should be consulted for the exact conformal windows, anomaly-free conditions, and IR R-charges of all single-node theories.
 
 ### 2b. Two-Node Quivers
 
