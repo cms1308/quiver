@@ -141,32 +141,20 @@ Note: the Dynkin index contributions to $b_0$ are identical for $(\square, \bar{
 
 ---
 
-## 5. Asymptotic Freedom: Exact Condition and Large N Structure
+## 5. Asymptotic Freedom Condition
 
-The correct asymptotic freedom condition is:
+The asymptotic freedom condition must be checked exactly:
 $$b_0 > 0 \quad \text{for all } N \geq N_{\min}$$
-where $N_{\min} = 2$ for SU(N), $N_{\min} = 3$ for SO(N), $N_{\min} = 1$ for Sp(N). This must be checked **exactly**, not just at leading order in $N$.
+where $N_{\min} = 2$ for SU(N), $N_{\min} = 3$ for SO(N), $N_{\min} = 1$ for Sp(N).
 
-The large N structure of $b_0$ is useful as a preliminary screen but is **not sufficient**. The per-field Dynkin index contributions scale as:
+For **SU(N)** the exact formula is:
+$$b_0^{SU(N)} = 3N - \frac{n_f + n_{\bar{f}}}{2} - N\,n_{\mathrm{adj}} - \frac{N+2}{2}(n_S + n_{\bar{S}}) - \frac{N-2}{2}(n_A + n_{\bar{A}}) - \frac{N}{2}\,k$$
 
-| Group | $3T(\mathrm{adj})$ at large $N$ | Node matter contribution per field |
-|-------|-------------------------------|----------------------------|
-| SU(N) | $3N$ | $\square, \bar{\square}$: $\frac{1}{2} = \mathcal{O}(1)$; $S, \bar{S}, A, \bar{A}$: $\sim \frac{N}{2}$; adj: $\sim N$ |
-| SO(N) | $3N$ | vector $V$: $1 = \mathcal{O}(1)$; sym $S$: $\sim N$; adj: $\sim N$ |
-| Sp(N) | $3N$ | fund $f$: $\frac{1}{2} = \mathcal{O}(1)$; antisym $A$: $\sim N$; adj: $\sim N$ |
+where $k$ is the number of bifundamental neighbors (each contributing $N/2$ regardless of neighbor type).
 
-For **SU(N)**, writing $b_0$ exactly:
-$$b_0 = N \underbrace{\left(3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \frac{k}{2}\right)}_{B_0} + \underbrace{(n_S + n_{\bar{S}}) - (n_A + n_{\bar{A}}) + \mathcal{O}(1/N)}_{\text{subleading}}$$
-
-where the subleading constant comes from the exact Dynkin indices $T(S) = (N+2)/2$ and $T(A) = (N-2)/2$.
-
-**$B_0 > 0$ is a necessary but not sufficient condition.** When $B_0 = 0$, the sign of $b_0$ is determined by the subleading constant, and such theories may still be asymptotically free for all $N$.
-
-> **Example:** SU(N) with $n_A = n_{\bar{A}} = 3$ (three antisymmetric + three conjugate antisymmetric):
+> **Example:** SU(N) with $n_A = n_{\bar{A}} = 3$:
 > $$b_0 = 3N - 3\cdot\frac{N-2}{2} - 3\cdot\frac{N-2}{2} = 3N - 3(N-2) = 6 > 0$$
-> Here $B_0 = 3 - 3/2 - 3/2 = 0$ (fails the $B_0 > 0$ screen) but $b_0 = 6$ for **all** $N$ — the theory is asymptotically free for every $N \geq 2$.
-
-where $k$ = number of bifundamental edges to other nodes.
+> This theory is asymptotically free for every $N \geq 2$.
 
 ---
 
@@ -195,7 +183,7 @@ for each quiver candidate Q:
 
 ---
 
-## 8. Notes on the NSVZ Exact Beta Function
+## 7. Notes on the NSVZ Exact Beta Function
 
 At higher loops (and exactly via NSVZ):
 $$\beta(g) = -\frac{g^3}{16\pi^2}\,\frac{3T(\mathrm{adj}) - \sum_i T(r_i)(1 - \gamma_i)}{1 - T(\mathrm{adj})\,g^2/(8\pi^2)}$$
