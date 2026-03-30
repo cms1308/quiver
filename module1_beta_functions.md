@@ -121,6 +121,12 @@ When two gauge nodes $G_a$ and $G_b$ are connected by a bifundamental edge, the 
 - To node $a$: $T_{G_a} = N \cdot \frac{1}{2} = \frac{N}{2}$  (there are $N$ fundamentals of $G_a$, one per color of $G_b$)
 - To node $b$: $T_{G_b} = N \cdot \frac{1}{2} = \frac{N}{2}$
 
+### SU(N) × SU(N) bifundamental $(\square_a, \square_b)$:
+- To node $a$: $T_{G_a} = N \cdot \frac{1}{2} = \frac{N}{2}$  (there are $N$ fundamentals of $G_a$, one per color of $G_b$)
+- To node $b$: $T_{G_b} = N \cdot \frac{1}{2} = \frac{N}{2}$
+
+Note: the Dynkin index contributions to $b_0$ are identical for $(\square, \bar{\square})$ and $(\square, \square)$. They differ in their **gauge anomaly** contributions (see Module 2) and give inequivalent chiral theories.
+
 ### SU(N) × SO(N) bifundamental $(\square_{SU}, V_{SO})$:
 - To SU(N) node: $T_{SU} = N \cdot \frac{1}{2} = \frac{N}{2}$ (N fundamentals, one per SO(N) vector index)
 - To SO(N) node: $T_{SO} = N \cdot 1 = N$ (N vectors, one per SU(N) color)
@@ -148,7 +154,7 @@ At large N, the leading-N behavior of $b_0$ determines whether the theory remain
 **Large N asymptotic freedom requires that the $\mathcal{O}(N)$ part of $b_0$ is positive:**
 
 For **SU(N)** with $n_{\mathrm{adj}}$ adjoints, $n_S + n_{\bar{S}}$ symmetric (plus conjugates), $n_A + n_{\bar{A}}$ antisymmetric (plus conjugates), and $k$ bifundamental neighbors:
-$$b_0 \approx N\!\left(3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \frac{k}{2}\right) + \mathcal{O}(1)$$
+$$b_0 \approx N \left(3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \frac{k}{2}\right) + \mathcal{O}(1)$$
 
 Large N AF condition:
 $$n_{\mathrm{adj}} + \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} + \frac{k}{2} < 3$$
@@ -179,39 +185,15 @@ for each quiver candidate Q:
 - Boolean: is the full quiver UV-asymptotically free?
 - Boolean: does it remain AF at large N?
 
----
-
-## 7. Simple Examples
-
-### Example 1: SU(N) with $N_f$ fundamentals
-$$b_0 = 3N - \frac{N_f}{2}$$
-AF condition: $N_f < 6N$.
-Large N limit: $N_f = \kappa N$ with $\kappa < 6$.
-
-### Example 2: Linear quiver SU(N)$^k$ with bifundamentals only
-Each interior node has 2 bifundamental neighbors:
-$$b_0^{\mathrm{int}} = 3N - 2 \cdot \frac{N}{2} = 2N > 0 \checkmark$$
-Each end node has 1 neighbor:
-$$b_0^{\mathrm{end}} = 3N - \frac{N}{2} = \frac{5N}{2} > 0 \checkmark$$
-
-### Example 3: Circular quiver SU(N)$^k$ with bifundamentals only
-Each node has 2 neighbors: $b_0 = 2N > 0$ for all $k$. ✓
-
-### Example 4: SU(N) with one adjoint chiral
-$$b_0 = 3N - N = 2N > 0 \checkmark$$
-(This is the $\mathcal{N}=2$ vector multiplet contribution.)
-
-### Example 5: SU(N) with one rank-2 symmetric
-$$b_0 = 3N - \frac{N+2}{2} = \frac{5N-2}{2} > 0 \checkmark$$
 
 ---
 
 ## 8. Notes on the NSVZ Exact Beta Function
 
 At higher loops (and exactly via NSVZ):
-$$\beta(g) = -\frac{g^3}{16\pi^2}\,\frac{3T(\mathrm{adj}) - \sum_i T(r_i)(1 - 2\gamma_i)}{1 - T(\mathrm{adj})\,g^2/(8\pi^2)}$$
+$$\beta(g) = -\frac{g^3}{16\pi^2}\,\frac{3T(\mathrm{adj}) - \sum_i T(r_i)(1 - \gamma_i)}{1 - T(\mathrm{adj})\,g^2/(8\pi^2)}$$
 
-where $\gamma_i$ is the anomalous dimension of field $i$. At the IR fixed point, $\beta(g) = 0$ (numerator = 0) and $\gamma_i = R_i - 1$ (from superconformal algebra), recovering the condition:
-$$3T(\mathrm{adj}) = \sum_i T(r_i)(3 - 2R_i) \quad \Leftrightarrow \quad \mathrm{Tr}[R\,G^2] = 0$$
+where $\gamma_i$ is the anomalous dimension of field $i$. At the IR fixed point, $\beta(g) = 0$ (numerator = 0) and $\gamma_i = 3 R_i - 2$ (from superconformal algebra), recovering the condition:
+$$3T(\mathrm{adj}) = \sum_i T(r_i)(3 - 3R_i) \quad \Leftrightarrow \quad \mathrm{Tr}[R\,G^2] = 0$$
 
 This links the beta function vanishing to the anomaly-free R-symmetry condition used in a-maximization (Module 3).
