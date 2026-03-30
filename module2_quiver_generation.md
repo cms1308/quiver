@@ -114,19 +114,17 @@ Denote:
 Each $(\square_a, \bar{\square}_b)$ contributes $+N$ to node $a$ and $-N$ to node $b$.
 Each $(\square_a, \square_b)$ contributes $+N$ to **both** node $a$ and node $b$.
 
-The anomaly-free condition at node $a$:
-$$N\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + \sum_{\text{node reps at }a} A(r) \cdot d_{\text{other}} = 0$$
+The general anomaly-free condition at node $a$:
+$$N\sum_{b \neq a} \Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_f - n_{\bar{f}}) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
 
-For a **pure bifundamental quiver** (no node-level rank-2 matter):
-$$\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) = 0 \quad \forall\, a$$
+where $n_f, n_{\bar{f}}$ are the numbers of standalone fundamental and anti-fundamental chirals at node $a$ (node-level matter, not bifundamentals). This single formula covers all cases uniformly; pure bifundamental theories simply set $n_f = n_{\bar{f}} = n_S = n_{\bar{S}} = n_A = n_{\bar{A}} = 0$.
 
-Note: $(\square, \square)$ edges contribute $+1$ to both their endpoints, so they always increase the anomaly at both ends — they must be compensated by net incoming $(\square, \bar{\square})$ arrows. A node with no $(\square, \square)$ edges must be balanced ($\deg^+ = \deg^-$); a node with $k^{++}$ symmetric bifundamentals must have $k^{++}$ more incoming $(\square, \bar{\square})$ arrows than outgoing ones.
+Note: $(\square, \square)$ edges contribute $+N$ to both endpoints and must be compensated by net incoming $(\square, \bar{\square})$ arrows, anti-fundamentals $\bar{\square}$, or $\bar{S}/\bar{A}$ at the node.
 
-**With rank-2 tensors $S, \bar{S}, A, \bar{A}$ at node $a$:**
-$$N\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
+For large N, the leading $\mathcal{O}(N)$ condition is:
+$$\sum_{b \neq a} \Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_S - n_{\bar{S}}) + (n_A - n_{\bar{A}}) = 0$$
 
-For large N, the leading condition is:
-$$\sum_{b \neq a}\!\Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_S - n_{\bar{S}}) + (n_A - n_{\bar{A}}) = 0$$
+The $(n_f - n_{\bar{f}})$ term is $\mathcal{O}(1)$ and only enters at subleading order in $N$.
 
 ### 4b. SO(N) and Sp(N) Anomalies
 
