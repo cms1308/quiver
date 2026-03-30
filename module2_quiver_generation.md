@@ -182,12 +182,7 @@ For each candidate quiver:
 - 1 node, 1 adjoint + $N_f$ fundamentals + $N_f$ anti-fundamentals
 - AF: $b_0 = 3N - N - N_f = 2N - N_f > 0 \Rightarrow N_f < 2N$
 
-### Example C: Linear SU(N)$^k$ quiver (necklace tail)
-- $k$ nodes, bifundamentals between adjacent nodes
-- All nodes: $b_0 = 2N$ (interior) or $5N/2$ (ends)
-- Anomaly: each interior node balanced ✓
-
-### Example D: Circular (affine $A_{k-1}$) quiver SU(N)$^k$
+### Example C: Circular (affine $A_{k-1}$) quiver SU(N)$^k$
 - $k$ nodes in a circle, one bifundamental per adjacent pair
 - All nodes: $b_0 = 2N > 0$ ✓, balanced ✓
 
