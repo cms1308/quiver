@@ -121,7 +121,7 @@ Note: $(\square, \square)$ edges contribute $+N$ to both endpoints and must be c
 
 **SO(N):** No cubic gauge anomaly (gauge group is real/pseudo-real for odd N; for SO(N) the third-order Dynkin index vanishes). No constraint from anomaly cancellation.
 
-**Sp(N) = USp(2N):** No cubic gauge anomaly (group is pseudo-real). However, there is a **Witten global anomaly** for odd numbers of fundamental half-hypermultiplets. The condition:
+**Sp(N) = USp(2N):** No cubic gauge anomaly (group is pseudo-real). However, there is a **Witten global anomaly** for odd numbers of fundamental chiral multiplets. The condition:
 $$n_f^{Sp(N)} \equiv 0 \pmod{2}$$
 
 i.e., the total number of fundamental chiral multiplets at each Sp(N) node must be **even**. (A bifundamental edge from node $b$ to an Sp(N) node contributes a fundamental of Sp(N), counted in this total.)
