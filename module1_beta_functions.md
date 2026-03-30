@@ -11,12 +11,12 @@ For a 4D N=1 supersymmetric gauge theory with gauge group $G$ and chiral superfi
 
 $$\mu \frac{dg}{d\mu} = -\frac{g^3}{16\pi^2} b_0 + \mathcal{O}(g^5)$$
 
-$$\boxed{b_0 = 3\,T(\mathrm{adj}) - \sum_i T(r_i)}$$
+$$\boxed{b_0 = 3 T(\mathrm{adj}) - \sum_i T(r_i)}$$
 
 where $T(r)$ is the **Dynkin index** of representation $r$, defined by:
-$$\mathrm{tr}_r[T^a T^b] = T(r)\,\delta^{ab}$$
+$$\mathrm{tr}_r[T^a T^b] = T(r) \delta^{ab}$$
 
-**Asymptotic freedom** requires $b_0 > 0$.
+**Asymptotic freedom** requires $b_0 > 0$ for all valid $N$ ($N \geq 2$ for SU(N), $N \geq 3$ for SO(N), $N \geq 1$ for Sp(N)).
 
 The sum runs over all chiral superfields charged under $G$. For a bifundamental field $(\square_a, \bar{\square}_b)$ shared between two nodes, it contributes to **both** $b_0^{(a)}$ and $b_0^{(b)}$.
 
@@ -39,7 +39,7 @@ The sum runs over all chiral superfields charged under $G$. For a bifundamental 
 The anomaly coefficient $A(r)$ enters gauge anomaly cancellation (see Module 2).
 
 **Beta function for SU(N):**
-$$b_0^{SU(N)} = 3N - \frac{n_f + n_{\bar{f}}}{2} - N\,n_{\mathrm{adj}} - \frac{N+2}{2}\,(n_S + n_{\bar{S}}) - \frac{N-2}{2}\,(n_A + n_{\bar{A}}) - [\text{bifundamental contributions}]$$
+$$b_0^{SU(N)} = 3N - \frac{n_f + n_{\bar{f}}}{2} - N n_{\mathrm{adj}} - \frac{N+2}{2} (n_S + n_{\bar{S}}) - \frac{N-2}{2} (n_A + n_{\bar{A}}) - [\text{bifundamental contributions}]$$
 
 where $n_f, n_{\bar{f}}, n_{\mathrm{adj}}, n_S, n_{\bar{S}}, n_A, n_{\bar{A}}$ are the numbers of fundamentals, anti-fundamentals, adjoints, symmetric, conjugate symmetric, antisymmetric, and conjugate antisymmetric chiral multiplets. Note that $\bar{S}$ and $\bar{A}$ have the same Dynkin index as $S$ and $A$ respectively, so their contributions to $b_0$ are identical.
 
@@ -141,24 +141,7 @@ Note: the Dynkin index contributions to $b_0$ are identical for $(\square, \bar{
 
 ---
 
-## 5. Asymptotic Freedom Condition
-
-The asymptotic freedom condition must be checked exactly:
-$$b_0 > 0 \quad \text{for all } N \geq N_{\min}$$
-where $N_{\min} = 2$ for SU(N), $N_{\min} = 3$ for SO(N), $N_{\min} = 1$ for Sp(N).
-
-For **SU(N)** the exact formula is:
-$$b_0^{SU(N)} = 3N - \frac{n_f + n_{\bar{f}}}{2} - N\,n_{\mathrm{adj}} - \frac{N+2}{2}(n_S + n_{\bar{S}}) - \frac{N-2}{2}(n_A + n_{\bar{A}}) - \frac{N}{2}\,k$$
-
-where $k$ is the number of bifundamental neighbors (each contributing $N/2$ regardless of neighbor type).
-
-> **Example:** SU(N) with $n_A = n_{\bar{A}} = 3$:
-> $$b_0 = 3N - 3\cdot\frac{N-2}{2} - 3\cdot\frac{N-2}{2} = 3N - 3(N-2) = 6 > 0$$
-> This theory is asymptotically free for every $N \geq 2$.
-
----
-
-## 6. Algorithm
+## 5. Algorithm
 
 ```
 for each quiver candidate Q:
@@ -183,12 +166,12 @@ for each quiver candidate Q:
 
 ---
 
-## 7. Notes on the NSVZ Exact Beta Function
+## 6. Notes on the NSVZ Exact Beta Function
 
 At higher loops (and exactly via NSVZ):
-$$\beta(g) = -\frac{g^3}{16\pi^2}\,\frac{3T(\mathrm{adj}) - \sum_i T(r_i)(1 - \gamma_i)}{1 - T(\mathrm{adj})\,g^2/(8\pi^2)}$$
+$$\beta(g) = -\frac{g^3}{16\pi^2} \frac{3T(\mathrm{adj}) - \sum_i T(r_i)(1 - \gamma_i)}{1 - T(\mathrm{adj}) g^2/(8\pi^2)}$$
 
 where $\gamma_i$ is the anomalous dimension of field $i$. At the IR fixed point, $\beta(g) = 0$ (numerator = 0) and $\gamma_i = 3 R_i - 2$ (from superconformal algebra), recovering the condition:
-$$3T(\mathrm{adj}) = \sum_i T(r_i)(3 - 3R_i) \quad \Leftrightarrow \quad \mathrm{Tr}[R\,G^2] = 0$$
+$$3T(\mathrm{adj}) = \sum_i T(r_i)(3 - 3R_i) \quad \Leftrightarrow \quad \mathrm{Tr}RG^2 = 0$$
 
 This links the beta function vanishing to the anomaly-free R-symmetry condition used in a-maximization (Module 3).
