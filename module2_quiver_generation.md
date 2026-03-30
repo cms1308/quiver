@@ -171,28 +171,7 @@ For each candidate quiver:
 
 ---
 
-## 7. Examples of Valid Quivers
-
-### Example A: SU(N) SQCD with $N_f$ fundamentals
-- 1 node (SU(N)), $N_f$ flavor fundamentals + $N_f$ anti-fundamentals
-- AF: $b_0 = 3N - N_f > 0 \Rightarrow N_f < 3N$
-- Anomaly: $N_f \cdot 1 + N_f \cdot(-1) = 0$ ✓
-
-### Example B: $\mathcal{N}=2$ SQCD — SU(N) with adjoint + $N_f$ fund
-- 1 node, 1 adjoint + $N_f$ fundamentals + $N_f$ anti-fundamentals
-- AF: $b_0 = 3N - N - N_f = 2N - N_f > 0 \Rightarrow N_f < 2N$
-
-### Example C: Circular (affine $A_{k-1}$) quiver SU(N)$^k$
-- $k$ nodes in a circle, one bifundamental per adjacent pair
-- All nodes: $b_0 = 2N > 0$ ✓, balanced ✓
-
-### Example E: Sp(N)–SU(2N)–SO(N) tail
-- Three nodes: Sp(N)–SU(2N)–SO(N)
-- Need to check all constraints carefully
-
----
-
-## 8. Known Classification for Special Cases
+## 7. Known Classification for Special Cases
 
 ### Single-node theories (quivers with one gauge group)
 The complete classification of single-node 4D $\mathcal{N}=1$ theories (with gauge anomaly cancellation, UV asymptotic freedom, and non-trivial IR fixed point) is given in arXiv:2007.16165 and arXiv:2510.19136.
