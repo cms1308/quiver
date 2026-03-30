@@ -139,11 +139,11 @@ When two gauge nodes $G_a$ and $G_b$ are connected by a bifundamental edge, the 
 
 At large N, the leading-N behavior of $b_0$ determines whether the theory remains AF.
 
-| Group | $3T(\mathrm{adj})$ at large $N$ | Leading matter contribution |
+| Group | $3T(\mathrm{adj})$ at large $N$ | Node matter contribution per field |
 |-------|-------------------------------|----------------------------|
-| SU(N) | $3N$ | each $\square/\bar{\square}/S/\bar{S}/A/\bar{A}$: $\sim N/2$ each |
-| SO(N) | $3N$ | each vector: $\sim 1$; each sym: $\sim N$ |
-| Sp(N) | $3N$ | each fund: $\sim 1/2$; each $A$: $\sim N$ |
+| SU(N) | $3N$ | $\square, \bar{\square}$: $\frac{1}{2} = \mathcal{O}(1)$; $S, \bar{S}, A, \bar{A}$: $\sim \frac{N}{2}$; adj: $\sim N$ |
+| SO(N) | $3N$ | vector $V$: $1 = \mathcal{O}(1)$; sym $S$: $\sim N$; adj: $\sim N$ |
+| Sp(N) | $3N$ | fund $f$: $\frac{1}{2} = \mathcal{O}(1)$; antisym $A$: $\sim N$; adj: $\sim N$ |
 
 **Large N asymptotic freedom requires that the $\mathcal{O}(N)$ part of $b_0$ is positive:**
 
