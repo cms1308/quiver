@@ -48,7 +48,9 @@ All nodes share the **same parameter N**. The theory admits a large N limit (pla
 | SU(N) | Anti-fundamental | $\bar{\square}$ | $1/2$ |
 | SU(N) | Adjoint | $\mathrm{adj}$ | $N$ |
 | SU(N) | Rank-2 symmetric | $S$ | $N/2$ |
+| SU(N) | Rank-2 sym conjugate | $\bar{S}$ | $N/2$ |
 | SU(N) | Rank-2 antisymmetric | $A$ | $N/2$ |
+| SU(N) | Rank-2 antisym conjugate | $\bar{A}$ | $N/2$ |
 | SO(N) | Vector | $V$ | $1$ |
 | SO(N) | Adjoint | $\mathrm{adj}$ | $N$ |
 | SO(N) | Rank-2 symmetric (traceless) | $S$ | $N$ |
@@ -88,10 +90,12 @@ where $A(r)$ is the anomaly coefficient (third-order Dynkin index):
 | $\square$ | $+1$ |
 | $\bar{\square}$ | $-1$ |
 | adjoint | $0$ |
-| $S^2$ | $+(N+4)$ |
-| $\Lambda^2$ | $+(N-4)$ |
+| $S$ | $+(N+4)$ |
+| $\bar{S}$ | $-(N+4)$ |
+| $A$ | $+(N-4)$ |
+| $\bar{A}$ | $-(N-4)$ |
 
-> Note: $A(\Lambda^2)$ changes sign for $N < 4$. For large N both $S^2$ and $\Lambda^2$ have $A \sim N$.
+> Note: $A(A)$ changes sign for $N < 4$. For large N both $S$ and $A$ have $|A| \sim N$. The conjugates $\bar{S}$ and $\bar{A}$ carry opposite anomaly coefficients.
 
 **For a purely bifundamental SU(N) quiver:**
 
@@ -113,11 +117,11 @@ $$\deg^+(a) = \deg^-(a) \quad \forall\, a \in V$$
 
 This means the underlying directed graph must have equal in-degree and out-degree at every SU(N) node.
 
-**With rank-2 symmetric $S$ and antisymmetric $A$ at node $a$:**
-$$N\big(\deg^+(a) - \deg^-(a)\big) + n_S(N+4) + n_A(N-4) = 0$$
+**With rank-2 tensors $S, \bar{S}, A, \bar{A}$ at node $a$:**
+$$N\big(\deg^+(a) - \deg^-(a)\big) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
 
 For large N, the leading condition is:
-$$\deg^+(a) - \deg^-(a) + n_S + n_A = 0$$
+$$\deg^+(a) - \deg^-(a) + (n_S - n_{\bar{S}}) + (n_A - n_{\bar{A}}) = 0$$
 
 ### 4b. SO(N) and Sp(N) Anomalies
 
@@ -137,7 +141,7 @@ For the quiver to admit a large N limit, at each node $a$ the leading-N contribu
 $$B_0^{(a)} \equiv \lim_{N\to\infty} \frac{b_0^{(a)}}{N}$$
 
 Requirements:
-- **SU(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - \frac{n_S + n_A}{2} - \sum_{b \sim a} c_{ab} > 0$
+- **SU(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \sum_{b \sim a} c_{ab} > 0$
   - where $c_{ab} = 1/2$ for each SU-SU, SU-SO edge at the SU end; $c_{ab} = 1$ for SU-Sp edge at the SU end
 - **SO(N) node:** $B_0 = 3 - n_{\mathrm{adj}} - n_S - \sum_{b\sim a}c_{ab} > 0$
   - $c_{ab} = 1$ for SO-SU and SO-SO edges; $c_{ab} = 2$ for SO-Sp edge
@@ -213,7 +217,7 @@ For each candidate quiver:
 ## 8. Known Classification for Special Cases
 
 ### Single-node theories (quivers with one gauge group)
-- **SU(N):** $n_S + n_A < 6$ (rank-2 tensors), $n_f < 6N - (N+2)n_S - (N-2)n_A$ (fundamentals)
+- **SU(N):** $(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}}) < 6$ (rank-2 tensors), $n_f < 6N - \frac{N+2}{2}(n_S+n_{\bar{S}}) - \frac{N-2}{2}(n_A+n_{\bar{A}})$ (fundamentals)
 - **SO(N):** only vectors and symmetric tensors; $n_S = 0$ for AF in large N (since $T(S) = N+2 \approx N$)
 - **Sp(N):** similar analysis; adjoints very costly
 

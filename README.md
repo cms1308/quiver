@@ -38,9 +38,9 @@ Edges and node decorations can carry:
 
 | Gauge Group | Allowed Representations |
 |-------------|------------------------|
-| SU(N) | fund $\square$, anti-fund $\bar{\square}$, adjoint, sym $S^2$, antisym $\Lambda^2$ |
-| SO(N) | vector $V$, adjoint, sym $S^2$ (traceless), spinor (excluded at large N) |
-| Sp(N) | fund $f$, adjoint, antisym $\Lambda^2$ |
+| SU(N) | fund $\square$, anti-fund $\bar{\square}$, adjoint, sym $S$, sym conjugate $\bar{S}$, antisym $A$, antisym conjugate $\bar{A}$ |
+| SO(N) | vector $V$, adjoint, sym $S$ (traceless), spinor (excluded at large N) |
+| Sp(N) | fund $f$, adjoint, antisym $A$ (traceless) |
 
 Bifundamentals between nodes carry representations of both gauge groups simultaneously.
 

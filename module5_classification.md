@@ -64,8 +64,8 @@ We organize results by the structure of the quiver graph.
 |-------------|----------------|-----------------|-----------------|-------|
 | SU(N) | $N_f$ fund + $\bar{N}_f$ anti-fund | $N_f < 3N$ | $N_f > \frac{3N}{2}$ | SQCD conformal window |
 | SU(N) | 1 adjoint + $N_f$ fund + $\bar{N}_f$ anti-fund | $N_f < 2N$ | $N_f > N$ | $\mathcal{N}=2$ SQCD at $N_f = 2N$ marginal |
-| SU(N) | 1 sym + $N_f$ fund | check AF + anomaly | from bdry analysis | Kutasov-type |
-| SU(N) | 1 antisym + $N_f$ fund | check AF + anomaly | from bdry analysis | Kutasov-type |
+| SU(N) | $S$ (or $\bar{S}$) + $N_f$ fund + $\bar{N}_f$ anti-fund | check AF + anomaly | from bdry analysis | Kutasov-type |
+| SU(N) | $A$ (or $\bar{A}$) + $N_f$ fund + $\bar{N}_f$ anti-fund | check AF + anomaly | from bdry analysis | Kutasov-type |
 | SO(N) | $N_f$ vectors | $N_f < 3(N-2)$ | $N_f > \frac{3(N-2)}{2}$... | Intriligator-Seiberg |
 | Sp(N) | $2N_f$ fundamentals (even) | $2N_f < 3(N+1)$ | from bdry analysis | Intriligator-Seiberg |
 
@@ -154,7 +154,7 @@ $$B_0 = 3 - n_{\mathrm{adj}} - \frac{n_S + n_A}{2} - \frac{n_b}{2}$$
 - Seiberg's conformal window: $\frac{3}{2}N < N_f < 3N$ for SU(N)
 
 ### 4b. Kutasov–Schwimmer Models
-- SU(N) with one rank-2 antisymmetric + $N_f$ fundamentals
+- SU(N) with one $A$ (or $\bar{A}$) + $N_f$ fundamentals (+ anti-fundamentals for anomaly cancellation)
 - Conformal window: $N+2 \leq N_f \leq \frac{3}{2}(N-2)$ (depends on exact conventions)
 
 ### 4c. Circular SU(N)$^k$ Quivers

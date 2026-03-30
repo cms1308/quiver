@@ -31,15 +31,17 @@ The sum runs over all chiral superfields charged under $G$. For a bifundamental 
 | Fundamental | $\square$ | $N$ | $\frac{1}{2}$ | $+1$ |
 | Anti-fundamental | $\bar{\square}$ | $N$ | $\frac{1}{2}$ | $-1$ |
 | Adjoint | $\mathrm{adj}$ | $N^2 - 1$ | $N$ | $0$ |
-| Rank-2 symmetric | $S^2$ | $\frac{N(N+1)}{2}$ | $\frac{N+2}{2}$ | $N+4$ |
-| Rank-2 antisymmetric | $\Lambda^2$ | $\frac{N(N-1)}{2}$ | $\frac{N-2}{2}$ | $N-4$ |
+| Rank-2 symmetric | $S$ | $\frac{N(N+1)}{2}$ | $\frac{N+2}{2}$ | $+(N+4)$ |
+| Rank-2 sym conjugate | $\bar{S}$ | $\frac{N(N+1)}{2}$ | $\frac{N+2}{2}$ | $-(N+4)$ |
+| Rank-2 antisymmetric | $A$ | $\frac{N(N-1)}{2}$ | $\frac{N-2}{2}$ | $+(N-4)$ |
+| Rank-2 antisym conjugate | $\bar{A}$ | $\frac{N(N-1)}{2}$ | $\frac{N-2}{2}$ | $-(N-4)$ |
 
 The anomaly coefficient $A(r)$ enters gauge anomaly cancellation (see Module 2).
 
 **Beta function for SU(N):**
-$$b_0^{SU(N)} = 3N - \frac{n_f}{2} - N\,n_{\mathrm{adj}} - \frac{N+2}{2}\,n_S - \frac{N-2}{2}\,n_A - [\text{bifundamental contributions}]$$
+$$b_0^{SU(N)} = 3N - \frac{n_f + n_{\bar{f}}}{2} - N\,n_{\mathrm{adj}} - \frac{N+2}{2}\,(n_S + n_{\bar{S}}) - \frac{N-2}{2}\,(n_A + n_{\bar{A}}) - [\text{bifundamental contributions}]$$
 
-where $n_f, n_{\mathrm{adj}}, n_S, n_A$ are the numbers of fundamentals, adjoints, symmetric, and antisymmetric chiral multiplets attached to this node.
+where $n_f, n_{\bar{f}}, n_{\mathrm{adj}}, n_S, n_{\bar{S}}, n_A, n_{\bar{A}}$ are the numbers of fundamentals, anti-fundamentals, adjoints, symmetric, conjugate symmetric, antisymmetric, and conjugate antisymmetric chiral multiplets. Note that $\bar{S}$ and $\bar{A}$ have the same Dynkin index as $S$ and $A$ respectively, so their contributions to $b_0$ are identical.
 
 ---
 
@@ -69,7 +71,7 @@ The group USp(2N) has rank $N$; its fundamental representation has dimension $2N
 |----------------|--------|-----------|-------------------|
 | Fundamental | $f$ | $2N$ | $\frac{1}{2}$ |
 | Adjoint (= rank-2 symmetric) | $\mathrm{adj}$ | $N(2N+1)$ | $N+1$ |
-| Rank-2 antisymmetric (traceless) | $\Lambda^2$ | $N(2N-1)-1$ | $N-1$ |
+| Rank-2 antisymmetric (traceless) | $A$ | $N(2N-1)-1$ | $N-1$ |
 
 > **Note:** For USp(2) $\cong$ SU(2), the antisymmetric rank-2 is a singlet and plays no role.
 
@@ -108,17 +110,17 @@ At large N, the leading-N behavior of $b_0$ determines whether the theory remain
 
 | Group | $3T(\mathrm{adj})$ at large $N$ | Leading matter contribution |
 |-------|-------------------------------|----------------------------|
-| SU(N) | $3N$ | each $\square/S^2/\Lambda^2$: $\sim N/2$ each |
+| SU(N) | $3N$ | each $\square/\bar{\square}/S/\bar{S}/A/\bar{A}$: $\sim N/2$ each |
 | SO(N) | $3N$ | each vector: $\sim 1$; each sym: $\sim N$ |
-| Sp(N) | $3N$ | each fund: $\sim 1/2$; each $\Lambda^2$: $\sim N$ |
+| Sp(N) | $3N$ | each fund: $\sim 1/2$; each $A$: $\sim N$ |
 
 **Large N asymptotic freedom requires that the $\mathcal{O}(N)$ part of $b_0$ is positive:**
 
-For **SU(N)** with $n_{\mathrm{adj}}$ adjoints, $n_S$ symmetric, $n_A$ antisymmetric, and $k$ bifundamental neighbors:
-$$b_0 \approx N\!\left(3 - n_{\mathrm{adj}} - \frac{n_S + n_A}{2} - \frac{k}{2}\right) + \mathcal{O}(1)$$
+For **SU(N)** with $n_{\mathrm{adj}}$ adjoints, $n_S + n_{\bar{S}}$ symmetric (plus conjugates), $n_A + n_{\bar{A}}$ antisymmetric (plus conjugates), and $k$ bifundamental neighbors:
+$$b_0 \approx N\!\left(3 - n_{\mathrm{adj}} - \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} - \frac{k}{2}\right) + \mathcal{O}(1)$$
 
 Large N AF condition:
-$$n_{\mathrm{adj}} + \frac{n_S + n_A}{2} + \frac{k}{2} < 3$$
+$$n_{\mathrm{adj}} + \frac{(n_S + n_{\bar{S}}) + (n_A + n_{\bar{A}})}{2} + \frac{k}{2} < 3$$
 
 where $k$ = number of bifundamental edges to other nodes (each contributing $N/2$ at large N regardless of the neighbor's gauge group).
 
