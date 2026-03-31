@@ -23,33 +23,42 @@ from beta_functions import (
     is_af_all_N,
 )
 
-# ── Data structures ────────────────────────────────────────────────────────────
+# ── Constants (§2, §3) ─────────────────────────────────────────────────────────
 
-# Valid edge representation types per gauge group pair.
-# SU-SU allows two types; all other pairs have exactly one.
+# Valid edge representation types per gauge group pair (§3 bifundamental table).
+# SU-SU admits two distinct types; all other pairs have exactly one.
 EDGE_REPS: dict[frozenset[str], list[str]] = {
-    frozenset(["SU", "SU"]): ["+-", "++"],  # (□,□̄) directed; (□,□) undirected
-    frozenset(["SU", "SO"]): ["std"],
-    frozenset(["SU", "Sp"]): ["std"],
-    frozenset(["SO", "SO"]): ["std"],
-    frozenset(["SO", "Sp"]): ["std"],
-    frozenset(["Sp", "Sp"]): ["std"],
+    frozenset(["SU", "SU"]): ["+-", "++"],  # "+-": (□,□̄) directed; "++": (□,□) undirected
+    frozenset(["SU", "SO"]): ["std"],        # (□, V)
+    frozenset(["SU", "Sp"]): ["std"],        # (□, f)
+    frozenset(["SO", "SO"]): ["std"],        # (V, V)
+    frozenset(["SO", "Sp"]): ["std"],        # (V, f)
+    frozenset(["Sp", "Sp"]): ["std"],        # (f, f)
 }
 
-# Valid node-level matter representations per gauge group type
+# Valid node-level matter representations per gauge group type (§3 node matter table).
 NODE_REPS: dict[str, list[str]] = {
     "SU": ["fund", "antifund", "adj", "S", "Sbar", "A", "Abar"],
     "SO": ["V", "adj", "S"],
     "Sp": ["fund", "adj", "A"],
 }
 
+# Fund-like reps per gauge group type (those enumerated up to max_fund).
+FUND_REPS: dict[str, list[str]] = {
+    "SU": ["fund", "antifund"],
+    "SO": ["V"],
+    "Sp": ["fund"],
+}
+
+
+# ── Data structures (§1) ───────────────────────────────────────────────────────
 
 @dataclass(frozen=True)
 class Edge:
     """A single bifundamental edge in the quiver."""
     src: int   # source node index
-    dst: int   # destination node index
-    rep: str   # "+-" (□,□̄); "++" (□,□); "std" (unique type for non-SU-SU pairs)
+    dst: int   # destination node index (src != dst; no self-loops)
+    rep: str   # "+-" (□,□̄) | "++" (□,□) | "std" (unique type for non-SU-SU pairs)
 
 
 @dataclass
@@ -60,7 +69,7 @@ class Quiver:
     Attributes
     ----------
     gauge_types : list of GaugeType, one per node
-    edges : list of Edge (directed bifundamental edges, with multiplicity)
+    edges : list of Edge (directed bifundamental edges, with multiplicity; no self-loops)
     node_matter : list of dicts mapping rep name -> count, one per node
     """
     gauge_types: list[GaugeType]
@@ -78,7 +87,7 @@ class Quiver:
         return len(self.gauge_types)
 
     def degree(self, node: int) -> int:
-        """Total number of bifundamental edges incident to node (in + out)."""
+        """Total number of bifundamental edges incident to node (in + out, with multiplicity)."""
         return sum(1 for e in self.edges if e.src == node or e.dst == node)
 
     def incident_edges(self, node: int) -> list[tuple[Edge, str]]:
@@ -91,8 +100,8 @@ class Quiver:
 
     def bifund_neighbor_types(self, node: int) -> list[GaugeType]:
         """
-        List of gauge types of bifundamental neighbors of node (with multiplicity),
-        suitable for passing to NodeSpec.bifund_neighbors.
+        List of gauge types of bifundamental neighbors of node (with multiplicity).
+        Suitable for NodeSpec.bifund_neighbors.
         """
         result = []
         for e in self.edges:
@@ -130,48 +139,45 @@ class Quiver:
         return len(visited) == self.n_nodes
 
 
-# ── Anomaly checks ─────────────────────────────────────────────────────────────
+# ── Anomaly checks (§4) ────────────────────────────────────────────────────────
 
 def su_anomaly_polynomial(quiver: Quiver, node: int) -> tuple[int, int]:
     """
     Return (coeff_N, coeff_const) for the SU(N) cubic gauge anomaly at node,
-    as a polynomial anomaly(N) = coeff_N * N + coeff_const.
+    expressed as a polynomial: anomaly(N) = coeff_N * N + coeff_const.
 
-    The anomaly-free condition requires both coefficients to vanish.
+    The anomaly-free condition for all N requires both coefficients to vanish.
 
-    Sources:
-    - Node-level matter: A(r) * 1 (no other group factor for node matter)
-    - SU-SU "+-" edge (node→b): A(□_node) * dim(□̄_b) = +N
-    - SU-SU "+-" edge (b→node): A(□̄_node) * dim(□_b) = -N
-    - SU-SU "++" edge: A(□_node) * dim(□_b) = +N
-    - SU-SO edge: A(□_node) * dim(V_SO) = +N
-    - SU-Sp edge: A(□_node) * dim(f_Sp) = +2N
+    Contributions (§4a):
+    - Node matter:     (n_S - n_Sbar) + (n_A - n_Abar) to coeff_N
+                       (n_f - n_fbar) + 4*(n_S-n_Sbar) - 4*(n_A-n_Abar) to coeff_const
+    - SU-SU "+-" (node→b): +N;  (b→node): -N
+    - SU-SU "++" edge:  +N  (to both endpoints)
+    - SU-SO edge:  +N   [dim(V_SO) = N]
+    - SU-Sp edge:  +2N  [dim(f_Sp) = 2N]
     """
     assert quiver.gauge_types[node] == "SU"
-    matter = quiver.node_matter[node]
+    m = quiver.node_matter[node]
 
-    n_f    = matter.get("fund", 0)
-    n_fb   = matter.get("antifund", 0)
-    n_S    = matter.get("S", 0)
-    n_Sb   = matter.get("Sbar", 0)
-    n_A    = matter.get("A", 0)
-    n_Ab   = matter.get("Abar", 0)
+    n_f   = m.get("fund", 0)
+    n_fb  = m.get("antifund", 0)
+    n_S   = m.get("S", 0)
+    n_Sb  = m.get("Sbar", 0)
+    n_A   = m.get("A", 0)
+    n_Ab  = m.get("Abar", 0)
 
-    # Node matter contributions
     coeff_N     = (n_S - n_Sb) + (n_A - n_Ab)
     coeff_const = (n_f - n_fb) + 4 * (n_S - n_Sb) - 4 * (n_A - n_Ab)
 
-    # Bifundamental contributions
     for e, side in quiver.incident_edges(node):
-        neighbor = e.dst if side == "src" else e.src
+        neighbor   = e.dst if side == "src" else e.src
         g_neighbor = quiver.gauge_types[neighbor]
 
         if g_neighbor == "SU":
             if e.rep == "+-":
-                # (□_node, □̄_neighbor) if node is src; (□_neighbor, □̄_node) if dst
                 coeff_N += +1 if side == "src" else -1
             elif e.rep == "++":
-                coeff_N += +1  # always +N to both endpoints
+                coeff_N += +1
         elif g_neighbor == "SO":
             coeff_N += +1   # dim(V_SO) = N
         elif g_neighbor == "Sp":
@@ -188,23 +194,20 @@ def check_su_anomaly(quiver: Quiver, node: int) -> bool:
 
 def sp_fund_count(quiver: Quiver, node: int) -> int:
     """
-    Count the total number of fundamental chiral multiplets at an Sp(N) node.
-    Each bifundamental edge contributes 1; node-level funds contribute their count.
-
-    The Witten anomaly condition: sp_fund_count ≡ 0 (mod 2).
+    Total number of fundamental chiral multiplets at an Sp(N) node:
+    node-level funds + one per bifundamental edge (§4b).
     """
     assert quiver.gauge_types[node] == "Sp"
-    n_f = quiver.node_matter[node].get("fund", 0)
-    return n_f + quiver.degree(node)
+    return quiver.node_matter[node].get("fund", 0) + quiver.degree(node)
 
 
 def check_sp_witten(quiver: Quiver, node: int) -> bool:
-    """Return True if the Sp(N) Witten anomaly vanishes at node."""
+    """Return True if the Sp(N) Witten anomaly vanishes (fund count even, §4b)."""
     return sp_fund_count(quiver, node) % 2 == 0
 
 
 def check_anomalies(quiver: Quiver) -> bool:
-    """Check all anomaly conditions for every node."""
+    """Check all gauge and global anomaly conditions for every node."""
     for i, g in enumerate(quiver.gauge_types):
         if g == "SU" and not check_su_anomaly(quiver, i):
             return False
@@ -213,7 +216,7 @@ def check_anomalies(quiver: Quiver) -> bool:
     return True
 
 
-# ── Asymptotic freedom ─────────────────────────────────────────────────────────
+# ── Asymptotic freedom (§5) ────────────────────────────────────────────────────
 
 def check_af(quiver: Quiver) -> bool:
     """Return True if b_0 > 0 for all valid N at every node."""
@@ -223,49 +226,22 @@ def check_af(quiver: Quiver) -> bool:
     return True
 
 
-# ── Enumeration ────────────────────────────────────────────────────────────────
-
-def _max_degree(gauge_type: GaugeType, matter: dict[str, int]) -> int:
-    """
-    Upper bound on bifundamental degree of a node of gauge_type with given
-    node matter, derived from requiring the leading-N coefficient of b_0 >= 0.
-
-    The bound is conservative (uses minimum T_bifund contribution = N/2).
-    """
-    if gauge_type == "SU":
-        # leading coeff = 3 - n_adj - (n_S+n_Sbar)/2 - (n_A+n_Abar)/2 - deg/2 >= 0
-        n_adj = matter.get("adj", 0)
-        n_S2  = matter.get("S", 0) + matter.get("Sbar", 0)
-        n_A2  = matter.get("A", 0) + matter.get("Abar", 0)
-        slack = Fraction(3 - n_adj) - Fraction(n_S2 + n_A2, 2)
-        # each bif edge costs at least 1/2 from leading coeff → deg <= 2*slack
-        return max(0, int(2 * slack))
-    if gauge_type == "SO":
-        # leading coeff = 3 - n_adj - n_S - deg >= 0 (min cost per edge = 1)
-        n_adj = matter.get("adj", 0)
-        n_S   = matter.get("S", 0)
-        return max(0, 3 - n_adj - n_S)
-    if gauge_type == "Sp":
-        # leading coeff = 3 - n_adj - n_A - deg/2 >= 0 (min cost = 1/2)
-        n_adj = matter.get("adj", 0)
-        n_A   = matter.get("A", 0)
-        return max(0, int(2 * (3 - n_adj - n_A)))
-    raise ValueError(gauge_type)
-
+# ── Enumeration helpers ────────────────────────────────────────────────────────
 
 def _matter_bounds(gauge_type: GaugeType) -> dict[str, int]:
     """
-    Upper bounds on matter multiplicities at a single node with no bifundamentals,
-    derived from the leading-N AF condition. These bound the search space.
+    Upper bounds on rank-2 matter multiplicities, derived from requiring the
+    leading-N coefficient of b_0 to be non-negative (necessary for AF for all N).
+    Fund-like reps are bounded separately by max_fund.
     """
     if gauge_type == "SU":
-        # leading coeff = 3 - n_adj - (n_S+n_Sbar)/2 - (n_A+n_Abar)/2 > 0
+        # leading coeff of b_0: 3 - n_adj - (n_S+n_Sbar)/2 - (n_A+n_Abar)/2 >= 0
         return {"fund": 0, "antifund": 0, "adj": 2, "S": 5, "Sbar": 5, "A": 5, "Abar": 5}
     if gauge_type == "SO":
-        # leading coeff = 3 - n_adj - n_S > 0
+        # leading coeff: 3 - n_adj - n_S >= 0
         return {"V": 0, "adj": 2, "S": 2}
     if gauge_type == "Sp":
-        # leading coeff = 3 - n_adj - n_A > 0
+        # leading coeff: 3 - n_adj - n_A >= 0
         return {"fund": 0, "adj": 2, "A": 2}
     raise ValueError(gauge_type)
 
@@ -276,34 +252,33 @@ def _enumerate_node_matter(
     max_fund: int = 6,
 ) -> Iterator[dict[str, int]]:
     """
-    Generate all valid matter dicts for a node, bounded by AF (all N).
-    fund/antifund at SU and fund at Sp are bounded by max_fund.
-    """
-    bounds = _matter_bounds(gauge_type)
-    reps   = NODE_REPS[gauge_type]
+    Yield all matter dicts for a node that satisfy b_0 > 0 for all valid N.
 
-    # Fund-like reps get a separate bound from max_fund
-    fund_reps = {
-        "SU": ["fund", "antifund"],
-        "SO": ["V"],
-        "Sp": ["fund"],
-    }[gauge_type]
+    Reps are enumerated in the order given by NODE_REPS. For each rep:
+    - count = 0: always allowed (cannot worsen AF); recurse
+    - count > 0: recurse only if AF still holds; break on first failure
+      (valid since b_0 is monotonically decreasing in each rep count)
+    """
+    reps       = NODE_REPS[gauge_type]
+    bounds     = _matter_bounds(gauge_type)
+    fund_reps  = FUND_REPS[gauge_type]
 
     def _gen(idx: int, current: dict[str, int]) -> Iterator[dict[str, int]]:
         if idx == len(reps):
-            yield dict(current)
+            if is_af_all_N(gauge_type, current, bifund_neighbors):
+                yield dict(current)
             return
         rep = reps[idx]
-        hi = max_fund if rep in fund_reps else bounds[rep]
+        hi  = max_fund if rep in fund_reps else bounds[rep]
         for count in range(hi + 1):
-            current[rep] = count
-            # Early pruning: check leading-N AF coefficient
-            if is_af_all_N(gauge_type, current, bifund_neighbors):
-                yield from _gen(idx + 1, current)
-            elif count == 0:
-                # Even with 0 of this rep we may still be AF with later reps
-                yield from _gen(idx + 1, current)
-        del current[rep]
+            if count > 0:
+                current[rep] = count
+                if not is_af_all_N(gauge_type, current, bifund_neighbors):
+                    del current[rep]
+                    break  # b_0 only decreases with more matter; no need to try higher
+            yield from _gen(idx + 1, current)
+        if rep in current:
+            del current[rep]
 
     yield from _gen(0, {})
 
@@ -313,43 +288,44 @@ def _enumerate_edges(
     max_multiedge: int = 2,
 ) -> Iterator[list[Edge]]:
     """
-    Generate all edge multisets for a fixed gauge type assignment,
-    up to max_multiedge edges of each type between each ordered pair of nodes.
+    Yield all bifundamental edge multisets for a fixed gauge type assignment.
 
-    Yields lists of Edge objects (may be empty).
+    Iterates over ordered pairs (i, j) with i < j (no self-loops).
+    For each pair:
+    - SU-SU: three independent counts — "+-" i→j, "+-" j→i, "++"
+    - Other pairs: one count for "std" edges (unordered)
+    Each count ranges from 0 to max_multiedge.
     """
     n = len(gauge_types)
-    # Collect all (i, j, rep) slots where i <= j
+    # Build list of (i, j, slot_key) for all valid slots
     slots: list[tuple[int, int, str]] = []
     for i in range(n):
-        for j in range(i, n):
+        for j in range(i + 1, n):   # strict i < j: no self-loops
             gi, gj = gauge_types[i], gauge_types[j]
             key = frozenset([gi, gj])
             if key not in EDGE_REPS:
                 continue
             for rep in EDGE_REPS[key]:
                 if rep == "+-":
-                    # Directed: separate counts for i→j and j→i
-                    slots.append((i, j, "+-_fwd"))  # i→j
-                    if i != j:
-                        slots.append((i, j, "+-_bwd"))  # j→i
+                    slots.append((i, j, "+-_fwd"))   # i→j
+                    slots.append((i, j, "+-_bwd"))   # j→i
                 else:
                     slots.append((i, j, rep))
 
-    # Enumerate multiplicities for each slot
-    ranges = [range(max_multiedge + 1)] * len(slots)
-    for counts in product(*ranges):
+    for counts in product(range(max_multiedge + 1), repeat=len(slots)):
         edges: list[Edge] = []
-        for (i, j, rep_key), count in zip(slots, counts):
+        for (i, j, slot_key), count in zip(slots, counts):
             for _ in range(count):
-                if rep_key == "+-_fwd":
+                if slot_key == "+-_fwd":
                     edges.append(Edge(i, j, "+-"))
-                elif rep_key == "+-_bwd":
+                elif slot_key == "+-_bwd":
                     edges.append(Edge(j, i, "+-"))
                 else:
-                    edges.append(Edge(i, j, rep_key))
+                    edges.append(Edge(i, j, slot_key))
         yield edges
 
+
+# ── Main enumeration (§6) ──────────────────────────────────────────────────────
 
 def enumerate_quivers(
     max_nodes: int = 2,
@@ -358,55 +334,47 @@ def enumerate_quivers(
     require_connected: bool = True,
 ) -> list[Quiver]:
     """
-    Enumerate all quivers satisfying:
-    - UV asymptotic freedom (b_0 > 0) for all valid N at every node
+    Enumerate all quiver gauge theories satisfying (§6 steps 1–6):
+    - UV asymptotic freedom: b_0 > 0 for all valid N at every node
     - SU(N) gauge anomaly cancellation
     - Sp(N) Witten anomaly cancellation
     - Connected (if require_connected=True)
 
-    Note: does not deduplicate isomorphic quivers. For small max_nodes the
-    output can be filtered using a graph isomorphism library (e.g. networkx).
+    Does not deduplicate graph-isomorphic quivers.
 
     Parameters
     ----------
-    max_nodes : maximum number of gauge nodes
-    max_fund : maximum number of fundamental/vector representations per node
-    max_multiedge : maximum multiplicity of each edge type between a pair of nodes
+    max_nodes     : maximum number of gauge nodes
+    max_fund      : maximum multiplicity for fund-like representations per node
+    max_multiedge : maximum multiplicity for each edge slot between a pair of nodes
     """
     gauge_group_types: list[GaugeType] = ["SU", "SO", "Sp"]
     valid: list[Quiver] = []
 
     for n_nodes in range(1, max_nodes + 1):
-        # Enumerate all gauge type assignments
+        # Step 3: enumerate gauge type assignments
         for gauge_types in product(gauge_group_types, repeat=n_nodes):
             gauge_types = list(gauge_types)
 
-            # Enumerate all edge configurations
+            # Steps 1–2 + 4: enumerate edge configurations
             for edges in _enumerate_edges(gauge_types, max_multiedge):
-                # Build partial quiver with no node matter to get neighbor lists
                 q_partial = Quiver(gauge_types, edges)
 
+                # Connectivity filter
                 if require_connected and not q_partial.is_connected():
                     continue
 
-                # Enumerate node matter for each node independently,
-                # then combine (with constraint checking)
-                matter_choices: list[list[dict[str, int]]] = []
-                feasible = True
+                # Step 5: enumerate node matter (AF-filtered per node)
+                matter_per_node: list[list[dict[str, int]]] = []
                 for i in range(n_nodes):
                     neighbors = q_partial.bifund_neighbor_types(i)
-                    choices = list(_enumerate_node_matter(gauge_types[i], neighbors, max_fund))
-                    if not choices:
-                        feasible = False
-                        break
-                    matter_choices.append(choices)
+                    choices   = list(_enumerate_node_matter(gauge_types[i], neighbors, max_fund))
+                    matter_per_node.append(choices)
 
-                if not feasible:
-                    continue
-
-                for matter_combo in product(*matter_choices):
+                # Step 6: apply all constraints
+                for matter_combo in product(*matter_per_node):
                     q = Quiver(gauge_types, edges, list(matter_combo))
-                    if check_anomalies(q):
+                    if check_af(q) and check_anomalies(q):
                         valid.append(q)
 
     return valid
@@ -416,8 +384,7 @@ def enumerate_quivers(
 
 def quiver_summary(q: Quiver) -> str:
     """Human-readable summary of a quiver."""
-    lines = []
-    lines.append(f"Nodes: {' '.join(f'{g}({i})' for i, g in enumerate(q.gauge_types))}")
+    lines = [f"Nodes: {' '.join(f'{g}({i})' for i, g in enumerate(q.gauge_types))}"]
     for e in q.edges:
         lines.append(f"  Edge {e.src}→{e.dst}  rep={e.rep}")
     for i, matter in enumerate(q.node_matter):
@@ -427,23 +394,20 @@ def quiver_summary(q: Quiver) -> str:
     return "\n".join(lines)
 
 
-# ── Quick validation ───────────────────────────────────────────────────────────
+# ── Validation ─────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     # Single SU(N) node: SQCD with N_f fund + N_f antifund
-    # AF: 3N - N_f > 0 for all N>=2 => N_f <= 5
-    # Anomaly: n_f - n_fbar = 0 => ok
+    # b_0 = 3N - N_f > 0 for all N>=2  =>  N_f <= 5
+    # Anomaly: n_f - n_fbar = 0  =>  ok
     print("=== Single SU(N) node, SQCD-like ===")
     for n_f in range(7):
-        q = Quiver(["SU"], [], [{"fund": n_f, "antifund": n_f}])
-        af  = check_af(q)
-        ano = check_anomalies(q)
-        print(f"  N_f={n_f}: AF={af}  anomaly_free={ano}")
+        q   = Quiver(["SU"], [], [{"fund": n_f, "antifund": n_f}])
+        print(f"  N_f={n_f}: AF={check_af(q)}  anomaly_free={check_anomalies(q)}")
 
     print()
 
-    # Two SU(N) nodes, one "+-" bifundamental
-    # AF: b_0 = 3N - N/2 = 5N/2 > 0 ✓; anomaly: +N at node 0, -N at node 1 → not balanced
+    # Two SU(N) nodes, one "+-" bifundamental (unbalanced anomaly)
     print("=== Two SU(N) nodes, one +- edge, no extra matter ===")
     q = Quiver(["SU", "SU"], [Edge(0, 1, "+-")])
     print(f"  AF={check_af(q)}  anomaly_free={check_anomalies(q)}")
@@ -452,29 +416,34 @@ if __name__ == "__main__":
 
     print()
 
-    # Two SU(N) nodes, two +- edges in opposite directions: balanced
-    # b_0 = 3N - N = 2N > 0 ✓; anomaly: +N - N = 0 ✓
+    # Two SU(N) nodes, one +- each direction: balanced
+    # b_0 = 3N - N = 2N > 0;  anomaly: +N - N = 0
     print("=== Two SU(N) nodes, one +- each direction (balanced) ===")
     q = Quiver(["SU", "SU"], [Edge(0, 1, "+-"), Edge(1, 0, "+-")])
     print(f"  AF={check_af(q)}  anomaly_free={check_anomalies(q)}")
 
     print()
 
-    # Sp(N) node with 2 fund: Witten OK
+    # Sp(N) Witten anomaly
     print("=== Sp(N) node, 2 fundamentals ===")
     q = Quiver(["Sp"], [], [{"fund": 2}])
     print(f"  AF={check_af(q)}  Witten OK={check_sp_witten(q, 0)}")
 
     print()
 
-    # Sp(N) node with 3 fund: Witten violation
     print("=== Sp(N) node, 3 fundamentals ===")
     q = Quiver(["Sp"], [], [{"fund": 3}])
     print(f"  AF={check_af(q)}  Witten OK={check_sp_witten(q, 0)}")
 
     print()
 
-    # Small enumeration: 1 node, no multiedge
+    # 1-node enumeration
     print("=== Enumerate 1-node quivers ===")
     results = enumerate_quivers(max_nodes=1, max_fund=6, max_multiedge=0)
     print(f"  Found {len(results)} valid 1-node quivers")
+
+    # Verify every result passes both checks
+    for q in results:
+        assert check_af(q),        f"AF failed: {quiver_summary(q)}"
+        assert check_anomalies(q), f"Anomaly failed: {quiver_summary(q)}"
+    print("  All pass check_af and check_anomalies.")
