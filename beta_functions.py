@@ -13,13 +13,20 @@ from typing import Literal
 GaugeType = Literal["SU", "SO", "Sp"]
 
 # Minimum valid N for each gauge group type
-N_MIN: dict[str, int] = {"SU": 2, "SO": 3, "Sp": 1}
+N_MIN: dict[str, int] = {"SU": 5, "SO": 5, "Sp": 3}
 
-# Valid node-level matter representations per gauge group type
+# Valid node-level matter representations per gauge group type (all reps)
 VALID_REPS: dict[str, set[str]] = {
     "SU": {"fund", "antifund", "adj", "S", "Sbar", "A", "Abar"},
     "SO": {"V", "adj", "S"},
     "Sp": {"fund", "adj", "A"},
+}
+
+# Rank-2 and adjoint representations only (fund-like reps absorbed into N_f)
+RANK2_ADJ_REPS: dict[str, list[str]] = {
+    "SU": ["adj", "S", "Sbar", "A", "Abar"],
+    "SO": ["adj", "S"],
+    "Sp": ["adj", "A"],
 }
 
 
@@ -198,16 +205,14 @@ def is_af_all_N(
     bifund_neighbors: list[GaugeType],
 ) -> bool:
     """
-    Return True if b_0 > 0 for all valid N (N >= N_MIN[gauge_type]).
+    Return True if b_0 is positive for all sufficiently large N (large-N classification).
 
-    For b_0(N) = alpha*N + beta to be positive for all N >= N_min:
-      - alpha >= 0  (b_0 must not decrease without bound)
-      - b_0(N_min) > 0
+    For large N, b_0(N) = alpha*N + beta > 0 requires:
+      - alpha > 0, or
+      - alpha == 0 and beta > 0  (constant positive b_0)
     """
-    N_min = N_MIN[gauge_type]
     alpha, beta = b0_linear(gauge_type, matter, bifund_neighbors)
-    b0_at_min = alpha * N_min + beta
-    return alpha >= 0 and b0_at_min > 0
+    return alpha > 0 or (alpha == 0 and beta > 0)
 
 
 # ── Examples ───────────────────────────────────────────────────────────────────
@@ -216,7 +221,7 @@ if __name__ == "__main__":
     # Example A: SU(N) SQCD with N_f fundamentals + N_f anti-fundamentals
     # b_0 = 3N - N_f  =>  AF iff N_f < 3N
     for N_f in [2, 5, 9]:
-        node = NodeSpec("SU", 3, matter={"fund": N_f, "antifund": N_f})
+        node = NodeSpec("SU", 5, matter={"fund": N_f, "antifund": N_f})
         print(f"SQCD N=3, N_f={N_f}: b_0 = {compute_b0(node)}  AF={is_af(node)}")
 
     print()
@@ -224,7 +229,7 @@ if __name__ == "__main__":
     # Example B: N=2 SQCD — SU(N) with 1 adjoint + N_f fund + N_f antifund
     # b_0 = 2N - N_f  =>  AF iff N_f < 2N
     for N_f in [1, 4, 6]:
-        node = NodeSpec("SU", 4, matter={"adj": 1, "fund": N_f, "antifund": N_f})
+        node = NodeSpec("SU", 5, matter={"adj": 1, "fund": N_f, "antifund": N_f})
         print(f"N=2 SQCD N=4, N_f={N_f}: b_0 = {compute_b0(node)}  AF={is_af(node)}")
 
     print()

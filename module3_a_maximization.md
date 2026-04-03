@@ -27,6 +27,8 @@ where the traces are over all Weyl fermions in the theory.
 ### Variable R-charges (chiral multiplets)
 Assign trial R-charge $R[\Phi_i]$ to each chiral superfield $\Phi_i$. The fermion in $\Phi_i$ has R-charge $R[\Phi_i] - 1$.
 
+**There is no lower bound on $R[\Phi_i]$ itself.** The unitarity bound $R \geq 2/3$ applies only to gauge-invariant chiral operators $\mathcal{O}$ (see §9), not to elementary (gauge-charged) superfields, which may have $R[\Phi_i] < 2/3$.
+
 The trial R-symmetry must lie in the flavor symmetry group of the theory. Parameterize:
 $$R[\Phi_i] = R^{(0)}[\Phi_i] + \sum_\alpha s_\alpha [F_\alpha]_i$$
 
@@ -114,7 +116,7 @@ Since $a_{\mathrm{trial}}$ is cubic in $s_\alpha$, these are quadratic equations
 
 **Step 4:** Verify the result
 - Check $a_{\mathrm{trial}}$ is indeed a local maximum (negative definite Hessian)
-- Check unitarity bounds: $R[\Phi_i] \geq 2/3$ for each chiral superfield (if violated, the operator hits a unitarity bound and decouples as a free field)
+- Check unitarity bounds: $R[\mathcal{O}] \geq 2/3$ for each gauge-invariant chiral operator $\mathcal{O}$ (elementary fields $\Phi_i$ may have $R[\Phi_i] < 2/3$; only gauge-invariant composites are constrained)
 
 **Output:** Exact IR R-charges $R_i^*$, central charges $a^* = a_{\mathrm{trial}}(R^*)$, $c^* = c_{\mathrm{trial}}(R^*)$.
 
@@ -142,10 +144,23 @@ For classifying fixed points, the key outputs are $a$, $c$, and the exact R-char
 
 ## 9. Treatment of Accidental Symmetries
 
-If at the would-be fixed point a gauge-invariant operator $\mathcal{O}$ has $R[\mathcal{O}] < 2/3$ (violates unitarity bound), then $\mathcal{O}$ is actually a **free field** that decouples. In this case:
-1. Decouple $\mathcal{O}$ by adding a Lagrange multiplier (flip field) and redo a-maximization
-2. This modifies the flavor symmetry and the anomaly-free constraints
-3. Iterate until all operators satisfy $R \geq 2/3$
+The unitarity bound states: every gauge-invariant chiral operator $\mathcal{O}$ must have $R[\mathcal{O}] \geq 2/3$ at a unitary fixed point. Elementary gauge-charged fields $\Phi_i$ are not gauge-invariant and are not directly constrained.
+
+The simple gauge-invariant operators to check are:
+
+| Theory content | Operator $\mathcal{O}$ | $R[\mathcal{O}]$ |
+|---|---|---|
+| SU(N) fund $Q$ + antifund $\tilde{Q}$ | meson $M = Q\tilde{Q}$ | $R_Q + R_{\tilde{Q}}$ |
+| SU(N) bifund $Q_{ij}$ + $\tilde{Q}_{ij}$ (opposite) | bilinear $Q\tilde{Q}$ | $R_Q + R_{\tilde{Q}}$ |
+| Adjoint $\Phi$ | $\mathrm{Tr}(\Phi^2)$ | $2R_\Phi$ |
+| $S + \bar{S}$, $A + \bar{A}$ | $S\bar{S}$, $A\bar{A}$ | $R_S + R_{\bar{S}}$, $R_A + R_{\bar{A}}$ |
+| SO(N) vector $V$ | $V \cdot V$ | $2R_V$ |
+| Sp(N) fundamental $f$ | $f \Omega f$ | $2R_f$ |
+
+If $R[\mathcal{O}] < 2/3$, then $\mathcal{O}$ is a **free field** that decouples. The decoupling procedure:
+1. Add the constraint $\sum_i R[\Phi_i] = 2/3$ for the fields forming $\mathcal{O}$ (pinning $R[\mathcal{O}] = 2/3$)
+2. Redo a-maximization with this additional linear constraint
+3. Iterate until all gauge-invariant operators satisfy $R[\mathcal{O}] \geq 2/3$
 
 This is the **a-maximization with decoupling** procedure (Kutasov–Schwimmer, Intriligator–Wecht).
 
@@ -155,17 +170,21 @@ This is the **a-maximization with decoupling** procedure (Kutasov–Schwimmer, I
 
 Theory: SU(N) with $N_f$ fundamentals $Q_i$ and $N_f$ anti-fundamentals $\tilde{Q}_i$, no superpotential.
 
+Using $T(\square) = T(\bar{\square}) = 1/2$ (Dynkin index normalization throughout):
+
 **Anomaly-free condition:**
-$$N + N_f \cdot (R_Q - 1) + N_f \cdot (R_{\tilde{Q}} - 1) = 0$$
+$$N + N_f \cdot \tfrac{1}{2}(R_Q - 1) + N_f \cdot \tfrac{1}{2}(R_{\tilde{Q}} - 1) = 0$$
 
 By symmetry $R_Q = R_{\tilde{Q}} \equiv R$:
-$$N + 2N_f(R-1) = 0 \Rightarrow R = 1 - \frac{N}{2N_f}$$
+$$N + N_f(R-1) = 0 \Rightarrow R = 1 - \frac{N}{N_f}$$
 
 **No free parameters left** (after imposing $R_Q = R_{\tilde{Q}}$ by flavor symmetry), so a-maximization is trivial: the R-charge is fixed by the anomaly-free condition.
 
-$$R^*_Q = 1 - \frac{N}{2N_f} = \frac{2N_f - N}{2N_f}$$
+$$R^*_Q = 1 - \frac{N}{N_f}$$
 
-Unitarity: $R^*_Q \geq 2/3 \Rightarrow N_f \geq \frac{3N}{2}$ (the lower boundary of the conformal window).
+**Unitarity check on gauge-invariant operators:** The meson $M = Q\tilde{Q}$ has $R[M] = 2R^*_Q = 2 - 2N/N_f$. The unitarity bound $R[M] \geq 2/3$ gives:
+$$N_f \geq \frac{3N}{2}$$
+This is the lower boundary of the conformal window. Note: $R^*_Q$ itself can be well below $2/3$; only $R[M]$ is constrained.
 
 For $N_f > 3N/2$ and $N_f < 3N$ (upper AF boundary): SQCD has a non-trivial IR fixed point (Banks-Zaks).
 
@@ -175,19 +194,17 @@ For $N_f > 3N/2$ and $N_f < 3N$ (upper AF boundary): SQCD has a non-trivial IR f
 
 Theory: SU(N)$\times$SU(N) with bifundamentals $Q$ in $(\square_1, \bar{\square}_2)$ and $\tilde{Q}$ in $(\bar{\square}_1, \square_2)$.
 
+Using $T_{\mathrm{bif}}(\mathrm{SU},\mathrm{SU}) = N/2$ per endpoint (each bifundamental has $N$ color copies of the other node, each with $T(\square)=1/2$):
+
 **Anomaly-free for node 1:**
-$$N + N \cdot (R_Q - 1) + N \cdot (R_{\tilde{Q}} - 1) = 0$$
-$$\Rightarrow 1 + (R_Q - 1) + (R_{\tilde{Q}} - 1) = 0 \Rightarrow R_Q + R_{\tilde{Q}} = 2$$
+$$N + \tfrac{N}{2}(R_Q - 1) + \tfrac{N}{2}(R_{\tilde{Q}} - 1) = 0$$
+$$\Rightarrow 1 + \tfrac{1}{2}(R_Q - 1) + \tfrac{1}{2}(R_{\tilde{Q}} - 1) = 0 \Rightarrow R_Q + R_{\tilde{Q}} = 0$$
 
-**Anomaly-free for node 2:** gives the same condition (by symmetry).
+**Anomaly-free for node 2:** gives the same condition.
 
-**Superpotential** (if present, e.g. $W = 0$): no additional constraint.
+The constraint $R_Q + R_{\tilde{Q}} = 0$ with the free direction $R_Q - R_{\tilde{Q}}$ means the a-maximum is at $R_Q = R_{\tilde{Q}} = 0$ (a is maximized at the symmetric point since Tr$R$ is constant and Tr$R^3$ is maximized at $t=0$). This is unphysical ($R=0$), signaling no interacting SCFT exists for the pure bifundamental theory at $N_f=0$, consistent with the Module 4 boundary analysis ($\mathcal{B}_a > 0$).
 
-By the $\mathbb{Z}_2$ symmetry $Q \leftrightarrow \tilde{Q}$: $R_Q = R_{\tilde{Q}} = 1$.
-
-This is the $\mathcal{N}=2$ circular quiver in disguise (at this specific point), or the $\mathcal{N}=1$ theory where both matter fields sit at $R=1$ (free theory for the bifundamentals).
-
-More interesting cases arise with additional matter or superpotential deformations.
+Non-trivial examples require $N_f > 0$ fundamental flavors, which shift $b \neq 0$ and give $R_Q, R_{\tilde{Q}} \neq 0$ from the constraint.
 
 ---
 
@@ -229,11 +246,11 @@ def a_maximize(quiver):
                                   for a in range(len(flavor_generators)))
               for phi in quiver.chiral_fields}
 
-    # Check unitarity
-    for phi, r in R_star.items():
-        if r < 2/3:
-            # Decouple phi and redo
-            return a_maximize_with_decoupling(quiver, phi)
+    # Check unitarity on gauge-invariant operators (not elementary fields)
+    for op, (fields, r_op) in gauge_invariant_ops(quiver, R_star).items():
+        if r_op < 2/3:
+            # Decouple: add constraint sum(R[phi] for phi in fields) = 2/3
+            return a_maximize_with_decoupling(quiver, op_constraint=(fields, 2/3))
 
     a_star = a_trial(result.x, quiver, R0, flavor_generators)
     return R_star, a_star

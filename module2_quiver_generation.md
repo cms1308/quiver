@@ -106,12 +106,13 @@ A bifundamental $(\square_a, \square_b)$ (both fundamentals):
 Denote:
 - $n_{ab}^{+-}$: number of $(\square_a, \bar{\square}_b)$ bifundamentals from node $a$ to node $b$ (directed)
 - $n_{ab}^{++}$: number of $(\square_a, \square_b)$ bifundamentals between nodes $a$ and $b$ (undirected; $n_{ab}^{++} = n_{ba}^{++}$)
+- $n_{ab}^{--}$: number of $(\bar{\square}_a, \bar{\square}_b)$ bifundamentals between nodes $a$ and $b$ (undirected; $n_{ab}^{--} = n_{ba}^{--}$)
 
 Each $(\square_a, \bar{\square}_b)$ contributes $+N$ to node $a$ and $-N$ to node $b$.
 Each $(\square_a, \square_b)$ contributes $+N$ to **both** node $a$ and node $b$.
 
 The general anomaly-free condition at node $a$:
-$$N\sum_{b \neq a} \Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++}\Big) + (n_f - n_{\bar{f}}) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
+$$N\sum_{b \neq a} \Big(n_{ab}^{+-} - n_{ba}^{+-} + n_{ab}^{++} - n_{ab}^{--} \Big) + (n_f - n_{\bar{f}}) + (n_S - n_{\bar{S}})(N+4) + (n_A - n_{\bar{A}})(N-4) = 0$$
 
 where $n_f, n_{\bar{f}}$ are the numbers of standalone fundamental and anti-fundamental chirals at node $a$ (node-level matter, not bifundamentals).
 
