@@ -25,6 +25,7 @@ from fractions import Fraction
 from quiver_generation import (
     Quiver, enumerate_quivers, enumerate_quivers_mixed_rank,
     chiral_excess_coeffs, nf_bound, nf_bound_str,
+    _dedup_symmetries,
 )
 from a_maximization_large_N import (
     a_maximize_large_N_fast, a_maximize_large_N_fast_full,
@@ -49,12 +50,15 @@ CREATE TABLE IF NOT EXISTS universality_class (
     rep_theory_id  INTEGER,
     a_exact        TEXT,
     c_exact        TEXT,
-    R_exact        TEXT
+    R_exact        TEXT,
+    a_over_c       REAL,
+    veneziano_any  INTEGER NOT NULL DEFAULT 0,
+    veneziano_all  INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS theory (
     theory_id      INTEGER PRIMARY KEY AUTOINCREMENT,
-    class_id       INTEGER NOT NULL,
+    class_id       INTEGER,
     gauge_pair     TEXT    NOT NULL,
     gauge0         TEXT    NOT NULL,
     gauge1         TEXT    NOT NULL,
@@ -71,9 +75,11 @@ CREATE TABLE IF NOT EXISTS theory (
     delta1_b       INTEGER,
     nf_bound0      TEXT    NOT NULL,
     nf_bound1      TEXT    NOT NULL,
-    a_over_N2      REAL    NOT NULL,
+    a_over_N2      REAL,
     c_over_N2      REAL,
     R_numerical    TEXT,
+    a_over_c       REAL,
+    veneziano      INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (class_id) REFERENCES universality_class(class_id)
 );
 
@@ -230,7 +236,6 @@ def _format_R_numerical(fast_result) -> str | None:
 def cmd_build(args: argparse.Namespace) -> None:
     import os
     db_path = args.db
-    max_a = args.max_a
     exact_timeout = args.exact_timeout
 
     if os.path.exists(db_path):
@@ -245,7 +250,7 @@ def cmd_build(args: argparse.Namespace) -> None:
     print("Phase 1: enumerating 2-node quivers (equal + mixed rank)...", flush=True)
     t0 = time.time()
 
-    # Equal-rank quivers (all nodes rank N)
+    # Equal-rank quivers (all nodes rank N) — already deduped by symmetries internally
     equal_rank = enumerate_quivers(
         n_nodes=2, max_multiedge=4, min_multiedge=1, require_connected=True,
     )
@@ -258,48 +263,63 @@ def cmd_build(args: argparse.Namespace) -> None:
         n_nodes=2, rank_multipliers=[1, 2],
         max_multiedge=4, min_multiedge=1, require_connected=True,
     )
-    all_quivers = (
-        [(q, bounds, (1, 1)) for q, bounds in equal_rank] +
-        [(q, bounds, (2, 1)) for q, bounds in mixed_21] +
-        [(q, bounds, (1, 2)) for q, bounds in mixed_12]
-    )
-    total = len(all_quivers)
+    # Cross-set dedup: [2,1] and [1,2] quivers may be node-swaps of each other
+    all_qb = equal_rank + mixed_21 + mixed_12
+    all_qb = _dedup_symmetries(all_qb)
+    total = len(all_qb)
     print(f"  {len(equal_rank)} equal-rank + {len(mixed_21)} [2,1] + {len(mixed_12)} [1,2] "
-          f"= {total} quivers found in {time.time()-t0:.1f}s", flush=True)
+          f"→ {total} after cross-set dedup  ({time.time()-t0:.1f}s)", flush=True)
 
     print("Phase 1: fast a-maximization scan...", flush=True)
     t1 = time.time()
 
     from collections import defaultdict
-    # Bucket key: (gauge_pair, m0, m1) to keep equal-rank and mixed-rank separate
     buckets: dict[tuple, list[dict]] = defaultdict(list)
-    n_none = 0
-    n_filtered = 0
+    diverged_rows: list[dict] = []
+    n_diverged = 0
 
-    for i, (q, bounds, (m0, m1)) in enumerate(all_quivers):
+    for i, (q, bounds) in enumerate(all_qb):
         if i % 200 == 0:
             print(f"  {i}/{total}\r", end="", flush=True)
-        fast_res = a_maximize_large_N_fast_full(q)
-        if fast_res is None:
-            n_none += 1
-            continue
-        a_val = fast_res.a_over_N2
-        if abs(a_val) > max_a:
-            n_filtered += 1
-            continue
 
+        m0, m1 = q.rank_multipliers[0], q.rank_multipliers[1]
         g0, g1 = q.gauge_types[0], q.gauge_types[1]
         pair = _gauge_pair_key(g0, g1)
-        bucket_key = (pair, m0, m1)
 
         d0_str, d0_a, d0_b = _delta_for_node(q, 0)
         d1_str, d1_a, d1_b = _delta_for_node(q, 1)
         nf0 = _nf_bound_str_for(q, 0)
         nf1 = _nf_bound_str_for(q, 1)
+        veneziano = int(
+            (d0_a is not None and d0_a != 0) or
+            (d1_a is not None and d1_a != 0)
+        )
+
+        fast_res = a_maximize_large_N_fast_full(q)
+        if fast_res is None:
+            n_diverged += 1
+            diverged_rows.append({
+                "gauge_pair": pair, "gauge0": g0, "gauge1": g1,
+                "rank0_mult": m0, "rank1_mult": m1,
+                "matter0": _fmt_matter(q.node_matter[0]),
+                "matter1": _fmt_matter(q.node_matter[1]),
+                "edges": _fmt_edges(q),
+                "delta0": d0_str, "delta1": d1_str,
+                "delta0_a": d0_a, "delta0_b": d0_b,
+                "delta1_a": d1_a, "delta1_b": d1_b,
+                "nf_bound0": nf0, "nf_bound1": nf1,
+                "a_over_N2": None, "c_over_N2": None,
+                "R_numerical": None, "a_over_c": None,
+                "veneziano": veneziano,
+            })
+            continue
+
+        a_val = fast_res.a_over_N2
+        c_val = fast_res.c_over_N2
+        a_over_c = (a_val / c_val) if (c_val is not None and abs(c_val) > 1e-12) else None
 
         fields = build_fields_large_N(q)
-
-        buckets[bucket_key].append({
+        buckets[(pair, m0, m1)].append({
             "gauge_pair": pair, "gauge0": g0, "gauge1": g1,
             "rank0_mult": m0, "rank1_mult": m1,
             "matter0": _fmt_matter(q.node_matter[0]),
@@ -309,17 +329,18 @@ def cmd_build(args: argparse.Namespace) -> None:
             "delta0_a": d0_a, "delta0_b": d0_b,
             "delta1_a": d1_a, "delta1_b": d1_b,
             "nf_bound0": nf0, "nf_bound1": nf1,
-            "a_over_N2": a_val,
-            "c_over_N2": fast_res.c_over_N2,
+            "a_over_N2": a_val, "c_over_N2": c_val,
             "R_numerical": _format_R_numerical(fast_res),
+            "a_over_c": a_over_c,
+            "veneziano": veneziano,
             "quiver": q,
             "n_fields": len(fields),
         })
 
     n_stored = sum(len(v) for v in buckets.values())
     print(f"  Done in {time.time()-t1:.1f}s. "
-          f"{n_none} diverged, {n_filtered} filtered (|a|>{max_a}), "
-          f"{n_stored} stored.", flush=True)
+          f"{n_diverged} diverged (stored as class NULL), "
+          f"{n_stored} clusterable.", flush=True)
 
     # ── Phase 2: cluster into classes ─────────────────────────────────────────
     class_list: list[dict] = []
@@ -330,11 +351,16 @@ def cmd_build(args: argparse.Namespace) -> None:
         a_vals = [r["a_over_N2"] for r in rows]
         clusters = _cluster(a_vals)
         for centroid, members in clusters:
+            flags = [rows[i]["veneziano"] for i in members]
+            rep_local = _rep_idx(rows, members)
             class_list.append({
                 "pair": pair, "m0": m0, "m1": m1,
                 "centroid": centroid,
                 "members": members,
                 "rows": rows,
+                "veneziano_any": int(any(flags)),
+                "veneziano_all": int(all(flags)),
+                "a_over_c": rows[rep_local].get("a_over_c"),
             })
 
     total_classes = len(class_list)
@@ -399,10 +425,12 @@ def cmd_build(args: argparse.Namespace) -> None:
             con.execute(
                 "INSERT INTO universality_class "
                 "(class_id, gauge_pair, rank0_mult, rank1_mult, "
-                " a_over_N2, n_theories, a_exact, c_exact, R_exact) "
-                "VALUES (?,?,?,?,?,?,?,?,?)",
+                " a_over_N2, n_theories, a_exact, c_exact, R_exact, "
+                " a_over_c, veneziano_any, veneziano_all) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                 (cid, cls["pair"], m0, m1, cls["centroid"], len(members),
-                 cls["a_exact"], cls["c_exact"], cls["R_exact"]),
+                 cls["a_exact"], cls["c_exact"], cls["R_exact"],
+                 cls["a_over_c"], cls["veneziano_any"], cls["veneziano_all"]),
             )
 
             theory_ids = []
@@ -413,8 +441,9 @@ def cmd_build(args: argparse.Namespace) -> None:
                     "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
                     " matter0, matter1, edges, delta0, delta1, "
                     " delta0_a, delta0_b, delta1_a, delta1_b, "
-                    " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical) "
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical, "
+                    " a_over_c, veneziano) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (cid, r["gauge_pair"], r["gauge0"], r["gauge1"],
                      r["rank0_mult"], r["rank1_mult"],
                      r["matter0"], r["matter1"], r["edges"],
@@ -422,7 +451,8 @@ def cmd_build(args: argparse.Namespace) -> None:
                      r["delta0_a"], r["delta0_b"],
                      r["delta1_a"], r["delta1_b"],
                      r["nf_bound0"], r["nf_bound1"],
-                     r["a_over_N2"], r["c_over_N2"], r["R_numerical"]),
+                     r["a_over_N2"], r["c_over_N2"], r["R_numerical"],
+                     r["a_over_c"], r["veneziano"]),
                 )
                 theory_ids.append(cur.lastrowid)
 
@@ -434,16 +464,38 @@ def cmd_build(args: argparse.Namespace) -> None:
             )
             total_theories += len(members)
 
+    # Insert diverged theories (class_id = NULL)
+    with con:
+        for r in diverged_rows:
+            con.execute(
+                "INSERT INTO theory "
+                "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
+                " matter0, matter1, edges, delta0, delta1, "
+                " delta0_a, delta0_b, delta1_a, delta1_b, "
+                " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical, "
+                " a_over_c, veneziano) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (None, r["gauge_pair"], r["gauge0"], r["gauge1"],
+                 r["rank0_mult"], r["rank1_mult"],
+                 r["matter0"], r["matter1"], r["edges"],
+                 r["delta0"], r["delta1"],
+                 r["delta0_a"], r["delta0_b"],
+                 r["delta1_a"], r["delta1_b"],
+                 r["nf_bound0"], r["nf_bound1"],
+                 r["a_over_N2"], r["c_over_N2"], r["R_numerical"],
+                 r["a_over_c"], r["veneziano"]),
+            )
+
     with con:
         con.executemany(
             "INSERT OR REPLACE INTO build_info (key, value) VALUES (?,?)",
             [
                 ("built_at",      datetime.now().isoformat(timespec="seconds")),
                 ("n_theories",    str(total_theories)),
+                ("n_diverged",    str(n_diverged)),
                 ("n_classes",     str(total_classes)),
                 ("n_exact",       str(n_exact_ok)),
                 ("n_exact_fail",  str(n_exact_fail)),
-                ("max_a_filter",  str(max_a)),
                 ("tolerance",     str(TOL)),
                 ("max_multiedge", "4"),
                 ("exact_timeout", str(exact_timeout)),
@@ -452,8 +504,9 @@ def cmd_build(args: argparse.Namespace) -> None:
 
     con.close()
     print(f"\nDatabase written to '{db_path}'.")
-    print(f"  {total_theories} theories, {total_classes} classes "
-          f"({n_exact_ok} exact, {n_exact_fail} numerical).")
+    print(f"  {total_theories} theories in {total_classes} classes "
+          f"({n_exact_ok} exact, {n_exact_fail} numerical); "
+          f"{n_diverged} diverged (class_id NULL).")
 
 
 # ── Classes ───────────────────────────────────────────────────────────────────
@@ -464,17 +517,26 @@ def cmd_classes(args: argparse.Namespace) -> None:
 
     pair_filter = args.pair.upper().replace("X", "-") if args.pair else None
     rank_filter = args.rank if hasattr(args, "rank") and args.rank else None
+    veneziano_filter = getattr(args, "veneziano", None)
 
-    query = """
+    veneziano_cond = ""
+    if veneziano_filter is True:
+        veneziano_cond = "AND uc.veneziano_all = 1"
+    elif veneziano_filter is False:
+        veneziano_cond = "AND uc.veneziano_all = 0"
+
+    query = f"""
         SELECT uc.class_id, uc.gauge_pair, uc.rank0_mult, uc.rank1_mult,
                uc.a_over_N2, uc.n_theories,
-               uc.a_exact, uc.R_exact,
+               uc.a_exact, uc.R_exact, uc.a_over_c,
+               uc.veneziano_any, uc.veneziano_all,
                t.matter0, t.matter1, t.edges
         FROM universality_class uc
         LEFT JOIN theory t ON t.theory_id = uc.rep_theory_id
         WHERE (:pair IS NULL OR uc.gauge_pair = :pair)
           AND (:min_a IS NULL OR uc.a_over_N2 >= :min_a)
           AND (:max_a IS NULL OR uc.a_over_N2 <= :max_a)
+          {veneziano_cond}
         ORDER BY uc.gauge_pair, uc.rank0_mult, uc.rank1_mult, uc.a_over_N2
     """
     rows = con.execute(query, {
@@ -482,6 +544,10 @@ def cmd_classes(args: argparse.Namespace) -> None:
         "min_a": args.min_a,
         "max_a": args.max_a,
     }).fetchall()
+
+    n_diverged = con.execute(
+        "SELECT COUNT(*) FROM theory WHERE class_id IS NULL"
+    ).fetchone()[0]
     con.close()
 
     if rank_filter:
@@ -490,9 +556,10 @@ def cmd_classes(args: argparse.Namespace) -> None:
 
     if not rows:
         print("No classes found.")
+        if n_diverged:
+            print(f"  Diverged / no convergence: {n_diverged} theories  (use 'show null')")
         return
 
-    # Compute column widths for exact a/N²
     a_exact_w = max(
         (len(r["a_exact"] or f"{r['a_over_N2']:.6f}") for r in rows),
         default=10,
@@ -509,25 +576,104 @@ def cmd_classes(args: argparse.Namespace) -> None:
                                       r["gauge_pair"].split("-")[1],
                                       r["rank0_mult"], r["rank1_mult"])
             print(f"\n  {label}")
-            print(f"  {'─'*90}")
-            print(f"  {'ID':>5}  {'a/N² (exact)':<{a_exact_w}}  {'≈':>10}  {'#th':>4}  "
-                  f"Representative theory")
-            print(f"  {'─'*90}")
+            print(f"  {'─'*100}")
+            print(f"  {'ID':>5}  {'a/N² (exact)':<{a_exact_w}}  {'≈':>10}  "
+                  f"{'#th':>4}  {'Ven':>3}  Representative theory")
+            print(f"  {'─'*100}")
         m0 = r["matter0"] or "—"
         m1 = r["matter1"] or "—"
         e  = r["edges"] or "—"
         rep = f"({m0})  |  ({m1})  |  {e}"
         a_ex = r["a_exact"] or f"≈ {r['a_over_N2']:.6f}"
+        ven = "Y" if r["veneziano_any"] else "N"
         print(f"  {r['class_id']:>5}  {a_ex:<{a_exact_w}}  "
-              f"{r['a_over_N2']:>10.6f}  {r['n_theories']:>4}  {rep}")
+              f"{r['a_over_N2']:>10.6f}  {r['n_theories']:>4}  {ven:>3}  {rep}")
         total += 1
 
     print(f"\n  Total: {total} classes")
+    if n_diverged:
+        print(f"  Diverged / no convergence: {n_diverged} theories  (use 'show null')")
 
 
 # ── Show ──────────────────────────────────────────────────────────────────────
 
+def _print_theory_table(theories) -> None:
+    """Print a table of theories (shared by cmd_show and _show_diverged)."""
+    if not theories:
+        print("  (none)")
+        return
+
+    m0w = max(len(t["matter0"] or "—") for t in theories)
+    m1w = max(len(t["matter1"] or "—") for t in theories)
+    ew  = max(len(t["edges"]   or "—") for t in theories)
+    d0w = max(len(t["delta0"]  or "—") for t in theories)
+    d1w = max(len(t["delta1"]  or "—") for t in theories)
+    rw  = max(len(t["R_numerical"] or "—") for t in theories)
+    m0w = max(m0w, 8);  m1w = max(m1w, 8)
+    ew  = max(ew,  5);  d0w = max(d0w, 7);  d1w = max(d1w, 7)
+    rw  = min(rw, 60)   # cap R_numerical display width
+
+    hdr = (f"  {'ID':>5}  "
+           f"{'Matter(0)':<{m0w}}  "
+           f"{'Matter(1)':<{m1w}}  "
+           f"{'Edges':<{ew}}  "
+           f"{'delta(0)':>{d0w}}  "
+           f"{'delta(1)':>{d1w}}  "
+           f"{'N_f bound(0)':<14}  "
+           f"{'N_f bound(1)':<14}  "
+           f"{'a/N²':>10}  "
+           f"{'c/N²':>10}  "
+           f"{'a/c':>8}  "
+           f"{'Ven':>3}  "
+           f"{'R-charges':<{rw}}")
+    print(hdr)
+    print("  " + "─" * (len(hdr) - 2))
+
+    for t in theories:
+        m0  = t["matter0"]     or "—"
+        m1  = t["matter1"]     or "—"
+        e   = t["edges"]       or "—"
+        d0  = t["delta0"]      or "—"
+        d1  = t["delta1"]      or "—"
+        a_s = f"{t['a_over_N2']:.6f}" if t["a_over_N2"] is not None else "—"
+        c_s = f"{t['c_over_N2']:.6f}" if t["c_over_N2"] is not None else "—"
+        ac_s = f"{t['a_over_c']:.5f}" if t["a_over_c"] is not None else "—"
+        ven = "Y" if t["veneziano"] else "N"
+        r_s = (t["R_numerical"] or "—")[:rw]
+        print(f"  {t['theory_id']:>5}  "
+              f"{m0:<{m0w}}  "
+              f"{m1:<{m1w}}  "
+              f"{e:<{ew}}  "
+              f"{d0:>{d0w}}  "
+              f"{d1:>{d1w}}  "
+              f"{t['nf_bound0']:<14}  "
+              f"{t['nf_bound1']:<14}  "
+              f"{a_s:>10}  "
+              f"{c_s:>10}  "
+              f"{ac_s:>8}  "
+              f"{ven:>3}  "
+              f"{r_s:<{rw}}")
+
+
+def _show_diverged(args: argparse.Namespace) -> None:
+    """Show all theories with class_id IS NULL (optimizer diverged)."""
+    con = sqlite3.connect(args.db)
+    con.row_factory = sqlite3.Row
+    theories = con.execute(
+        "SELECT * FROM theory WHERE class_id IS NULL "
+        "ORDER BY gauge_pair, matter0, matter1"
+    ).fetchall()
+    con.close()
+    print(f"\nDiverged theories (class_id IS NULL): {len(theories)}")
+    print("─" * 100)
+    _print_theory_table(theories)
+
+
 def cmd_show(args: argparse.Namespace) -> None:
+    if args.class_id is None:
+        _show_diverged(args)
+        return
+
     con = sqlite3.connect(args.db)
     con.row_factory = sqlite3.Row
 
@@ -552,50 +698,19 @@ def cmd_show(args: argparse.Namespace) -> None:
           f"{label}  "
           f"({cls['n_theories']} theories)")
 
-    a_ex = cls["a_exact"] or f"≈ {cls['a_over_N2']:.8f}  (numerical)"
-    c_ex = cls["c_exact"] or "(numerical only)"
-    R_ex = cls["R_exact"] or "(numerical only)"
+    a_ex  = cls["a_exact"] or f"≈ {cls['a_over_N2']:.8f}  (numerical)"
+    c_ex  = cls["c_exact"] or "(numerical only)"
+    R_ex  = cls["R_exact"] or "(numerical only)"
+    ac_s  = f"{cls['a_over_c']:.6f}" if cls["a_over_c"] is not None else "(n/a)"
+    ven_s = f"any={cls['veneziano_any']} all={cls['veneziano_all']}"
     print(f"  a/N² = {a_ex}  ≈ {cls['a_over_N2']:.8f}")
     print(f"  c/N² = {c_ex}")
+    print(f"  a/c  = {ac_s}")
     print(f"  R-charges (large N): {R_ex}")
+    print(f"  Veneziano: {ven_s}")
     print("─" * 100)
 
-    # Column widths
-    m0w = max(len(t["matter0"] or "—") for t in theories)
-    m1w = max(len(t["matter1"] or "—") for t in theories)
-    ew  = max(len(t["edges"]   or "—") for t in theories)
-    d0w = max(len(t["delta0"]  or "—") for t in theories)
-    d1w = max(len(t["delta1"]  or "—") for t in theories)
-    m0w = max(m0w, 8);  m1w = max(m1w, 8)
-    ew  = max(ew,  5);  d0w = max(d0w, 7);  d1w = max(d1w, 7)
-
-    hdr = (f"  {'ID':>5}  "
-           f"{'Matter(0)':<{m0w}}  "
-           f"{'Matter(1)':<{m1w}}  "
-           f"{'Edges':<{ew}}  "
-           f"{'delta(0)':>{d0w}}  "
-           f"{'delta(1)':>{d1w}}  "
-           f"{'N_f bound(0)':<14}  "
-           f"{'N_f bound(1)':<14}  "
-           f"{'a/N²':>10}")
-    print(hdr)
-    print("  " + "─" * (len(hdr) - 2))
-
-    for t in theories:
-        m0 = t["matter0"] or "—"
-        m1 = t["matter1"] or "—"
-        e  = t["edges"]   or "—"
-        d0 = t["delta0"]  or "—"
-        d1 = t["delta1"]  or "—"
-        print(f"  {t['theory_id']:>5}  "
-              f"{m0:<{m0w}}  "
-              f"{m1:<{m1w}}  "
-              f"{e:<{ew}}  "
-              f"{d0:>{d0w}}  "
-              f"{d1:>{d1w}}  "
-              f"{t['nf_bound0']:<14}  "
-              f"{t['nf_bound1']:<14}  "
-              f"{t['a_over_N2']:>10.6f}")
+    _print_theory_table(theories)
 
 
 # ── Search ────────────────────────────────────────────────────────────────────
@@ -628,6 +743,11 @@ def cmd_search(args: argparse.Namespace) -> None:
     if args.max_a is not None:
         conditions.append("a_over_N2 <= :max_a")
         params["max_a"] = args.max_a
+    veneziano_filter = getattr(args, "veneziano", None)
+    if veneziano_filter is True:
+        conditions.append("veneziano = 1")
+    elif veneziano_filter is False:
+        conditions.append("veneziano = 0")
 
     where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
     limit_clause = f"LIMIT {args.limit}" if args.limit else ""
@@ -732,8 +852,6 @@ def main() -> None:
 
     # build
     p = sub.add_parser("build", help="Build/rebuild the database from scratch")
-    p.add_argument("--max-a", type=float, default=2.0,
-                   help="Exclude theories with |a/N²| > this (default 2.0)")
     p.add_argument("--force", action="store_true", help="Overwrite existing DB without asking")
     p.add_argument("--exact-timeout", type=int, default=30, dest="exact_timeout",
                    help="Timeout in seconds per exact solve (default 30)")
@@ -744,6 +862,11 @@ def main() -> None:
             raise argparse.ArgumentTypeError("--rank expects 'm0,m1' e.g. '2,1'")
         return (int(parts[0]), int(parts[1]))
 
+    def _parse_class_id(s):
+        if s.lower() == "null":
+            return None
+        return int(s)
+
     # classes
     p = sub.add_parser("classes", help="List universality classes")
     p.add_argument("--pair", help="Filter by gauge pair, e.g. SU-SU or SU×SU")
@@ -751,10 +874,16 @@ def main() -> None:
     p.add_argument("--max-a", type=float, dest="max_a")
     p.add_argument("--rank", type=_parse_rank,
                    help="Filter by rank multipliers, e.g. '2,1' for SU(2N)×SU(N)")
+    vg = p.add_mutually_exclusive_group()
+    vg.add_argument("--veneziano",    dest="veneziano", action="store_true",  default=None,
+                    help="Show only classes where all theories require Veneziano limit")
+    vg.add_argument("--no-veneziano", dest="veneziano", action="store_false",
+                    help="Show only classes where no theory requires Veneziano limit")
 
     # show
     p = sub.add_parser("show", help="Show all theories in a universality class")
-    p.add_argument("class_id", type=int, help="Class ID (from 'classes' output)")
+    p.add_argument("class_id", type=_parse_class_id,
+                   help="Class ID (from 'classes') or 'null' for diverged theories")
 
     # search
     p = sub.add_parser("search", help="Filter theories by properties")
@@ -768,6 +897,11 @@ def main() -> None:
     p.add_argument("--min-a", type=float, dest="min_a")
     p.add_argument("--max-a", type=float, dest="max_a")
     p.add_argument("--limit", type=int, help="Maximum number of results")
+    vg = p.add_mutually_exclusive_group()
+    vg.add_argument("--veneziano",    dest="veneziano", action="store_true",  default=None,
+                    help="Show only theories requiring Veneziano limit")
+    vg.add_argument("--no-veneziano", dest="veneziano", action="store_false",
+                    help="Show only theories not requiring Veneziano limit")
 
     # stats
     sub.add_parser("stats", help="Database summary and build metadata")

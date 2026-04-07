@@ -254,7 +254,13 @@ def nf_bound(quiver: Quiver, node: int) -> tuple[Fraction, Fraction] | None:
         # No chiral excess: f = b0_rank2_adj is exactly linear
         alpha, gamma = b0_linear(g, quiver.node_matter[node], neighbors,
                                  rank_mult=m, neighbor_mults=n_mults)
-        if alpha < 0 or (alpha == 0 and gamma <= 0):
+        # Sp(N): if odd Witten parity, compensate with one extra fundamental
+        # (fixes anomaly; shifts b0 by -1/2, invisible in IR classification)
+        if g == "Sp":
+            odd_parity = sum(mb % 2 for mb in n_mults) % 2
+            if odd_parity:
+                gamma -= Fraction(1, 2)
+        if alpha < 0 or (alpha == 0 and gamma < 0):
             return None
         return alpha, gamma
 
@@ -271,7 +277,7 @@ def nf_bound(quiver: Quiver, node: int) -> tuple[Fraction, Fraction] | None:
     else:  # a < 0: for large N, |delta| = -a*N - b
         gamma = beta_b0 + Fraction(b, 2)
 
-    if alpha < 0 or (alpha == 0 and gamma <= 0):
+    if alpha < 0 or (alpha == 0 and gamma < 0):
         return None
     return alpha, gamma
 
@@ -431,10 +437,6 @@ def enumerate_quivers(
             if require_connected and not q_partial.is_connected():
                 continue
 
-            # Witten anomaly depends only on degree — prune early
-            if not check_anomalies(q_partial):
-                continue
-
             # Enumerate rank-2/adj matter for each node
             matter_choices: list[list[dict[str, int]]] = []
             feasible = True
@@ -463,7 +465,7 @@ def enumerate_quivers(
                 if valid:
                     results.append((q, bounds))
 
-    return _dedup_conjugation(results)
+    return _dedup_symmetries(results)
 
 
 def enumerate_quivers_mixed_rank(
@@ -495,9 +497,6 @@ def enumerate_quivers_mixed_rank(
             q_partial = Quiver(gauge_types, edges, rank_multipliers=rank_multipliers)
 
             if require_connected and not q_partial.is_connected():
-                continue
-
-            if not check_anomalies(q_partial):
                 continue
 
             matter_choices: list[list[dict[str, int]]] = []
@@ -547,11 +546,19 @@ def _conjugate_matter(matter: dict[str, int]) -> dict[str, int]:
     return {_CONJ_REP[rep]: count for rep, count in matter.items()}
 
 
+def _ne(s: int, d: int, r: str) -> tuple:
+    """Normalize edge: for reps where src/dst order carries no independent meaning,
+    ensure src <= dst.  This covers all reps except '+-' (SU-SU directed pair)."""
+    if r != "+-" and s > d:
+        return (d, s, r)
+    return (s, d, r)
+
+
 def _quiver_signature(q: Quiver) -> tuple:
-    """Hashable canonical signature of a quiver."""
-    edges = tuple(sorted((e.src, e.dst, e.rep) for e in q.edges))
+    """Hashable canonical signature of a quiver (includes rank_multipliers)."""
+    edges = tuple(sorted(_ne(e.src, e.dst, e.rep) for e in q.edges))
     matter = tuple(tuple(sorted(m.items())) for m in q.node_matter)
-    return (tuple(q.gauge_types), edges, matter)
+    return (tuple(q.gauge_types), edges, matter, tuple(q.rank_multipliers))
 
 
 def _conjugate_signature(q: Quiver) -> tuple:
@@ -561,24 +568,84 @@ def _conjugate_signature(q: Quiver) -> tuple:
         if e.rep == "+-":
             conj_edges.append((e.dst, e.src, "+-"))
         elif e.rep == "++":
-            conj_edges.append((e.src, e.dst, "--"))
+            conj_edges.append(_ne(e.src, e.dst, "--"))
         elif e.rep == "--":
-            conj_edges.append((e.src, e.dst, "++"))
+            conj_edges.append(_ne(e.src, e.dst, "++"))
         elif e.rep == "+":
             conj_edges.append((e.src, e.dst, "-"))
         elif e.rep == "-":
             conj_edges.append((e.src, e.dst, "+"))
         else:
-            conj_edges.append((e.src, e.dst, e.rep))
+            conj_edges.append(_ne(e.src, e.dst, e.rep))
     edges = tuple(sorted(conj_edges))
     matter = tuple(tuple(sorted(_conjugate_matter(m).items())) for m in q.node_matter)
-    return (tuple(q.gauge_types), edges, matter)
+    return (tuple(q.gauge_types), edges, matter, tuple(q.rank_multipliers))
+
+
+_GAUGE_PRIORITY: dict[str, int] = {"SU": 0, "SO": 1, "Sp": 2}
+
+
+def _canonical_key(sig: tuple) -> tuple:
+    """Sort key for choosing the canonical form among symmetry-equivalent quivers.
+
+    Prefer: SU at node 0 > SO > Sp; then larger rank multiplier at node 0;
+    then full signature lexicographically.
+    """
+    gauge_types, _edges, _matter, mults = sig
+    return (_GAUGE_PRIORITY[gauge_types[0]], -mults[0], sig)
+
+
+def _node_swap_signature(q: Quiver) -> tuple:
+    """Signature after swapping node 0 ↔ node 1 (2-node quivers only)."""
+    swapped_edges = []
+    for e in q.edges:
+        swapped_edges.append(_ne(1 - e.src, 1 - e.dst, e.rep))
+    new_edges = tuple(sorted(swapped_edges))
+    new_matter = (tuple(sorted(q.node_matter[1].items())),
+                  tuple(sorted(q.node_matter[0].items())))
+    return (
+        (q.gauge_types[1], q.gauge_types[0]),
+        new_edges,
+        new_matter,
+        (q.rank_multipliers[1], q.rank_multipliers[0]),
+    )
+
+
+def _dedup_symmetries(
+    results: list[tuple[Quiver, list[tuple[Fraction, Fraction]]]],
+) -> list[tuple[Quiver, list[tuple[Fraction, Fraction]]]]:
+    """Remove duplicates related by charge conjugation and/or node-swap (2-node).
+
+    For each equivalence class, keep the quiver whose own signature equals the
+    canonical (minimum key) form.  This ensures SU-first canonical ordering.
+    """
+    seen: set[tuple] = set()
+    unique: list[tuple[Quiver, list[tuple[Fraction, Fraction]]]] = []
+    for q, bounds in results:
+        sig      = _quiver_signature(q)
+        conj_sig = _conjugate_signature(q)
+        swap_sig = _node_swap_signature(q)
+
+        q_swap = Quiver(
+            [q.gauge_types[1], q.gauge_types[0]],
+            [Edge(1 - e.src, 1 - e.dst, e.rep) for e in q.edges],
+            [dict(q.node_matter[1]), dict(q.node_matter[0])],
+            rank_multipliers=[q.rank_multipliers[1], q.rank_multipliers[0]],
+        )
+        swap_conj_sig = _conjugate_signature(q_swap)
+
+        canonical = min(sig, conj_sig, swap_sig, swap_conj_sig, key=_canonical_key)
+        # Only keep this quiver if it IS the canonical form and we haven't seen it yet
+        if sig == canonical and canonical not in seen:
+            seen.add(canonical)
+            unique.append((q, bounds))
+    return unique
 
 
 def _dedup_conjugation(
     results: list[tuple[Quiver, list[tuple[Fraction, Fraction]]]],
 ) -> list[tuple[Quiver, list[tuple[Fraction, Fraction]]]]:
-    """Remove duplicate theories related by charge conjugation."""
+    """Remove duplicate theories related by charge conjugation (legacy; prefer _dedup_symmetries)."""
     seen: set[tuple] = set()
     unique: list[tuple[Quiver, list[tuple[Fraction, Fraction]]]] = []
     for q, bounds in results:
@@ -595,6 +662,8 @@ def _dedup_conjugation(
 
 def nf_bound_str(alpha: Fraction, gamma: Fraction) -> str:
     """Format N_f bound as a readable string."""
+    if alpha == 0 and gamma == 0:
+        return "N_f = 0 (conformal)"
     if alpha == 0:
         return f"N_f < {gamma}"
     if gamma == 0:

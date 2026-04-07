@@ -253,7 +253,7 @@ def is_af_all_N(
       - alpha == 0 and beta > 0  (constant positive b_0)
     """
     alpha, beta = b0_linear(gauge_type, matter, bifund_neighbors, rank_mult, neighbor_mults)
-    return alpha > 0 or (alpha == 0 and beta > 0)
+    return alpha > 0 or (alpha == 0 and beta >= 0)
 
 
 # ── Examples ───────────────────────────────────────────────────────────────────
