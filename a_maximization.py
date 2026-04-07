@@ -95,6 +95,8 @@ def build_fields(quiver: Quiver, N: int, N_f: int) -> list[ChiralField]:
     """
     Expand a Module 2 quiver at (N, N_f) into the full list of chiral fields.
 
+    Each node i has effective rank N_i = rank_multipliers[i] * N.
+
     Three sources of fields:
     1. Node-level rank-2/adj matter (from quiver.node_matter)
     2. Fund-like matter derived from N_f and chiral excess δ
@@ -102,14 +104,16 @@ def build_fields(quiver: Quiver, N: int, N_f: int) -> list[ChiralField]:
     """
     fields: list[ChiralField] = []
     idx = 0  # R_index counter
+    mults = quiver.rank_multipliers
 
     # 1. Rank-2/adj node matter
     for i, (g, matter) in enumerate(zip(quiver.gauge_types, quiver.node_matter)):
+        N_i = mults[i] * N
         for rep, count in matter.items():
             if count == 0:
                 continue
-            d = count * dim_rep(g, rep, N)
-            T = count * T_rep(g, rep, N)
+            d = count * dim_rep(g, rep, N_i)
+            T = count * T_rep(g, rep, N_i)
             fields.append(ChiralField(
                 label=f"node{i}_{rep}",
                 R_index=idx,
@@ -120,25 +124,26 @@ def build_fields(quiver: Quiver, N: int, N_f: int) -> list[ChiralField]:
 
     # 2. Fund-like matter
     for i, g in enumerate(quiver.gauge_types):
+        N_i = mults[i] * N
         if g == "SU":
             a, b = chiral_excess_coeffs(quiver, i)
-            delta = a * N + b  # chiral excess = n_f - n_fbar
+            delta = a * N + b  # chiral excess = n_f - n_fbar (N is the base rank)
             n_f    = N_f + max(delta, 0)
             n_fbar = N_f + max(-delta, 0)
             if n_f > 0:
                 fields.append(ChiralField(
                     label=f"node{i}_fund",
                     R_index=idx,
-                    dim=n_f * dim_rep(g, "fund", N),
-                    T_contributions={i: n_f * T_rep(g, "fund", N)},
+                    dim=n_f * dim_rep(g, "fund", N_i),
+                    T_contributions={i: n_f * T_rep(g, "fund", N_i)},
                 ))
                 idx += 1
             if n_fbar > 0:
                 fields.append(ChiralField(
                     label=f"node{i}_antifund",
                     R_index=idx,
-                    dim=n_fbar * dim_rep(g, "antifund", N),
-                    T_contributions={i: n_fbar * T_rep(g, "antifund", N)},
+                    dim=n_fbar * dim_rep(g, "antifund", N_i),
+                    T_contributions={i: n_fbar * T_rep(g, "antifund", N_i)},
                 ))
                 idx += 1
         elif g == "SO":
@@ -146,8 +151,8 @@ def build_fields(quiver: Quiver, N: int, N_f: int) -> list[ChiralField]:
                 fields.append(ChiralField(
                     label=f"node{i}_V",
                     R_index=idx,
-                    dim=N_f * dim_rep(g, "V", N),
-                    T_contributions={i: N_f * T_rep(g, "V", N)},
+                    dim=N_f * dim_rep(g, "V", N_i),
+                    T_contributions={i: N_f * T_rep(g, "V", N_i)},
                 ))
                 idx += 1
         elif g == "Sp":
@@ -156,8 +161,8 @@ def build_fields(quiver: Quiver, N: int, N_f: int) -> list[ChiralField]:
                 fields.append(ChiralField(
                     label=f"node{i}_fund",
                     R_index=idx,
-                    dim=n_fund * dim_rep(g, "fund", N),
-                    T_contributions={i: n_fund * T_rep(g, "fund", N)},
+                    dim=n_fund * dim_rep(g, "fund", N_i),
+                    T_contributions={i: n_fund * T_rep(g, "fund", N_i)},
                 ))
                 idx += 1
 
@@ -165,9 +170,10 @@ def build_fields(quiver: Quiver, N: int, N_f: int) -> list[ChiralField]:
     for e in quiver.edges:
         i, j = e.src, e.dst
         gi, gj = quiver.gauge_types[i], quiver.gauge_types[j]
-        T_i, T_j = T_bifund(gi, gj, N)
-        d_i = _bifund_dim_at_node(gi, e.rep, N, side="src")
-        d_j = _bifund_dim_at_node(gj, e.rep, N, side="dst")
+        N_i, N_j = mults[i] * N, mults[j] * N
+        T_i, T_j = T_bifund(gi, gj, N, N_i, N_j)
+        d_i = _bifund_dim_at_node(gi, e.rep, N_i, side="src")
+        d_j = _bifund_dim_at_node(gj, e.rep, N_j, side="dst")
         rep_label = e.rep.replace("+", "p").replace("-", "m")
         fields.append(ChiralField(
             label=f"edge_{i}_{j}_{rep_label}",
@@ -181,7 +187,8 @@ def build_fields(quiver: Quiver, N: int, N_f: int) -> list[ChiralField]:
 
 
 def _bifund_dim_at_node(gauge_type: GaugeType, rep: str, N: int, side: str) -> int:
-    """Dimension of the representation at one endpoint of a bifundamental edge."""
+    """Dimension of the fundamental-like representation at one endpoint of a bifundamental edge.
+    N here is the effective rank (already multiplied by rank_mult)."""
     if gauge_type == "SU":
         return N  # both □ and □̄ have dim N
     if gauge_type == "SO":
@@ -206,14 +213,18 @@ def anomaly_matrix(
     Rearranged to A @ R = b:
         A[a, R_index] = T_a(field)   (summed if multiple fields share R_index)
         b[a] = Σ_i T_a(field_i) - T(adj_a)
+
+    Each node a uses effective rank N_a = rank_multipliers[a] * N.
     """
     n_nodes = quiver.n_nodes
     n_R = len(fields)
     A = np.zeros((n_nodes, n_R))
     b = np.zeros(n_nodes)
 
+    mults = quiver.rank_multipliers
     for a, g in enumerate(quiver.gauge_types):
-        b[a] = float(-T_adj(g, N))
+        N_a = mults[a] * N
+        b[a] = float(-T_adj(g, N_a))
         for f in fields:
             T_a = f.T_contributions.get(a)
             if T_a is not None:
@@ -226,8 +237,10 @@ def anomaly_matrix(
 # ── Trial central charges ──────────────────────────────────────────────────────
 
 def _traces(R_values: np.ndarray, fields: list[ChiralField], quiver: Quiver, N: int) -> tuple[float, float]:
-    """Return (Tr R, Tr R³) including gaugino contributions."""
-    tr_R = sum(dim_group(g, N) for g in quiver.gauge_types)
+    """Return (Tr R, Tr R³) including gaugino contributions.
+    Each node a uses effective rank N_a = rank_multipliers[a] * N."""
+    mults = quiver.rank_multipliers
+    tr_R = sum(dim_group(g, m * N) for g, m in zip(quiver.gauge_types, mults))
     tr_R3 = float(tr_R)
     for f in fields:
         r = R_values[f.R_index]

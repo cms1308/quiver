@@ -175,17 +175,27 @@ def build_fields_large_N(quiver: Quiver) -> list[LeadField]:
     No N or N_f parameter: fund-like fields with fixed N_f are subleading.
     Fund-like matter appears only when chiral excess has nonzero N-coefficient
     (anomaly cancellation forces O(N) extra fundamentals).
+
+    rank_multipliers[i] = m_i means node i has gauge group G(m_i * N).
+    All leading-order coefficients are scaled accordingly:
+      - T_adj_lead(g_a) * m_a    (T_adj ~ m_a * N)
+      - T_rep_lead(g, rep) * m_a  (T_rep ~ m_a * N for rank-2/adj)
+      - dim_rep_lead(g, rep) * m_a²  (dim ~ m_a² * N²)
+      - T_bifund_lead at node a from node b: T_bifund_lead(g_a, g_b) * m_b
+      - dim_bifund_lead(g_a, g_b) * m_a * m_b
     """
     fields: list[LeadField] = []
     idx = 0
+    mults = quiver.rank_multipliers
 
     # 1. Rank-2/adj node matter
     for i, (g, matter) in enumerate(zip(quiver.gauge_types, quiver.node_matter)):
+        m_i = mults[i]
         for rep, count in matter.items():
             if count == 0:
                 continue
-            t = count * T_rep_lead(g, rep)
-            d = count * dim_rep_lead(g, rep)
+            t = count * T_rep_lead(g, rep) * m_i
+            d = count * dim_rep_lead(g, rep) * m_i * m_i
             if t == 0 and d == 0:
                 continue
             fields.append(LeadField(
@@ -200,22 +210,27 @@ def build_fields_large_N(quiver: Quiver) -> list[LeadField]:
     for i, g in enumerate(quiver.gauge_types):
         if g != "SU":
             continue
+        m_i = mults[i]
         a_delta, _ = chiral_excess_coeffs(quiver, i)
         if a_delta == 0:
             continue
+        # |a_delta|*N extra fundamentals of SU(m_i*N): dim = |a_delta|*m_i per N²,
+        # T = |a_delta|/2 per N (T_fund = 1/2 exact)
+        dim_lead = Fraction(abs(a_delta)) * m_i
+        T_lead_val = Fraction(abs(a_delta), 2)
         if a_delta > 0:
             fields.append(LeadField(
                 label=f"node{i}_fund",
                 R_index=idx,
-                dim_lead=Fraction(a_delta),
-                T_lead={i: Fraction(a_delta, 2)},
+                dim_lead=dim_lead,
+                T_lead={i: T_lead_val},
             ))
         else:
             fields.append(LeadField(
                 label=f"node{i}_antifund",
                 R_index=idx,
-                dim_lead=Fraction(-a_delta),
-                T_lead={i: Fraction(-a_delta, 2)},
+                dim_lead=dim_lead,
+                T_lead={i: T_lead_val},
             ))
         idx += 1
 
@@ -223,8 +238,11 @@ def build_fields_large_N(quiver: Quiver) -> list[LeadField]:
     for e in quiver.edges:
         i, j = e.src, e.dst
         gi, gj = quiver.gauge_types[i], quiver.gauge_types[j]
-        T_i, T_j = T_bifund_lead(gi, gj)
-        d = dim_bifund_lead(gi, gj)
+        m_i, m_j = mults[i], mults[j]
+        T_i_base, T_j_base = T_bifund_lead(gi, gj)
+        T_i = T_i_base * m_j   # T at node i scales with neighbor's rank mult
+        T_j = T_j_base * m_i
+        d = dim_bifund_lead(gi, gj) * m_i * m_j
         rep_label = e.rep.replace("+", "p").replace("-", "m")
         fields.append(LeadField(
             label=f"edge_{i}_{j}_{rep_label}",
@@ -247,11 +265,14 @@ def _build_anomaly_system(
     """
     Build anomaly-free constraint equations (one per gauge node).
 
-    Each equation: T_adj_lead + Σ T_lead(field) * (R_field - 1) = 0
+    Each equation: T_adj_lead * m_a + Σ T_lead(field) * (R_field - 1) = 0
+    where m_a = rank_multipliers[a].
     """
+    mults = quiver.rank_multipliers
     eqs: list[Expr] = []
     for a, g in enumerate(quiver.gauge_types):
-        eq: Expr = _R(T_adj_lead(g))
+        m_a = mults[a]
+        eq: Expr = _R(T_adj_lead(g)) * m_a
         for f in fields:
             T_a = f.T_lead.get(a)
             if T_a is not None:
@@ -267,8 +288,11 @@ def _symbolic_traces(
     quiver: Quiver,
     R: list[Expr],
 ) -> tuple[Expr, Expr]:
-    """Return symbolic (Tr R / N^2, Tr R^3 / N^2) at leading order."""
-    gaugino = sum(_R(dim_group_lead(g)) for g in quiver.gauge_types)
+    """Return symbolic (Tr R / N^2, Tr R^3 / N^2) at leading order.
+    Gaugino contribution scales as dim_group_lead(g) * m_a²."""
+    mults = quiver.rank_multipliers
+    gaugino = sum(_R(dim_group_lead(g)) * m * m
+                  for g, m in zip(quiver.gauge_types, mults))
     tr_R: Expr = gaugino
     tr_R3: Expr = gaugino
     for f in fields:
@@ -407,7 +431,9 @@ def a_maximize_large_N(quiver: Quiver) -> LargeNResult:
 
     if n_R == 0:
         # No leading-order matter: gaugino-only contribution.
-        gaugino_sum = sum(_R(dim_group_lead(g)) for g in quiver.gauge_types)
+        mults = quiver.rank_multipliers
+        gaugino_sum = sum(_R(dim_group_lead(g)) * m * m
+                          for g, m in zip(quiver.gauge_types, mults))
         a_val = Rational(3, 32) * (2 * gaugino_sum)
         c_val = Rational(1, 32) * (4 * gaugino_sum)
         return LargeNResult(
@@ -635,6 +661,33 @@ def _solve_a_max(
 
 # ── Fast numerical large-N a-maximization (for scanning many quivers) ─────────
 
+@dataclass
+class FastNumericalResult:
+    """Numerical result of fast large-N a-maximization."""
+    a_over_N2: float
+    c_over_N2: float
+    R_charges: dict[str, float]   # field label → R-charge
+
+
+def _fast_anomaly_matrix(fields, quiver) -> tuple:
+    """Build float anomaly matrix respecting rank_multipliers."""
+    import numpy as np
+    mults = quiver.rank_multipliers
+    n_nodes = quiver.n_nodes
+    n_R = len(fields)
+    A = np.zeros((n_nodes, n_R))
+    b = np.zeros(n_nodes)
+    for a, g in enumerate(quiver.gauge_types):
+        m_a = mults[a]
+        b[a] = -float(T_adj_lead(g)) * m_a
+        for f in fields:
+            T_a = f.T_lead.get(a)
+            if T_a is not None:
+                A[a, f.R_index] += float(T_a)
+                b[a] += float(T_a)
+    return A, b
+
+
 def a_maximize_large_N_fast(quiver: Quiver) -> float | None:
     """
     Fast numerical large-N a-maximization using numpy/scipy.
@@ -651,26 +704,19 @@ def a_maximize_large_N_fast(quiver: Quiver) -> float | None:
     fields = build_fields_large_N(quiver)
     n_R = len(fields)
 
+    mults = quiver.rank_multipliers
     if n_R == 0:
-        return (3 / 32) * 2 * sum(float(dim_group_lead(g)) for g in quiver.gauge_types)
+        return (3 / 32) * 2 * sum(float(dim_group_lead(g)) * m * m
+                                   for g, m in zip(quiver.gauge_types, mults))
 
-    # Anomaly matrix (float)
-    n_nodes = quiver.n_nodes
-    A = np.zeros((n_nodes, n_R))
-    b = np.zeros(n_nodes)
-    for a, g in enumerate(quiver.gauge_types):
-        b[a] = -float(T_adj_lead(g))
-        for f in fields:
-            T_a = f.T_lead.get(a)
-            if T_a is not None:
-                A[a, f.R_index] += float(T_a)
-                b[a] += float(T_a)
+    A, b = _fast_anomaly_matrix(fields, quiver)
 
     R0, *_ = np.linalg.lstsq(A, b, rcond=None)
     F = null_space(A)
     n_free = F.shape[1]
 
-    gaugino = sum(float(dim_group_lead(g)) for g in quiver.gauge_types)
+    gaugino = sum(float(dim_group_lead(g)) * m * m
+                  for g, m in zip(quiver.gauge_types, mults))
     dims = np.array([float(f.dim_lead) for f in fields])
 
     def neg_a(s: np.ndarray) -> float:
@@ -696,6 +742,72 @@ def a_maximize_large_N_fast(quiver: Quiver) -> float | None:
         if best_a is None or a_val > best_a:
             best_a = a_val
     return best_a
+
+
+def a_maximize_large_N_fast_full(quiver: Quiver) -> FastNumericalResult | None:
+    """
+    Fast numerical large-N a-maximization returning a/N², c/N², and R-charges.
+
+    Returns FastNumericalResult or None if no bounded maximum exists.
+    """
+    import numpy as np
+    from scipy.linalg import null_space
+    from scipy.optimize import minimize
+
+    fields = build_fields_large_N(quiver)
+    n_R = len(fields)
+
+    mults = quiver.rank_multipliers
+    gaugino = sum(float(dim_group_lead(g)) * m * m
+                  for g, m in zip(quiver.gauge_types, mults))
+
+    if n_R == 0:
+        a_val = (3 / 32) * 2 * gaugino
+        c_val = (1 / 32) * 4 * gaugino
+        return FastNumericalResult(a_over_N2=a_val, c_over_N2=c_val, R_charges={})
+
+    A, b = _fast_anomaly_matrix(fields, quiver)
+
+    R0, *_ = np.linalg.lstsq(A, b, rcond=None)
+    F = null_space(A)
+    n_free = F.shape[1]
+
+    dims = np.array([float(f.dim_lead) for f in fields])
+
+    def neg_a(s: np.ndarray) -> float:
+        R = R0 + F @ s
+        r1 = R - 1
+        tr_R  = gaugino + dims @ r1
+        tr_R3 = gaugino + dims @ (r1 ** 3)
+        return -(3 / 32) * (3 * tr_R3 - tr_R)
+
+    if n_free == 0:
+        R_opt = R0
+    else:
+        rng = np.random.default_rng(0)
+        best_s = None
+        best_a = None
+        for _ in range(8):
+            s0 = rng.standard_normal(n_free)
+            res = minimize(neg_a, s0, method="BFGS",
+                           options={"maxiter": 2000, "gtol": 1e-10})
+            if abs(res.fun) > 1e6:
+                continue
+            if best_a is None or -res.fun > best_a:
+                best_a = -res.fun
+                best_s = res.x
+        if best_s is None:
+            return None
+        R_opt = R0 + F @ best_s
+
+    r1 = R_opt - 1
+    tr_R  = gaugino + dims @ r1
+    tr_R3 = gaugino + dims @ (r1 ** 3)
+    a_val = (3 / 32) * (3 * tr_R3 - tr_R)
+    c_val = (1 / 32) * (9 * tr_R3 - 5 * tr_R)
+
+    R_charges = {f.label: float(R_opt[f.R_index]) for f in fields}
+    return FastNumericalResult(a_over_N2=a_val, c_over_N2=c_val, R_charges=R_charges)
 
 
 # ── Classification table ──────────────────────────────────────────────────────

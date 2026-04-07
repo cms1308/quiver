@@ -23,10 +23,12 @@ from datetime import datetime
 from fractions import Fraction
 
 from quiver_generation import (
-    Quiver, enumerate_quivers, chiral_excess_coeffs, nf_bound, nf_bound_str,
+    Quiver, enumerate_quivers, enumerate_quivers_mixed_rank,
+    chiral_excess_coeffs, nf_bound, nf_bound_str,
 )
 from a_maximization_large_N import (
-    a_maximize_large_N_fast, a_maximize_large_N, build_fields_large_N,
+    a_maximize_large_N_fast, a_maximize_large_N_fast_full,
+    a_maximize_large_N, build_fields_large_N,
     _fmt_matter, _fmt_edges, _fmt_linear, _fmt_expr, _fmt_R,
 )
 
@@ -40,6 +42,8 @@ _DDL = """
 CREATE TABLE IF NOT EXISTS universality_class (
     class_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     gauge_pair     TEXT    NOT NULL,
+    rank0_mult     INTEGER NOT NULL DEFAULT 1,
+    rank1_mult     INTEGER NOT NULL DEFAULT 1,
     a_over_N2      REAL    NOT NULL,
     n_theories     INTEGER NOT NULL,
     rep_theory_id  INTEGER,
@@ -54,6 +58,8 @@ CREATE TABLE IF NOT EXISTS theory (
     gauge_pair     TEXT    NOT NULL,
     gauge0         TEXT    NOT NULL,
     gauge1         TEXT    NOT NULL,
+    rank0_mult     INTEGER NOT NULL DEFAULT 1,
+    rank1_mult     INTEGER NOT NULL DEFAULT 1,
     matter0        TEXT    NOT NULL,
     matter1        TEXT    NOT NULL,
     edges          TEXT    NOT NULL,
@@ -66,6 +72,8 @@ CREATE TABLE IF NOT EXISTS theory (
     nf_bound0      TEXT    NOT NULL,
     nf_bound1      TEXT    NOT NULL,
     a_over_N2      REAL    NOT NULL,
+    c_over_N2      REAL,
+    R_numerical    TEXT,
     FOREIGN KEY (class_id) REFERENCES universality_class(class_id)
 );
 
@@ -96,6 +104,14 @@ GAUGE_PAIR_LABEL = {
 
 PAIR_ORDER = ["SU-SU", "SU-SO", "SO-SU", "SU-Sp", "Sp-SU",
               "SO-SO", "SO-Sp", "Sp-SO", "Sp-Sp"]
+
+
+def _gauge_pair_label(g0: str, g1: str, m0: int = 1, m1: int = 1) -> str:
+    """Human-readable gauge pair label, e.g. 'SU(2N)×SU(N)'."""
+    def _grp(g: str, m: int) -> str:
+        rank = f"{m}N" if m > 1 else "N"
+        return f"{g}({rank})"
+    return f"{_grp(g0, m0)}×{_grp(g1, m1)}"
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -200,60 +216,92 @@ def _rep_idx(rows: list[dict], members: list[int]) -> int:
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
+def _format_R_numerical(fast_result) -> str | None:
+    """Format fast numerical R-charges as a compact string for DB storage."""
+    if fast_result is None or not fast_result.R_charges:
+        return None
+    parts = []
+    for label, r in fast_result.R_charges.items():
+        short = _fmt_R(label)
+        parts.append(f"R_{short}={r:.5f}")
+    return ",  ".join(parts)
+
+
 def cmd_build(args: argparse.Namespace) -> None:
     import os
     db_path = args.db
     max_a = args.max_a
     exact_timeout = args.exact_timeout
 
-    if os.path.exists(db_path) and not args.force:
-        ans = input(f"'{db_path}' already exists. Overwrite? [y/N] ").strip().lower()
-        if ans != "y":
-            print("Aborted.")
-            return
+    if os.path.exists(db_path):
+        if not args.force:
+            ans = input(f"'{db_path}' already exists. Overwrite? [y/N] ").strip().lower()
+            if ans != "y":
+                print("Aborted.")
+                return
         os.remove(db_path)
 
     # ── Phase 1: enumerate and fast numerical scan ────────────────────────────
-    print("Phase 1: enumerating 2-node quivers...", flush=True)
+    print("Phase 1: enumerating 2-node quivers (equal + mixed rank)...", flush=True)
     t0 = time.time()
-    quivers_bounds = enumerate_quivers(
+
+    # Equal-rank quivers (all nodes rank N)
+    equal_rank = enumerate_quivers(
         n_nodes=2, max_multiedge=4, min_multiedge=1, require_connected=True,
     )
-    total = len(quivers_bounds)
-    print(f"  {total} quivers found in {time.time()-t0:.1f}s", flush=True)
+    # Mixed-rank quivers: [2,1] and [1,2]
+    mixed_21 = enumerate_quivers_mixed_rank(
+        n_nodes=2, rank_multipliers=[2, 1],
+        max_multiedge=4, min_multiedge=1, require_connected=True,
+    )
+    mixed_12 = enumerate_quivers_mixed_rank(
+        n_nodes=2, rank_multipliers=[1, 2],
+        max_multiedge=4, min_multiedge=1, require_connected=True,
+    )
+    all_quivers = (
+        [(q, bounds, (1, 1)) for q, bounds in equal_rank] +
+        [(q, bounds, (2, 1)) for q, bounds in mixed_21] +
+        [(q, bounds, (1, 2)) for q, bounds in mixed_12]
+    )
+    total = len(all_quivers)
+    print(f"  {len(equal_rank)} equal-rank + {len(mixed_21)} [2,1] + {len(mixed_12)} [1,2] "
+          f"= {total} quivers found in {time.time()-t0:.1f}s", flush=True)
 
     print("Phase 1: fast a-maximization scan...", flush=True)
     t1 = time.time()
 
     from collections import defaultdict
-    buckets: dict[str, list[dict]] = defaultdict(list)
+    # Bucket key: (gauge_pair, m0, m1) to keep equal-rank and mixed-rank separate
+    buckets: dict[tuple, list[dict]] = defaultdict(list)
     n_none = 0
     n_filtered = 0
 
-    for i, (q, bounds) in enumerate(quivers_bounds):
+    for i, (q, bounds, (m0, m1)) in enumerate(all_quivers):
         if i % 200 == 0:
             print(f"  {i}/{total}\r", end="", flush=True)
-        a_val = a_maximize_large_N_fast(q)
-        if a_val is None:
+        fast_res = a_maximize_large_N_fast_full(q)
+        if fast_res is None:
             n_none += 1
             continue
+        a_val = fast_res.a_over_N2
         if abs(a_val) > max_a:
             n_filtered += 1
             continue
 
         g0, g1 = q.gauge_types[0], q.gauge_types[1]
         pair = _gauge_pair_key(g0, g1)
+        bucket_key = (pair, m0, m1)
 
         d0_str, d0_a, d0_b = _delta_for_node(q, 0)
         d1_str, d1_a, d1_b = _delta_for_node(q, 1)
         nf0 = _nf_bound_str_for(q, 0)
         nf1 = _nf_bound_str_for(q, 1)
 
-        # Compute field signature for exact-solver representative selection
         fields = build_fields_large_N(q)
 
-        buckets[pair].append({
+        buckets[bucket_key].append({
             "gauge_pair": pair, "gauge0": g0, "gauge1": g1,
+            "rank0_mult": m0, "rank1_mult": m1,
             "matter0": _fmt_matter(q.node_matter[0]),
             "matter1": _fmt_matter(q.node_matter[1]),
             "edges": _fmt_edges(q),
@@ -262,7 +310,9 @@ def cmd_build(args: argparse.Namespace) -> None:
             "delta1_a": d1_a, "delta1_b": d1_b,
             "nf_bound0": nf0, "nf_bound1": nf1,
             "a_over_N2": a_val,
-            "quiver": q,           # keep for exact solve phase
+            "c_over_N2": fast_res.c_over_N2,
+            "R_numerical": _format_R_numerical(fast_res),
+            "quiver": q,
             "n_fields": len(fields),
         })
 
@@ -272,17 +322,16 @@ def cmd_build(args: argparse.Namespace) -> None:
           f"{n_stored} stored.", flush=True)
 
     # ── Phase 2: cluster into classes ─────────────────────────────────────────
-    # Build flat class list with references to bucket rows
-    class_list: list[dict] = []  # {pair, centroid, member_indices, rows_ref}
+    class_list: list[dict] = []
 
-    for pair, rows in buckets.items():
+    for (pair, m0, m1), rows in buckets.items():
         if not rows:
             continue
         a_vals = [r["a_over_N2"] for r in rows]
         clusters = _cluster(a_vals)
         for centroid, members in clusters:
             class_list.append({
-                "pair": pair,
+                "pair": pair, "m0": m0, "m1": m1,
                 "centroid": centroid,
                 "members": members,
                 "rows": rows,
@@ -302,17 +351,15 @@ def cmd_build(args: argparse.Namespace) -> None:
         rows = cls["rows"]
         members = cls["members"]
 
-        # Pick the member with fewest fields (fewest free params → fastest exact solve)
         best_idx = min(members, key=lambda i: rows[i]["n_fields"])
         rep_q = rows[best_idx]["quiver"]
         n_f = rows[best_idx]["n_fields"]
 
-        print(f"  [{ci+1}/{total_classes}] {cls['pair']} a≈{cls['centroid']:.6f} "
-              f"({n_f} fields)\r", end="", flush=True)
+        print(f"  [{ci+1}/{total_classes}] {cls['pair']}({cls['m0']},{cls['m1']}) "
+              f"a≈{cls['centroid']:.6f} ({n_f} fields)\r", end="", flush=True)
 
         result = _exact_with_timeout(rep_q, timeout=exact_timeout)
         if result is not None:
-            # Validate: exact a/N² must match numerical within tolerance
             try:
                 exact_float = float(result.a_over_N2)
             except (TypeError, ValueError):
@@ -323,7 +370,6 @@ def cmd_build(args: argparse.Namespace) -> None:
                 cls["R_exact"] = _format_R_charges(result, rep_q)
                 n_exact_ok += 1
             else:
-                # Exact solver found wrong critical point — discard
                 cls["a_exact"] = None
                 cls["c_exact"] = None
                 cls["R_exact"] = None
@@ -347,13 +393,15 @@ def cmd_build(args: argparse.Namespace) -> None:
         cid = ci + 1
         rows = cls["rows"]
         members = cls["members"]
+        m0, m1 = cls["m0"], cls["m1"]
 
         with con:
             con.execute(
                 "INSERT INTO universality_class "
-                "(class_id, gauge_pair, a_over_N2, n_theories, a_exact, c_exact, R_exact) "
-                "VALUES (?,?,?,?,?,?,?)",
-                (cid, cls["pair"], cls["centroid"], len(members),
+                "(class_id, gauge_pair, rank0_mult, rank1_mult, "
+                " a_over_N2, n_theories, a_exact, c_exact, R_exact) "
+                "VALUES (?,?,?,?,?,?,?,?,?)",
+                (cid, cls["pair"], m0, m1, cls["centroid"], len(members),
                  cls["a_exact"], cls["c_exact"], cls["R_exact"]),
             )
 
@@ -362,16 +410,19 @@ def cmd_build(args: argparse.Namespace) -> None:
                 r = rows[idx]
                 cur = con.execute(
                     "INSERT INTO theory "
-                    "(class_id, gauge_pair, gauge0, gauge1, matter0, matter1, "
-                    " edges, delta0, delta1, delta0_a, delta0_b, delta1_a, delta1_b, "
-                    " nf_bound0, nf_bound1, a_over_N2) "
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
+                    " matter0, matter1, edges, delta0, delta1, "
+                    " delta0_a, delta0_b, delta1_a, delta1_b, "
+                    " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (cid, r["gauge_pair"], r["gauge0"], r["gauge1"],
+                     r["rank0_mult"], r["rank1_mult"],
                      r["matter0"], r["matter1"], r["edges"],
                      r["delta0"], r["delta1"],
                      r["delta0_a"], r["delta0_b"],
                      r["delta1_a"], r["delta1_b"],
-                     r["nf_bound0"], r["nf_bound1"], r["a_over_N2"]),
+                     r["nf_bound0"], r["nf_bound1"],
+                     r["a_over_N2"], r["c_over_N2"], r["R_numerical"]),
                 )
                 theory_ids.append(cur.lastrowid)
 
@@ -412,9 +463,11 @@ def cmd_classes(args: argparse.Namespace) -> None:
     con.row_factory = sqlite3.Row
 
     pair_filter = args.pair.upper().replace("X", "-") if args.pair else None
+    rank_filter = args.rank if hasattr(args, "rank") and args.rank else None
 
     query = """
-        SELECT uc.class_id, uc.gauge_pair, uc.a_over_N2, uc.n_theories,
+        SELECT uc.class_id, uc.gauge_pair, uc.rank0_mult, uc.rank1_mult,
+               uc.a_over_N2, uc.n_theories,
                uc.a_exact, uc.R_exact,
                t.matter0, t.matter1, t.edges
         FROM universality_class uc
@@ -422,7 +475,7 @@ def cmd_classes(args: argparse.Namespace) -> None:
         WHERE (:pair IS NULL OR uc.gauge_pair = :pair)
           AND (:min_a IS NULL OR uc.a_over_N2 >= :min_a)
           AND (:max_a IS NULL OR uc.a_over_N2 <= :max_a)
-        ORDER BY uc.gauge_pair, uc.a_over_N2
+        ORDER BY uc.gauge_pair, uc.rank0_mult, uc.rank1_mult, uc.a_over_N2
     """
     rows = con.execute(query, {
         "pair":  pair_filter,
@@ -430,6 +483,10 @@ def cmd_classes(args: argparse.Namespace) -> None:
         "max_a": args.max_a,
     }).fetchall()
     con.close()
+
+    if rank_filter:
+        m0f, m1f = rank_filter
+        rows = [r for r in rows if r["rank0_mult"] == m0f and r["rank1_mult"] == m1f]
 
     if not rows:
         print("No classes found.")
@@ -442,12 +499,15 @@ def cmd_classes(args: argparse.Namespace) -> None:
     )
     a_exact_w = max(a_exact_w, 10)
 
-    current_pair = None
+    current_group = None
     total = 0
     for r in rows:
-        if r["gauge_pair"] != current_pair:
-            current_pair = r["gauge_pair"]
-            label = GAUGE_PAIR_LABEL.get(current_pair, current_pair)
+        group_key = (r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
+        if group_key != current_group:
+            current_group = group_key
+            label = _gauge_pair_label(r["gauge_pair"].split("-")[0],
+                                      r["gauge_pair"].split("-")[1],
+                                      r["rank0_mult"], r["rank1_mult"])
             print(f"\n  {label}")
             print(f"  {'─'*90}")
             print(f"  {'ID':>5}  {'a/N² (exact)':<{a_exact_w}}  {'≈':>10}  {'#th':>4}  "
@@ -485,7 +545,9 @@ def cmd_show(args: argparse.Namespace) -> None:
     ).fetchall()
     con.close()
 
-    label = GAUGE_PAIR_LABEL.get(cls["gauge_pair"], cls["gauge_pair"])
+    label = _gauge_pair_label(cls["gauge_pair"].split("-")[0],
+                              cls["gauge_pair"].split("-")[1],
+                              cls["rank0_mult"], cls["rank1_mult"])
     print(f"\nUniversality class #{cls['class_id']}  "
           f"{label}  "
           f"({cls['n_theories']} theories)")
@@ -625,19 +687,27 @@ def cmd_stats(args: argparse.Namespace) -> None:
     for k, v in info.items():
         print(f"  {k:<16}: {v}")
 
-    print("\nTheories and classes by gauge pair:")
-    print(f"  {'Gauge pair':<18}  {'#theories':>9}  {'#classes':>8}")
-    print(f"  {'─'*40}")
-    for pair in PAIR_ORDER:
-        label = GAUGE_PAIR_LABEL.get(pair, pair)
-        row = con.execute(
-            "SELECT COUNT(*) n FROM theory WHERE gauge_pair=?", (pair,)
-        ).fetchone()
-        cls_row = con.execute(
-            "SELECT COUNT(*) n FROM universality_class WHERE gauge_pair=?", (pair,)
-        ).fetchone()
-        if row["n"] > 0:
-            print(f"  {label:<18}  {row['n']:>9}  {cls_row['n']:>8}")
+    print("\nTheories and classes by gauge pair and rank:")
+    print(f"  {'Gauge pair':<22}  {'#theories':>9}  {'#classes':>8}")
+    print(f"  {'─'*44}")
+    rows_stat = con.execute(
+        "SELECT gauge_pair, rank0_mult, rank1_mult, "
+        "COUNT(*) n_th FROM theory GROUP BY gauge_pair, rank0_mult, rank1_mult"
+    ).fetchall()
+    cls_stat = con.execute(
+        "SELECT gauge_pair, rank0_mult, rank1_mult, "
+        "COUNT(*) n_cl FROM universality_class GROUP BY gauge_pair, rank0_mult, rank1_mult"
+    ).fetchall()
+    cls_map = {(r["gauge_pair"], r["rank0_mult"], r["rank1_mult"]): r["n_cl"]
+               for r in cls_stat}
+    for r in sorted(rows_stat, key=lambda x: (PAIR_ORDER.index(x["gauge_pair"])
+                                               if x["gauge_pair"] in PAIR_ORDER else 99,
+                                               x["rank0_mult"], x["rank1_mult"])):
+        label = _gauge_pair_label(r["gauge_pair"].split("-")[0],
+                                  r["gauge_pair"].split("-")[1],
+                                  r["rank0_mult"], r["rank1_mult"])
+        n_cl = cls_map.get((r["gauge_pair"], r["rank0_mult"], r["rank1_mult"]), 0)
+        print(f"  {label:<22}  {r['n_th']:>9}  {n_cl:>8}")
 
     a_stats = con.execute(
         "SELECT MIN(a_over_N2) mn, MAX(a_over_N2) mx, AVG(a_over_N2) av "
@@ -668,11 +738,19 @@ def main() -> None:
     p.add_argument("--exact-timeout", type=int, default=30, dest="exact_timeout",
                    help="Timeout in seconds per exact solve (default 30)")
 
+    def _parse_rank(s):
+        parts = s.split(",")
+        if len(parts) != 2:
+            raise argparse.ArgumentTypeError("--rank expects 'm0,m1' e.g. '2,1'")
+        return (int(parts[0]), int(parts[1]))
+
     # classes
     p = sub.add_parser("classes", help="List universality classes")
     p.add_argument("--pair", help="Filter by gauge pair, e.g. SU-SU or SU×SU")
     p.add_argument("--min-a", type=float, dest="min_a")
     p.add_argument("--max-a", type=float, dest="max_a")
+    p.add_argument("--rank", type=_parse_rank,
+                   help="Filter by rank multipliers, e.g. '2,1' for SU(2N)×SU(N)")
 
     # show
     p = sub.add_parser("show", help="Show all theories in a universality class")

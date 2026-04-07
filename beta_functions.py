@@ -71,28 +71,47 @@ def T_rep(gauge_type: GaugeType, rep: str, N: int) -> Fraction:
     raise ValueError(f"Unknown rep {rep!r} for gauge type {gauge_type!r}")
 
 
-def T_bifund(gauge_a: GaugeType, gauge_b: GaugeType, N: int) -> tuple[Fraction, Fraction]:
+def _fund_dim(gauge_type: GaugeType, N: int) -> int:
+    """Dimension of the fundamental/vector/spinor representation at each endpoint."""
+    if gauge_type == "SU":
+        return N          # □ of SU(N)
+    if gauge_type == "SO":
+        return N          # V of SO(N)
+    if gauge_type == "Sp":
+        return 2 * N      # f of USp(2N)
+    raise ValueError(f"Unknown gauge type: {gauge_type!r}")
+
+
+def _fund_T(gauge_type: GaugeType) -> Fraction:
+    """Dynkin index T(fund-like rep) — exact, independent of N."""
+    if gauge_type == "SU":
+        return Fraction(1, 2)
+    if gauge_type == "SO":
+        return Fraction(1)
+    if gauge_type == "Sp":
+        return Fraction(1, 2)
+    raise ValueError(f"Unknown gauge type: {gauge_type!r}")
+
+
+def T_bifund(
+    gauge_a: GaugeType, gauge_b: GaugeType, N: int,
+    N_a: int | None = None, N_b: int | None = None,
+) -> tuple[Fraction, Fraction]:
     """
     Bifundamental Dynkin index contributions (T_a, T_b) to b_0 at each endpoint
-    for one bifundamental edge between a node of type gauge_a and one of gauge_b.
+    for one bifundamental edge between a node of type gauge_a (rank N_a) and
+    one of gauge_b (rank N_b).
+
+    When N_a and N_b are omitted both default to N (equal-rank case).
+    Formula: T_a = T_fund(gauge_a) × dim_fund(gauge_b, N_b), and vice versa.
     """
-    pair = (gauge_a, gauge_b)
-    if pair == ("SU", "SU"):
-        return Fraction(N, 2), Fraction(N, 2)
-    if pair in (("SU", "SO"), ("SO", "SU")):
-        T_SU, T_SO = Fraction(N, 2), Fraction(N)
-        return (T_SU, T_SO) if gauge_a == "SU" else (T_SO, T_SU)
-    if pair in (("SU", "Sp"), ("Sp", "SU")):
-        T_SU, T_Sp = Fraction(N), Fraction(N, 2)
-        return (T_SU, T_Sp) if gauge_a == "SU" else (T_Sp, T_SU)
-    if pair == ("SO", "SO"):
-        return Fraction(N), Fraction(N)
-    if pair in (("SO", "Sp"), ("Sp", "SO")):
-        T_SO, T_Sp = Fraction(2 * N), Fraction(N, 2)
-        return (T_SO, T_Sp) if gauge_a == "SO" else (T_Sp, T_SO)
-    if pair == ("Sp", "Sp"):
-        return Fraction(N), Fraction(N)
-    raise ValueError(f"Unknown gauge pair: ({gauge_a!r}, {gauge_b!r})")
+    if N_a is None:
+        N_a = N
+    if N_b is None:
+        N_b = N
+    T_a = _fund_T(gauge_a) * _fund_dim(gauge_b, N_b)
+    T_b = _fund_T(gauge_b) * _fund_dim(gauge_a, N_a)
+    return T_a, T_b
 
 
 # ── Anomaly coefficients (SU(N) only) ─────────────────────────────────────────
@@ -180,17 +199,37 @@ def b0_linear(
     gauge_type: GaugeType,
     matter: dict[str, int],
     bifund_neighbors: list[GaugeType],
+    rank_mult: int = 1,
+    neighbor_mults: list[int] | None = None,
 ) -> tuple[Fraction, Fraction]:
     """
-    Return (alpha, beta) such that b_0(N) = alpha*N + beta.
+    Return (alpha, beta) such that b_0 = alpha*N_base + beta, where N_base is
+    the shared large-N parameter and each node has rank rank_mult * N_base.
 
-    Since b_0 is linear in N, two evaluations at N_min and N_min+1 suffice.
+    neighbor_mults[i] is the rank multiplier for the i-th bifundamental neighbor;
+    defaults to rank_mult for each neighbor (equal-rank case).
+
+    Since b_0 is linear in N_base, two evaluations suffice.
     """
-    N_min = N_MIN[gauge_type]
-    b0_lo = compute_b0(NodeSpec(gauge_type, N_min,     matter, bifund_neighbors))
-    b0_hi = compute_b0(NodeSpec(gauge_type, N_min + 1, matter, bifund_neighbors))
+    if neighbor_mults is None:
+        neighbor_mults = [rank_mult] * len(bifund_neighbors)
+    N_min_base = N_MIN[gauge_type]
+
+    def _b0_at(N_base: int) -> Fraction:
+        N_a = rank_mult * N_base
+        b0 = 3 * T_adj(gauge_type, N_a)
+        for rep, count in matter.items():
+            b0 -= count * T_rep(gauge_type, rep, N_a)
+        for g_nb, m_nb in zip(bifund_neighbors, neighbor_mults):
+            N_b = m_nb * N_base
+            T_a, _ = T_bifund(gauge_type, g_nb, N_a, N_a, N_b)
+            b0 -= T_a
+        return b0
+
+    b0_lo = _b0_at(N_min_base)
+    b0_hi = _b0_at(N_min_base + 1)
     alpha = b0_hi - b0_lo
-    beta  = b0_lo - alpha * N_min
+    beta  = b0_lo - alpha * N_min_base
     return alpha, beta
 
 
@@ -203,6 +242,8 @@ def is_af_all_N(
     gauge_type: GaugeType,
     matter: dict[str, int],
     bifund_neighbors: list[GaugeType],
+    rank_mult: int = 1,
+    neighbor_mults: list[int] | None = None,
 ) -> bool:
     """
     Return True if b_0 is positive for all sufficiently large N (large-N classification).
@@ -211,7 +252,7 @@ def is_af_all_N(
       - alpha > 0, or
       - alpha == 0 and beta > 0  (constant positive b_0)
     """
-    alpha, beta = b0_linear(gauge_type, matter, bifund_neighbors)
+    alpha, beta = b0_linear(gauge_type, matter, bifund_neighbors, rank_mult, neighbor_mults)
     return alpha > 0 or (alpha == 0 and beta > 0)
 
 

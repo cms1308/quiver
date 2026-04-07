@@ -28,6 +28,7 @@ from beta_functions import (
     RANK2_ADJ_REPS,
     NodeSpec,
     compute_b0,
+    b0_linear,
     is_af_all_N,
 )
 
@@ -68,16 +69,23 @@ class Quiver:
 
     node_matter contains only rank-2/adj representations; fund-like matter
     (fundamentals, antifundamentals, vectors) is parametrized by N_f.
+
+    rank_multipliers[i] = m_i means node i has gauge group G(m_i * N).
+    Defaults to [1, 1, ...] (all nodes share the same rank N).
     """
     gauge_types: list[GaugeType]
     edges: list[Edge] = field(default_factory=list)
     node_matter: list[dict[str, int]] = field(default_factory=list)
+    rank_multipliers: list[int] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         n = len(self.gauge_types)
         if len(self.node_matter) == 0:
             self.node_matter = [{} for _ in range(n)]
         assert len(self.node_matter) == n
+        if len(self.rank_multipliers) == 0:
+            self.rank_multipliers = [1] * n
+        assert len(self.rank_multipliers) == n
 
     @property
     def n_nodes(self) -> int:
@@ -105,11 +113,22 @@ class Quiver:
                 result.append(self.gauge_types[e.src])
         return result
 
+    def bifund_neighbor_mults(self, node: int) -> list[int]:
+        """List of rank multipliers of bifundamental neighbors (parallel to bifund_neighbor_types)."""
+        result = []
+        for e in self.edges:
+            if e.src == node:
+                result.append(self.rank_multipliers[e.dst])
+            elif e.dst == node:
+                result.append(self.rank_multipliers[e.src])
+        return result
+
     def node_spec(self, node: int, N: int) -> NodeSpec:
-        """Build a NodeSpec for node at rank N (rank-2/adj matter only)."""
+        """Build a NodeSpec for node at base rank N (uses rank_multipliers[node] * N)."""
+        m = self.rank_multipliers[node]
         return NodeSpec(
             gauge_type=self.gauge_types[node],
-            N=N,
+            N=m * N,
             matter=self.node_matter[node],
             bifund_neighbors=self.bifund_neighbor_types(node),
         )
@@ -137,51 +156,59 @@ class Quiver:
 
 def chiral_excess_coeffs(quiver: Quiver, node: int) -> tuple[int, int]:
     """
-    For an SU(N) node, return (a, b) such that the chiral excess
+    For an SU(m_a*N) node, return (a, b) such that the chiral excess
     delta(N) = a*N + b, where delta = n_f - n_fbar is fixed by
     gauge anomaly cancellation:
 
-        delta + (n_S - n_Sbar)(N+4) + (n_A - n_Abar)(N-4) + bif_anomaly(N) = 0
+        delta + (n_S - n_Sbar)(m_a*N+4) + (n_A - n_Abar)(m_a*N-4) + bif_anomaly = 0
 
-    Bifundamental anomaly contributions at the SU node:
-      "+-" edge (node is src): +N  (node is dst): -N
-      "++" edge: +N to node
-      SU-SO edge: +N
-      SU-Sp edge: +2N
+    Rank-2 anomaly contributions at SU(m_a*N):
+      (n_S - n_Sb)*(m_a*N+4) + (n_A - n_Ab)*(m_a*N-4)
+      → N-coeff: [(n_S-n_Sb) + (n_A-n_Ab)] * m_a
+      → const:   4*(n_S-n_Sb) - 4*(n_A-n_Ab)
+
+    Bifundamental anomaly from neighbor of type g_nb with mult m_b
+    (A_fund × dim_fund(g_nb, m_b*N)):
+      SU-SU "+-" src: +m_b*N;  dst: -m_b*N
+      SU-SU "++": +m_b*N;  "--": -m_b*N
+      SU-SO "+": +m_b*N;  "-": -m_b*N  (dim_V = m_b*N)
+      SU-Sp "+": +2*m_b*N;  "-": -2*m_b*N  (dim_f = 2*m_b*N)
     """
     assert quiver.gauge_types[node] == "SU"
+    m_a = quiver.rank_multipliers[node]
     matter = quiver.node_matter[node]
     n_S  = matter.get("S",    0)
     n_Sb = matter.get("Sbar", 0)
     n_A  = matter.get("A",    0)
     n_Ab = matter.get("Abar", 0)
 
-    # Rank-2 anomaly: (n_S - n_Sbar)(N+4) + (n_A - n_Ab)(N-4)
-    r2_coeff_N     = (n_S - n_Sb) + (n_A - n_Ab)
+    # Rank-2 anomaly: scaled by m_a
+    r2_coeff_N     = ((n_S - n_Sb) + (n_A - n_Ab)) * m_a
     r2_coeff_const = 4 * (n_S - n_Sb) - 4 * (n_A - n_Ab)
 
-    # Bifundamental anomaly (all O(N); constant term vanishes)
+    # Bifundamental anomaly: scaled by neighbor's m_b
     bif_coeff_N = 0
     for e, side in quiver.incident_edges(node):
         neighbor = e.dst if side == "src" else e.src
         g_nb = quiver.gauge_types[neighbor]
+        m_b  = quiver.rank_multipliers[neighbor]
         if g_nb == "SU":
             if e.rep == "+-":
-                bif_coeff_N += +1 if side == "src" else -1
+                bif_coeff_N += m_b * (+1 if side == "src" else -1)
             elif e.rep == "++":
-                bif_coeff_N += +1
+                bif_coeff_N += m_b
             elif e.rep == "--":
-                bif_coeff_N += -1
+                bif_coeff_N -= m_b
         elif g_nb == "SO":
             if e.rep == "+":
-                bif_coeff_N += +1
+                bif_coeff_N += m_b
             elif e.rep == "-":
-                bif_coeff_N += -1
+                bif_coeff_N -= m_b
         elif g_nb == "Sp":
             if e.rep == "+":
-                bif_coeff_N += +2
+                bif_coeff_N += 2 * m_b
             elif e.rep == "-":
-                bif_coeff_N += -2
+                bif_coeff_N -= 2 * m_b
 
     # delta = -(rank-2 anomaly + bif anomaly)
     return -(r2_coeff_N + bif_coeff_N), -r2_coeff_const
@@ -208,31 +235,33 @@ def _nf_bound_at_N(quiver: Quiver, node: int, N: int) -> Fraction:
 def nf_bound(quiver: Quiver, node: int) -> tuple[Fraction, Fraction] | None:
     """
     Return (alpha, gamma) such that the one-loop AF condition is N_f < alpha*N + gamma
-    for all N >= N_MIN[gauge_type].
+    for all large N.
 
     For SU nodes, f(N) = b0_rank2_adj(N) - |delta(N)|/2 is piecewise linear (delta can
     change sign). We compute the large-N asymptotic linear form directly:
         For large N: |delta(N)| ~ |a|*N + sgn(a)*b
         => large-N slope: alpha = alpha_b0 - |a|/2
 
-    Validity requires: (1) large-N alpha >= 0 with positive constant, and (2) f(N_min) > 0.
-
-    Returns None if either condition fails.
+    Validity requires: large-N alpha >= 0 with positive constant.
+    Returns None if the condition cannot be satisfied.
     """
-    from beta_functions import b0_linear
-
     g = quiver.gauge_types[node]
+    m = quiver.rank_multipliers[node]
+    neighbors = quiver.bifund_neighbor_types(node)
+    n_mults   = quiver.bifund_neighbor_mults(node)
 
     if g != "SU":
         # No chiral excess: f = b0_rank2_adj is exactly linear
-        alpha, gamma = b0_linear(g, quiver.node_matter[node], quiver.bifund_neighbor_types(node))
+        alpha, gamma = b0_linear(g, quiver.node_matter[node], neighbors,
+                                 rank_mult=m, neighbor_mults=n_mults)
         if alpha < 0 or (alpha == 0 and gamma <= 0):
             return None
         return alpha, gamma
 
     # SU: compute large-N asymptotic form of f(N) = b0_rank2_adj(N) - |delta(N)|/2
     a, b = chiral_excess_coeffs(quiver, node)
-    alpha_b0, beta_b0 = b0_linear(g, quiver.node_matter[node], quiver.bifund_neighbor_types(node))
+    alpha_b0, beta_b0 = b0_linear(g, quiver.node_matter[node], neighbors,
+                                   rank_mult=m, neighbor_mults=n_mults)
 
     alpha = alpha_b0 - Fraction(abs(a), 2)
     if a == 0:
@@ -273,6 +302,8 @@ def check_anomalies(quiver: Quiver) -> bool:
 def _enumerate_node_matter(
     gauge_type: GaugeType,
     bifund_neighbors: list[GaugeType],
+    rank_mult: int = 1,
+    neighbor_mults: list[int] | None = None,
 ) -> Iterator[dict[str, int]]:
     """
     Yield all rank-2/adj matter dicts satisfying b_0(rank-2/adj, N_f=0) > 0
@@ -282,6 +313,8 @@ def _enumerate_node_matter(
     violates AF, all count > k also do — break immediately.
     """
     reps = NODE_REPS[gauge_type]
+    if neighbor_mults is None:
+        neighbor_mults = [rank_mult] * len(bifund_neighbors)
 
     def _gen(idx: int, current: dict[str, int]) -> Iterator[dict[str, int]]:
         if idx == len(reps):
@@ -293,7 +326,8 @@ def _enumerate_node_matter(
         # count > 0: recurse while AF holds, break on first failure
         for count in range(1, 100):
             current[rep] = count
-            if not is_af_all_N(gauge_type, current, bifund_neighbors):
+            if not is_af_all_N(gauge_type, current, bifund_neighbors,
+                                rank_mult=rank_mult, neighbor_mults=neighbor_mults):
                 del current[rep]
                 break
             yield from _gen(idx + 1, current)
@@ -430,6 +464,75 @@ def enumerate_quivers(
                     results.append((q, bounds))
 
     return _dedup_conjugation(results)
+
+
+def enumerate_quivers_mixed_rank(
+    n_nodes: int,
+    rank_multipliers: list[int],
+    max_multiedge: int = 2,
+    min_multiedge: int = 0,
+    require_connected: bool = True,
+) -> list[tuple[Quiver, list[tuple[Fraction, Fraction]]]]:
+    """
+    Enumerate all quivers with the given fixed rank multipliers satisfying:
+    - N_f bound f(N) > 0 and non-decreasing at every node
+    - Sp(N) Witten anomaly: even degree at every Sp node
+
+    Returns list of (quiver, bounds) where bounds[i] = (alpha, gamma) gives
+    the AF condition N_f < alpha*N + gamma at node i.
+
+    Note: does not deduplicate isomorphic quivers; caller should handle pairs
+    like [[2,1],[1,2]] to cover both orderings.
+    """
+    assert len(rank_multipliers) == n_nodes
+    gauge_group_types: list[GaugeType] = ["SU", "SO", "Sp"]
+    results: list[tuple[Quiver, list[tuple[Fraction, Fraction]]]] = []
+
+    for gauge_types in product(gauge_group_types, repeat=n_nodes):
+        gauge_types = list(gauge_types)
+
+        for edges in _enumerate_edges(gauge_types, max_multiedge, min_multiedge):
+            q_partial = Quiver(gauge_types, edges, rank_multipliers=rank_multipliers)
+
+            if require_connected and not q_partial.is_connected():
+                continue
+
+            if not check_anomalies(q_partial):
+                continue
+
+            matter_choices: list[list[dict[str, int]]] = []
+            feasible = True
+            for i in range(n_nodes):
+                neighbors    = q_partial.bifund_neighbor_types(i)
+                n_mults      = q_partial.bifund_neighbor_mults(i)
+                choices = list(_enumerate_node_matter(
+                    gauge_types[i], neighbors,
+                    rank_mult=rank_multipliers[i],
+                    neighbor_mults=n_mults,
+                ))
+                if not choices:
+                    feasible = False
+                    break
+                matter_choices.append(choices)
+
+            if not feasible:
+                continue
+
+            for matter_combo in product(*matter_choices):
+                q = Quiver(gauge_types, edges, list(matter_combo),
+                           rank_multipliers=list(rank_multipliers))
+                bounds: list[tuple[Fraction, Fraction]] = []
+                valid = True
+                for i in range(n_nodes):
+                    b = nf_bound(q, i)
+                    if b is None:
+                        valid = False
+                        break
+                    bounds.append(b)
+                if valid:
+                    results.append((q, bounds))
+
+    return results
 
 
 # ── Conjugation ────────────────────────────────────────────────────────────────
