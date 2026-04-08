@@ -810,6 +810,211 @@ def a_maximize_large_N_fast_full(quiver: Quiver) -> FastNumericalResult | None:
     return FastNumericalResult(a_over_N2=a_val, c_over_N2=c_val, R_charges=R_charges)
 
 
+# ── Mathematica batch NSolve scanner ─────────────────────────────────────────
+
+def a_maximize_batch_mathematica(
+    quivers: list[Quiver],
+    timeout: int = 7200,
+    working_precision: int = 30,
+) -> list[FastNumericalResult | None]:
+    """
+    Numerical large-N a-maximization for a list of quivers via a single
+    Mathematica NSolve session.
+
+    Finds ALL real critical points of the a-function (stationarity equations are
+    quadratic in the free parameters s), keeps only local maxima (negative-
+    semidefinite Hessian), and returns the maximum.  Returns None for theories
+    with no bounded maximum (unbounded a-function or no real critical points).
+
+    A single wolframscript process handles the entire batch, avoiding per-theory
+    subprocess startup overhead.
+    """
+    import json
+    import subprocess
+    import tempfile
+    import os
+    from fractions import Fraction as Frac
+    import numpy as np
+    from scipy.linalg import null_space
+
+    def _to_mma_rat(x: float) -> str:
+        """Convert a float to an exact rational string for Mathematica."""
+        f = Frac(x).limit_denominator(10 ** 12)
+        return f"{f.numerator}/{f.denominator}"
+
+    def _vec_to_mma(v) -> str:
+        return "{" + ",".join(_to_mma_rat(x) for x in v) + "}"
+
+    def _mat_to_mma(M) -> str:
+        return "{" + ",".join(_vec_to_mma(row) for row in M) + "}"
+
+    # ── Serialise each quiver's data ─────────────────────────────────────────
+    theory_data = []
+    for idx, q in enumerate(quivers):
+        fields = build_fields_large_N(q)
+        n_R = len(fields)
+        mults = q.rank_multipliers
+        gaugino = sum(
+            float(dim_group_lead(g)) * m * m
+            for g, m in zip(q.gauge_types, mults)
+        )
+
+        if n_R == 0:
+            # No leading-order matter: a is fixed
+            a_val = (3 / 32) * 2 * gaugino
+            c_val = (1 / 32) * 4 * gaugino
+            theory_data.append({
+                "idx": idx,
+                "trivial": True,
+                "a": a_val, "c": c_val, "R": [],
+            })
+            continue
+
+        A, b = _fast_anomaly_matrix(fields, q)
+        R0, *_ = np.linalg.lstsq(A, b, rcond=None)
+        F = null_space(A)
+        n_free = F.shape[1]
+
+        theory_data.append({
+            "idx": idx,
+            "trivial": False,
+            "R0_mma":    _vec_to_mma(R0),
+            "F_mma":     _mat_to_mma(F.T),   # Mathematica wants rows=svars
+            "dims_mma":  _vec_to_mma([float(f.dim_lead) for f in fields]),
+            "gaugino_mma": _to_mma_rat(gaugino),
+            "n_free":    n_free,
+            "n_R":       n_R,
+            "labels":    [f.label for f in fields],
+        })
+
+    # ── Write Mathematica batch script (parallel) ─────────────────────────────
+    tmpdir = tempfile.mkdtemp()
+    script_path = os.path.join(tmpdir, "mma_batch.wl")
+    result_path = os.path.join(tmpdir, "mma_results.json")
+
+    wp = working_precision
+
+    # Build the Mathematica list of Association literals, one per theory
+    assoc_parts = []
+    for td in theory_data:
+        idx = td["idx"]
+        if td.get("trivial"):
+            # No matter fields: store precomputed a/c as exact rationals
+            a_r = _to_mma_rat(td["a"])
+            c_r = _to_mma_rat(td["c"])
+            assoc_parts.append(
+                f'<|"idx"->{idx},"trivial"->True,"a0"->{a_r},"c0"->{c_r}|>'
+            )
+        elif td["n_free"] == 0:
+            assoc_parts.append(
+                f'<|"idx"->{idx},"trivial"->False,"nfree"->0,'
+                f'"R0"->{td["R0_mma"]},"dims"->{td["dims_mma"]},'
+                f'"gaugino"->{td["gaugino_mma"]}|>'
+            )
+        else:
+            n_free = td["n_free"]
+            assoc_parts.append(
+                f'<|"idx"->{idx},"trivial"->False,"nfree"->{n_free},'
+                f'"R0"->{td["R0_mma"]},'
+                f'"F"->Transpose[{td["F_mma"]}],'   # shape n_R × n_free
+                f'"dims"->{td["dims_mma"]},'
+                f'"gaugino"->{td["gaugino_mma"]}|>'
+            )
+
+    theories_literal = "{\n" + ",\n".join(assoc_parts) + "\n}"
+
+    script = f"""\
+(* Parallel a-maximization via NSolve *)
+LaunchKernels[];
+
+processTheory[th_] := Module[
+  {{idx, R0, Fmat, dims, gaugino, nfree, svars, R, r1,
+    trR, trR3, a, c, grad, hess, sols, avals, best, Ropt}},
+  idx     = th["idx"];
+  If[th["trivial"],
+    (* No matter fields: a and c already computed *)
+    Return[<|"idx" -> idx, "a" -> th["a0"], "c" -> th["c0"], "R" -> {{}}|>]
+  ];
+  R0      = th["R0"];
+  dims    = th["dims"];
+  gaugino = th["gaugino"];
+  nfree   = th["nfree"];
+  If[nfree == 0,
+    (* R fully determined by anomaly constraint *)
+    r1   = R0 - 1;
+    trR  = gaugino + dims.r1;
+    trR3 = gaugino + dims.(r1^3);
+    Return[<|"idx" -> idx,
+             "a" -> N[(3/32)*(3*trR3 - trR), {wp}],
+             "c" -> N[(1/32)*(9*trR3 - 5*trR), {wp}],
+             "R" -> N[R0, {wp}]|>]
+  ];
+  (* nfree > 0: solve stationarity polynomial system *)
+  Fmat  = th["F"];
+  svars = Array[s, nfree];
+  R     = R0 + Fmat.svars;
+  r1    = R - 1;
+  trR   = gaugino + dims.r1;
+  trR3  = gaugino + dims.(r1^3);
+  a     = (3/32)*(3*trR3 - trR);
+  c     = (1/32)*(9*trR3 - 5*trR);
+  grad  = Table[D[a, svars[[j]]], {{j, nfree}}];
+  hess  = Outer[D[a, #1, #2]&, svars, svars];
+  sols  = NSolve[Thread[grad == 0], svars, Reals,
+                 WorkingPrecision -> {wp}];
+  (* Keep only local maxima: all Hessian eigenvalues <= 0 *)
+  sols  = Select[sols,
+    AllTrue[Eigenvalues[N[hess /. #, {wp}]], # <= 1*^-8 &] &];
+  If[sols == {{}},
+    Return[<|"idx" -> idx, "a" -> "NONE"|>]
+  ];
+  avals = N[a /. sols, {wp}];
+  best  = First[Ordering[avals, -1]];
+  Ropt  = N[R /. sols[[best]], {wp}];
+  <|"idx" -> idx,
+    "a" -> avals[[best]],
+    "c" -> N[c /. sols[[best]], {wp}],
+    "R" -> Ropt|>
+];
+
+theories = {theories_literal};
+results  = ParallelMap[processTheory, theories];
+Export["{result_path}", results, "JSON"];
+"""
+
+    with open(script_path, "w") as fh:
+        fh.write(script)
+
+    # ── Run wolframscript ─────────────────────────────────────────────────────
+    subprocess.run(
+        ["wolframscript", "-file", script_path],
+        timeout=timeout,
+        check=True,
+    )
+
+    # ── Parse results ─────────────────────────────────────────────────────────
+    with open(result_path) as fh:
+        raw = json.load(fh)
+
+    by_idx: dict[int, dict] = {int(r["idx"]): r for r in raw}
+
+    out: list[FastNumericalResult | None] = []
+    for idx, q in enumerate(quivers):
+        r = by_idx.get(idx)
+        if r is None or r.get("a") == "NONE":
+            out.append(None)
+            continue
+        a_val = float(r["a"])
+        c_val = float(r["c"])
+        R_list = [float(x) for x in r["R"]]
+        fields = build_fields_large_N(q)
+        R_charges = {f.label: R_list[f.R_index] for f in fields} if R_list else {}
+        out.append(FastNumericalResult(
+            a_over_N2=a_val, c_over_N2=c_val, R_charges=R_charges,
+        ))
+    return out
+
+
 # ── Classification table ──────────────────────────────────────────────────────
 
 def _fmt_matter(matter: dict[str, int]) -> str:
