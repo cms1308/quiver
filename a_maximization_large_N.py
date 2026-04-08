@@ -944,6 +944,10 @@ processTheory[th_] := Module[
     r1   = R0 - 1;
     trR  = gaugino + dims.r1;
     trR3 = gaugino + dims.(r1^3);
+    (* Check unitarity: all R-charges >= 2/3 *)
+    If[Min[N[R0, {wp}]] < 2/3,
+      Return[<|"idx" -> idx, "a" -> "NONE"|>]
+    ];
     Return[<|"idx" -> idx,
              "a" -> N[(3/32)*(3*trR3 - trR), {wp}],
              "c" -> N[(1/32)*(9*trR3 - 5*trR), {wp}],
@@ -965,6 +969,8 @@ processTheory[th_] := Module[
   (* Keep only local maxima: all Hessian eigenvalues <= 0 *)
   sols  = Select[sols,
     AllTrue[Eigenvalues[N[hess /. #, {wp}]], # <= 1*^-8 &] &];
+  (* Also require all R-charges >= 2/3 (SCFT unitarity bound) *)
+  sols  = Select[sols, Min[N[R /. #, {wp}]] >= 2/3 &];
   If[sols == {{}},
     Return[<|"idx" -> idx, "a" -> "NONE"|>]
   ];
