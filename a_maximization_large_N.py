@@ -998,7 +998,10 @@ Export["{result_path}", results, "JSON"];
     import re as _re
     with open(result_path) as fh:
         raw_text = fh.read()
-    raw_text = _re.sub(r'(\d)\.e([+-]\d+)', r'\1.0e\2', raw_text)
+    # Mathematica emits bare decimals like "0.", "0.e7", "1.e-30" — all invalid
+    # JSON.  Any digit followed by "." not followed by another digit gets a "0"
+    # appended, e.g. "0.e7" → "0.0e7", "0." → "0.0".
+    raw_text = _re.sub(r'(\d)\.(?!\d)', r'\1.0', raw_text)
     raw = json.loads(raw_text)
 
     by_idx: dict[int, dict] = {int(r["idx"]): r for r in raw}
