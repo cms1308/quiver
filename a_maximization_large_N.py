@@ -993,8 +993,13 @@ Export["{result_path}", results, "JSON"];
     )
 
     # ── Parse results ─────────────────────────────────────────────────────────
+    # Mathematica can emit e.g. "0.e-30" (no digit after decimal) which is
+    # invalid JSON.  Fix by inserting a zero: "0.e-30" → "0.0e-30".
+    import re as _re
     with open(result_path) as fh:
-        raw = json.load(fh)
+        raw_text = fh.read()
+    raw_text = _re.sub(r'(\d)\.e([+-]\d+)', r'\1.0e\2', raw_text)
+    raw = json.loads(raw_text)
 
     by_idx: dict[int, dict] = {int(r["idx"]): r for r in raw}
 
