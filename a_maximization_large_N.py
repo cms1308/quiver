@@ -944,10 +944,6 @@ processTheory[th_] := Module[
     r1   = R0 - 1;
     trR  = gaugino + dims.r1;
     trR3 = gaugino + dims.(r1^3);
-    (* Check unitarity: all R-charges >= 2/3 *)
-    If[Min[N[R0, {wp}]] < 2/3,
-      Return[<|"idx" -> idx, "a" -> "NONE"|>]
-    ];
     Return[<|"idx" -> idx,
              "a" -> N[(3/32)*(3*trR3 - trR), {wp}],
              "c" -> N[(1/32)*(9*trR3 - 5*trR), {wp}],
@@ -966,11 +962,11 @@ processTheory[th_] := Module[
   hess  = Outer[D[a, #1, #2]&, svars, svars];
   sols  = NSolve[Thread[grad == 0], svars, Reals,
                  WorkingPrecision -> {wp}];
-  (* Keep only local maxima: all Hessian eigenvalues <= 0 *)
+  (* Keep only local maxima: all Hessian eigenvalues <= 0.
+     Use tolerance 0 (not 1e-8) to avoid accepting saddle points
+     that slip through due to QR convergence failures. *)
   sols  = Select[sols,
-    AllTrue[Eigenvalues[N[hess /. #, {wp}]], # <= 1*^-8 &] &];
-  (* Also require all R-charges >= 2/3 (SCFT unitarity bound) *)
-  sols  = Select[sols, Min[N[R /. #, {wp}]] >= 2/3 &];
+    AllTrue[Eigenvalues[N[hess /. #, {wp}]], # <= 0 &] &];
   If[sols == {{}},
     Return[<|"idx" -> idx, "a" -> "NONE"|>]
   ];
