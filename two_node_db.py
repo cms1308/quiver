@@ -29,7 +29,6 @@ from quiver_generation import (
     _dedup_symmetries,
 )
 from a_maximization_large_N import (
-    a_maximize_large_N_fast, a_maximize_large_N_fast_full,
     a_maximize_large_N, a_maximize_batch_mathematica,
     build_fields_large_N,
     _fmt_matter, _fmt_edges, _fmt_linear, _fmt_expr, _fmt_R,

@@ -673,155 +673,42 @@ def _solve_a_max(
     )
 
 
-# ── Fast numerical large-N a-maximization (for scanning many quivers) ─────────
+# ── Numerical result container and anomaly matrix ────────────────────────────
 
 @dataclass
 class FastNumericalResult:
-    """Numerical result of fast large-N a-maximization."""
+    """Numerical result of large-N a-maximization (from Mathematica NSolve)."""
     a_over_N2: float
     c_over_N2: float
     R_charges: dict[str, float]   # field label → R-charge
 
 
-def _fast_anomaly_matrix(fields, quiver) -> tuple:
-    """Build float anomaly matrix respecting rank_multipliers."""
-    import numpy as np
+def _anomaly_matrix_exact(fields, quiver) -> tuple[list[list], list]:
+    """
+    Build the anomaly matrix A and RHS vector b as exact Fraction values.
+
+    Anomaly-free condition per gauge node a:
+        Σ_i T_lead_a(field_i) × (R_i − 1) = −T_adj_lead(g_a) × m_a
+
+    Rewritten as A·R = b with:
+        A[a, i] = T_lead_a(field_i)
+        b[a]    = −T_adj_lead(g_a)×m_a + Σ_i T_lead_a(field_i)
+    """
+    from fractions import Fraction
     mults = quiver.rank_multipliers
     n_nodes = quiver.n_nodes
     n_R = len(fields)
-    A = np.zeros((n_nodes, n_R))
-    b = np.zeros(n_nodes)
+    A: list[list] = [[Fraction(0)] * n_R for _ in range(n_nodes)]
+    b: list       = [Fraction(0)] * n_nodes
     for a, g in enumerate(quiver.gauge_types):
         m_a = mults[a]
-        b[a] = -float(T_adj_lead(g)) * m_a
+        b[a] = -T_adj_lead(g) * m_a
         for f in fields:
             T_a = f.T_lead.get(a)
             if T_a is not None:
-                A[a, f.R_index] += float(T_a)
-                b[a] += float(T_a)
+                A[a][f.R_index] += T_a
+                b[a] += T_a
     return A, b
-
-
-def a_maximize_large_N_fast(quiver: Quiver) -> float | None:
-    """
-    Fast numerical large-N a-maximization using numpy/scipy.
-
-    Returns a/N² as a float, or None if no bounded maximum exists
-    (theory has no SCFT at large N).
-
-    Uses BFGS with multiple random restarts to avoid local minima.
-    """
-    import numpy as np
-    from scipy.linalg import null_space
-    from scipy.optimize import minimize
-
-    fields = build_fields_large_N(quiver)
-    n_R = len(fields)
-
-    mults = quiver.rank_multipliers
-    if n_R == 0:
-        return (3 / 32) * 2 * sum(float(dim_group_lead(g)) * m * m
-                                   for g, m in zip(quiver.gauge_types, mults))
-
-    A, b = _fast_anomaly_matrix(fields, quiver)
-
-    R0, *_ = np.linalg.lstsq(A, b, rcond=None)
-    F = null_space(A)
-    n_free = F.shape[1]
-
-    gaugino = sum(float(dim_group_lead(g)) * m * m
-                  for g, m in zip(quiver.gauge_types, mults))
-    dims = np.array([float(f.dim_lead) for f in fields])
-
-    def neg_a(s: np.ndarray) -> float:
-        R = R0 + F @ s
-        r1 = R - 1
-        tr_R  = gaugino + dims @ r1
-        tr_R3 = gaugino + dims @ (r1 ** 3)
-        return -(3 / 32) * (3 * tr_R3 - tr_R)
-
-    if n_free == 0:
-        return -neg_a(np.zeros(0))
-
-    rng = np.random.default_rng(0)
-    best_a = None
-    for _ in range(8):                  # random restarts
-        s0 = rng.standard_normal(n_free)
-        res = minimize(neg_a, s0, method="BFGS",
-                       options={"maxiter": 2000, "gtol": 1e-10})
-        # Reject diverged results (unbounded a-function → no SCFT)
-        if abs(res.fun) > 1e6:
-            continue
-        a_val = -res.fun
-        if best_a is None or a_val > best_a:
-            best_a = a_val
-    return best_a
-
-
-def a_maximize_large_N_fast_full(quiver: Quiver) -> FastNumericalResult | None:
-    """
-    Fast numerical large-N a-maximization returning a/N², c/N², and R-charges.
-
-    Returns FastNumericalResult or None if no bounded maximum exists.
-    """
-    import numpy as np
-    from scipy.linalg import null_space
-    from scipy.optimize import minimize
-
-    fields = build_fields_large_N(quiver)
-    n_R = len(fields)
-
-    mults = quiver.rank_multipliers
-    gaugino = sum(float(dim_group_lead(g)) * m * m
-                  for g, m in zip(quiver.gauge_types, mults))
-
-    if n_R == 0:
-        a_val = (3 / 32) * 2 * gaugino
-        c_val = (1 / 32) * 4 * gaugino
-        return FastNumericalResult(a_over_N2=a_val, c_over_N2=c_val, R_charges={})
-
-    A, b = _fast_anomaly_matrix(fields, quiver)
-
-    R0, *_ = np.linalg.lstsq(A, b, rcond=None)
-    F = null_space(A)
-    n_free = F.shape[1]
-
-    dims = np.array([float(f.dim_lead) for f in fields])
-
-    def neg_a(s: np.ndarray) -> float:
-        R = R0 + F @ s
-        r1 = R - 1
-        tr_R  = gaugino + dims @ r1
-        tr_R3 = gaugino + dims @ (r1 ** 3)
-        return -(3 / 32) * (3 * tr_R3 - tr_R)
-
-    if n_free == 0:
-        R_opt = R0
-    else:
-        rng = np.random.default_rng(0)
-        best_s = None
-        best_a = None
-        for _ in range(8):
-            s0 = rng.standard_normal(n_free)
-            res = minimize(neg_a, s0, method="BFGS",
-                           options={"maxiter": 2000, "gtol": 1e-10})
-            if abs(res.fun) > 1e6:
-                continue
-            if best_a is None or -res.fun > best_a:
-                best_a = -res.fun
-                best_s = res.x
-        if best_s is None:
-            return None
-        R_opt = R0 + F @ best_s
-
-    r1 = R_opt - 1
-    tr_R  = gaugino + dims @ r1
-    tr_R3 = gaugino + dims @ (r1 ** 3)
-    a_val = (3 / 32) * (3 * tr_R3 - tr_R)
-    c_val = (1 / 32) * (9 * tr_R3 - 5 * tr_R)
-
-    R_charges = {f.label: float(R_opt[f.R_index]) for f in fields}
-    return FastNumericalResult(a_over_N2=a_val, c_over_N2=c_val, R_charges=R_charges)
 
 
 # ── Mathematica batch NSolve scanner ─────────────────────────────────────────
@@ -848,19 +735,15 @@ def a_maximize_batch_mathematica(
     import tempfile
     import os
     from fractions import Fraction as Frac
-    import numpy as np
-    from scipy.linalg import null_space
 
-    def _to_mma_rat(x: float) -> str:
-        """Convert a float to an exact rational string for Mathematica."""
-        f = Frac(x).limit_denominator(10 ** 12)
+    def _frac_to_mma(f: Frac) -> str:
         return f"{f.numerator}/{f.denominator}"
 
-    def _vec_to_mma(v) -> str:
-        return "{" + ",".join(_to_mma_rat(x) for x in v) + "}"
+    def _fvec_to_mma(v: list) -> str:
+        return "{" + ",".join(_frac_to_mma(x) for x in v) + "}"
 
-    def _mat_to_mma(M) -> str:
-        return "{" + ",".join(_vec_to_mma(row) for row in M) + "}"
+    def _fmat_to_mma(M: list) -> str:
+        return "{" + ",".join(_fvec_to_mma(row) for row in M) + "}"
 
     # ── Serialise each quiver's data ─────────────────────────────────────────
     theory_data = []
@@ -869,36 +752,34 @@ def a_maximize_batch_mathematica(
         n_R = len(fields)
         mults = q.rank_multipliers
         gaugino = sum(
-            float(dim_group_lead(g)) * m * m
+            dim_group_lead(g) * m * m
             for g, m in zip(q.gauge_types, mults)
         )
 
         if n_R == 0:
-            # No leading-order matter: a is fixed
-            a_val = (3 / 32) * 2 * gaugino
-            c_val = (1 / 32) * 4 * gaugino
+            # No leading-order matter: a and c are fixed by gaugino alone
+            a_val = Frac(3, 32) * 2 * gaugino
+            c_val = Frac(1, 32) * 4 * gaugino
             theory_data.append({
                 "idx": idx,
                 "trivial": True,
-                "a": a_val, "c": c_val, "R": [],
+                "a": _frac_to_mma(a_val),
+                "c": _frac_to_mma(c_val),
             })
             continue
 
-        A, b = _fast_anomaly_matrix(fields, q)
-        R0, *_ = np.linalg.lstsq(A, b, rcond=None)
-        F = null_space(A)
-        n_free = F.shape[1]
+        # Exact anomaly matrix and RHS (all Fraction entries)
+        A, b = _anomaly_matrix_exact(fields, q)
+        dims = [f.dim_lead for f in fields]  # Fraction values
 
         theory_data.append({
-            "idx": idx,
-            "trivial": False,
-            "R0_mma":    _vec_to_mma(R0),
-            "F_mma":     _mat_to_mma(F.T),   # Mathematica wants rows=svars
-            "dims_mma":  _vec_to_mma([float(f.dim_lead) for f in fields]),
-            "gaugino_mma": _to_mma_rat(gaugino),
-            "n_free":    n_free,
-            "n_R":       n_R,
-            "labels":    [f.label for f in fields],
+            "idx":         idx,
+            "trivial":     False,
+            "A_mma":       _fmat_to_mma(A),
+            "b_mma":       _fvec_to_mma(b),
+            "dims_mma":    _fvec_to_mma(dims),
+            "gaugino_mma": _frac_to_mma(gaugino),
+            "labels":      [f.label for f in fields],
         })
 
     # ── Write Mathematica batch script (parallel) ─────────────────────────────
@@ -913,24 +794,14 @@ def a_maximize_batch_mathematica(
     for td in theory_data:
         idx = td["idx"]
         if td.get("trivial"):
-            # No matter fields: store precomputed a/c as exact rationals
-            a_r = _to_mma_rat(td["a"])
-            c_r = _to_mma_rat(td["c"])
             assoc_parts.append(
-                f'<|"idx"->{idx},"trivial"->True,"a0"->{a_r},"c0"->{c_r}|>'
-            )
-        elif td["n_free"] == 0:
-            assoc_parts.append(
-                f'<|"idx"->{idx},"trivial"->False,"nfree"->0,'
-                f'"R0"->{td["R0_mma"]},"dims"->{td["dims_mma"]},'
-                f'"gaugino"->{td["gaugino_mma"]}|>'
+                f'<|"idx"->{idx},"trivial"->True,"a0"->{td["a"]},"c0"->{td["c"]}|>'
             )
         else:
-            n_free = td["n_free"]
             assoc_parts.append(
-                f'<|"idx"->{idx},"trivial"->False,"nfree"->{n_free},'
-                f'"R0"->{td["R0_mma"]},'
-                f'"F"->Transpose[{td["F_mma"]}],'   # shape n_R × n_free
+                f'<|"idx"->{idx},"trivial"->False,'
+                f'"A"->{td["A_mma"]},'
+                f'"b"->{td["b_mma"]},'
                 f'"dims"->{td["dims_mma"]},'
                 f'"gaugino"->{td["gaugino_mma"]}|>'
             )
@@ -938,23 +809,27 @@ def a_maximize_batch_mathematica(
     theories_literal = "{\n" + ",\n".join(assoc_parts) + "\n}"
 
     script = f"""\
-(* Parallel a-maximization via NSolve *)
+(* Parallel a-maximization via NSolve — anomaly constraint enforced exactly *)
 LaunchKernels[];
 
 processTheory[th_] := Module[
-  {{idx, R0, Fmat, dims, gaugino, nfree, svars, R, r1,
-    trR, trR3, a, c, grad, hess, sols, avals, best, Ropt}},
-  idx     = th["idx"];
+  {{idx, Amat, bvec, Fnull, nfree, Fmat, R0, dims, gaugino,
+    svars, R, r1, trR, trR3, a, c, grad, hess, sols, avals, best, Ropt}},
+  idx = th["idx"];
   If[th["trivial"],
-    (* No matter fields: a and c already computed *)
     Return[<|"idx" -> idx, "a" -> th["a0"], "c" -> th["c0"], "R" -> {{}}|>]
   ];
-  R0      = th["R0"];
+  (* Exact anomaly constraint: A.R = b  (all entries are exact rationals) *)
+  Amat  = th["A"];
+  bvec  = th["b"];
+  Fnull = NullSpace[Amat];      (* exact rational null vectors, shape n_free × n_R *)
+  nfree = Length[Fnull];
+  Fmat  = Transpose[Fnull];    (* n_R × n_free, so R = R0 + Fmat.svars *)
+  R0    = LinearSolve[Amat, bvec];  (* exact particular solution *)
   dims    = th["dims"];
   gaugino = th["gaugino"];
-  nfree   = th["nfree"];
   If[nfree == 0,
-    (* R fully determined by anomaly constraint *)
+    (* R fully determined by anomaly constraint — no free parameters *)
     r1   = R0 - 1;
     trR  = gaugino + dims.r1;
     trR3 = gaugino + dims.(r1^3);
@@ -963,10 +838,9 @@ processTheory[th_] := Module[
              "c" -> N[(1/32)*(9*trR3 - 5*trR), {wp}],
              "R" -> N[R0, {wp}]|>]
   ];
-  (* nfree > 0: solve stationarity polynomial system *)
-  Fmat  = th["F"];
+  (* nfree > 0: maximize a over the anomaly-free subspace *)
   svars = Array[s, nfree];
-  R     = R0 + Fmat.svars;
+  R     = R0 + Fmat.svars;    (* satisfies A.R = b for all svars by construction *)
   r1    = R - 1;
   trR   = gaugino + dims.r1;
   trR3  = gaugino + dims.(r1^3);
@@ -1237,13 +1111,10 @@ def _fmt_edges(quiver: Quiver) -> str:
     return "  ".join(parts) if parts else "—"
 
 
-def _classify_two_node(max_a: float = 2.0) -> None:
+def _classify_two_node() -> None:
     """
     Print a classification table of all two-node quiver theories
-    by their large N a/N² value (fast numerical scan).
-
-    Only theories with |a/N²| ≤ max_a are shown (larger values indicate
-    no genuine SCFT at large N, where the a-function is unbounded).
+    by their large N a/N² value (Mathematica NSolve scan).
     """
     import time
     import numpy as np
@@ -1255,19 +1126,14 @@ def _classify_two_node(max_a: float = 2.0) -> None:
     )
     print(f"  {len(quivers_bounds)} quivers found in {time.time()-t0:.1f}s", flush=True)
 
-    # Run fast scan
-    print("Running large-N a-maximization (fast)...", flush=True)
+    print("Running large-N a-maximization (Mathematica NSolve)...", flush=True)
     t1 = time.time()
+    mma_results = a_maximize_batch_mathematica([q for q, _ in quivers_bounds])
     rows = []
     n_none = 0
-    n_filtered = 0
-    for q, bounds in quivers_bounds:
-        a_val = a_maximize_large_N_fast(q)
-        if a_val is None:
+    for (q, bounds), fast_res in zip(quivers_bounds, mma_results):
+        if fast_res is None:
             n_none += 1
-            continue
-        if abs(a_val) > max_a:
-            n_filtered += 1
             continue
         g0, g1 = q.gauge_types[0], q.gauge_types[1]
         rows.append({
@@ -1275,11 +1141,10 @@ def _classify_two_node(max_a: float = 2.0) -> None:
             "matter0":    _fmt_matter(q.node_matter[0]),
             "matter1":    _fmt_matter(q.node_matter[1]),
             "edges":      _fmt_edges(q),
-            "a":          a_val,
+            "a":          fast_res.a_over_N2,
         })
     print(f"  Done in {time.time()-t1:.1f}s. "
-          f"{n_none} no-SCFT (diverged), {n_filtered} filtered (|a/N²|>{max_a}), "
-          f"{len(rows)} physical theories remain.", flush=True)
+          f"{n_none} no-SCFT (diverged), {len(rows)} physical theories.", flush=True)
 
     # Cluster into universality classes: same a/N² up to tolerance 1e-5
     TOL = 1e-5
