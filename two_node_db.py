@@ -979,12 +979,40 @@ def cmd_morph_build(args: argparse.Namespace) -> None:
     ).fetchall()
     print(f"Processing {len(rows)} theories...", flush=True)
 
+    # Pass 1: collect distinct morphology keys and sort them for sequential morph_id
+    seen: dict[tuple, tuple] = {}  # full key → (vec, gauge_pair, m0, m1)
+    vecs: dict[int, tuple] = {}    # theory_id → vec (reuse computation in pass 2)
+    for row in rows:
+        vec = _morph_vec_from_text(
+            row["matter0"], row["matter1"], row["edges"],
+            row["delta0_a"], row["delta1_a"],
+        )
+        vecs[row["theory_id"]] = vec
+        key = (row["gauge_pair"], row["rank0_mult"], row["rank1_mult"]) + vec
+        seen[key] = (vec, row["gauge_pair"], row["rank0_mult"], row["rank1_mult"])
+
+    def _morph_sort_key(k):
+        pair, m0, m1, N_r0, N_r1, N_bif, N_f0, N_f1 = k
+        return (PAIR_ORDER.index(pair) if pair in PAIR_ORDER else 99,
+                m0, m1, N_r0 + N_r1, N_bif, N_f0, N_f1)
+
+    sorted_keys = sorted(seen, key=_morph_sort_key)
+
+    with con:
+        for k in sorted_keys:
+            vec, gauge_pair, m0, m1 = seen[k]
+            con.execute(
+                "INSERT OR IGNORE INTO morphology_class "
+                "(gauge_pair, rank0_mult, rank1_mult, "
+                " N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, n_theories, n_classes) "
+                "VALUES (?,?,?,?,?,?,?,?,0,0)",
+                (gauge_pair, m0, m1, vec[0], vec[1], vec[2], vec[3], vec[4]),
+            )
+
+    # Pass 2: assign morph_id to each theory (all rows pre-inserted → lookup only)
     with con:
         for row in rows:
-            vec = _morph_vec_from_text(
-                row["matter0"], row["matter1"], row["edges"],
-                row["delta0_a"], row["delta1_a"],
-            )
+            vec = vecs[row["theory_id"]]
             mid = _get_or_create_morph_id(
                 con, vec, row["gauge_pair"], row["rank0_mult"], row["rank1_mult"])
             con.execute(
@@ -1074,6 +1102,7 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
                   f"{'N_f₀':>4}  {'N_f₁':>4}  {'#th':>5}  {'#cls':>5}")
         divider = f"  {'─'*60}"
 
+        group_counts: list[tuple[str, int]] = []
         total = 0
         for key in sorted(groups, key=_group_sort_key):
             pair, m0, m1 = key
@@ -1088,8 +1117,13 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
                 print(f"  {r['morph_id']:>7}  {r['N_rank2_0']:>6.1f}  {r['N_rank2_1']:>6.1f}  "
                       f"{r['N_bif']:>5}  {r['N_fund_0']:>4}  {r['N_fund_1']:>4}  "
                       f"{r['n_theories']:>5}  {r['n_classes']:>5}")
+            group_counts.append((label, len(rows_g)))
             total += len(rows_g)
-        print(f"\n  {total} morphology classes total.")
+
+        print(f"\n  Morphology classes by gauge group:")
+        for label, cnt in group_counts:
+            print(f"    {label:<22}: {cnt:>4}")
+        print(f"  Total: {total}")
 
     con.close()
 
