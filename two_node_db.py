@@ -60,6 +60,9 @@ CREATE TABLE IF NOT EXISTS universality_class (
 
 CREATE TABLE IF NOT EXISTS morphology_class (
     morph_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    gauge_pair  TEXT    NOT NULL,
+    rank0_mult  INTEGER NOT NULL DEFAULT 1,
+    rank1_mult  INTEGER NOT NULL DEFAULT 1,
     N_rank2_0  REAL    NOT NULL,
     N_rank2_1  REAL    NOT NULL,
     N_bif      INTEGER NOT NULL,
@@ -67,7 +70,7 @@ CREATE TABLE IF NOT EXISTS morphology_class (
     N_fund_1   INTEGER NOT NULL,
     n_theories INTEGER NOT NULL DEFAULT 0,
     n_classes  INTEGER NOT NULL DEFAULT 0,
-    UNIQUE(N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1)
+    UNIQUE(gauge_pair, rank0_mult, rank1_mult, N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1)
 );
 
 CREATE TABLE IF NOT EXISTS theory (
@@ -316,19 +319,22 @@ def _morph_vec_from_text(matter0: str, matter1: str, edges: str,
     )
 
 
-def _get_or_create_morph_id(con: sqlite3.Connection, vec: tuple) -> int:
-    """INSERT OR IGNORE the morphology vector, then return its morph_id."""
+def _get_or_create_morph_id(con: sqlite3.Connection, vec: tuple,
+                            gauge_pair: str, rank0_mult: int, rank1_mult: int) -> int:
+    """INSERT OR IGNORE the morphology vector (within a gauge group), return morph_id."""
     N_r0, N_r1, N_bif, N_f0, N_f1 = vec
     con.execute(
         "INSERT OR IGNORE INTO morphology_class "
-        "(N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, n_theories, n_classes) "
-        "VALUES (?,?,?,?,?,0,0)",
-        (N_r0, N_r1, N_bif, N_f0, N_f1),
+        "(gauge_pair, rank0_mult, rank1_mult, "
+        " N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, n_theories, n_classes) "
+        "VALUES (?,?,?,?,?,?,?,?,0,0)",
+        (gauge_pair, rank0_mult, rank1_mult, N_r0, N_r1, N_bif, N_f0, N_f1),
     )
     row = con.execute(
         "SELECT morph_id FROM morphology_class "
-        "WHERE N_rank2_0=? AND N_rank2_1=? AND N_bif=? AND N_fund_0=? AND N_fund_1=?",
-        (N_r0, N_r1, N_bif, N_f0, N_f1),
+        "WHERE gauge_pair=? AND rank0_mult=? AND rank1_mult=? "
+        "AND N_rank2_0=? AND N_rank2_1=? AND N_bif=? AND N_fund_0=? AND N_fund_1=?",
+        (gauge_pair, rank0_mult, rank1_mult, N_r0, N_r1, N_bif, N_f0, N_f1),
     ).fetchone()
     return row[0]
 
@@ -541,7 +547,7 @@ def cmd_build(args: argparse.Namespace) -> None:
             for idx in members:
                 r = rows[idx]
                 mv = r["morph_vec"]
-                mid = _get_or_create_morph_id(con, mv)
+                mid = _get_or_create_morph_id(con, mv, r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
                 cur = con.execute(
                     "INSERT INTO theory "
                     "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
@@ -944,24 +950,32 @@ def cmd_morph_build(args: argparse.Namespace) -> None:
         except sqlite3.OperationalError:
             pass  # column already exists
 
-    # Create morphology_class table and index
+    # Drop and recreate morphology_class with updated schema (gauge_pair columns added)
+    with con:
+        con.execute("DROP TABLE IF EXISTS morphology_class")
+        con.execute("UPDATE theory SET morph_id = NULL")
     con.executescript("""
         CREATE TABLE IF NOT EXISTS morphology_class (
-            morph_id   INTEGER PRIMARY KEY AUTOINCREMENT,
-            N_rank2_0  REAL    NOT NULL,
-            N_rank2_1  REAL    NOT NULL,
-            N_bif      INTEGER NOT NULL,
-            N_fund_0   INTEGER NOT NULL,
-            N_fund_1   INTEGER NOT NULL,
-            n_theories INTEGER NOT NULL DEFAULT 0,
-            n_classes  INTEGER NOT NULL DEFAULT 0,
-            UNIQUE(N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1)
+            morph_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+            gauge_pair  TEXT    NOT NULL,
+            rank0_mult  INTEGER NOT NULL DEFAULT 1,
+            rank1_mult  INTEGER NOT NULL DEFAULT 1,
+            N_rank2_0   REAL    NOT NULL,
+            N_rank2_1   REAL    NOT NULL,
+            N_bif       INTEGER NOT NULL,
+            N_fund_0    INTEGER NOT NULL,
+            N_fund_1    INTEGER NOT NULL,
+            n_theories  INTEGER NOT NULL DEFAULT 0,
+            n_classes   INTEGER NOT NULL DEFAULT 0,
+            UNIQUE(gauge_pair, rank0_mult, rank1_mult,
+                   N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1)
         );
         CREATE INDEX IF NOT EXISTS idx_theory_morph ON theory(morph_id);
     """)
 
     rows = con.execute(
-        "SELECT theory_id, matter0, matter1, edges, delta0_a, delta1_a FROM theory"
+        "SELECT theory_id, gauge_pair, rank0_mult, rank1_mult, "
+        "matter0, matter1, edges, delta0_a, delta1_a FROM theory"
     ).fetchall()
     print(f"Processing {len(rows)} theories...", flush=True)
 
@@ -971,7 +985,8 @@ def cmd_morph_build(args: argparse.Namespace) -> None:
                 row["matter0"], row["matter1"], row["edges"],
                 row["delta0_a"], row["delta1_a"],
             )
-            mid = _get_or_create_morph_id(con, vec)
+            mid = _get_or_create_morph_id(
+                con, vec, row["gauge_pair"], row["rank0_mult"], row["rank1_mult"])
             con.execute(
                 "UPDATE theory SET "
                 "N_rank2_0=?, N_rank2_1=?, N_bif=?, N_fund_0=?, N_fund_1=?, morph_id=? "
@@ -1013,35 +1028,68 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
             print(f"Morphology {mid} not found.")
             con.close()
             return
-        print(f"\nMorphology {mid}: "
+        label = _gauge_pair_label(
+            morph["gauge_pair"].split("-")[0], morph["gauge_pair"].split("-")[1],
+            morph["rank0_mult"], morph["rank1_mult"],
+        )
+        print(f"\nMorphology {mid} [{label}]: "
               f"N_r2₀={morph['N_rank2_0']}, N_r2₁={morph['N_rank2_1']}, "
               f"N_bif={morph['N_bif']}, N_f₀={morph['N_fund_0']}, "
               f"N_f₁={morph['N_fund_1']}  "
               f"({morph['n_theories']} theories, {morph['n_classes']} classes)")
         cls_rows = con.execute(
-            "SELECT DISTINCT uc.class_id, uc.gauge_pair, uc.a_over_N2, uc.n_theories "
+            "SELECT DISTINCT uc.class_id, uc.a_over_N2, uc.n_theories "
             "FROM universality_class uc "
             "JOIN theory t ON t.class_id = uc.class_id "
             "WHERE t.morph_id=? ORDER BY uc.a_over_N2",
             (mid,),
         ).fetchall()
-        print(f"\n  {'CID':>5}  {'Gauge pair':<12}  {'a/N²':>12}  {'#th':>4}")
-        print(f"  {'─'*40}")
+        print(f"\n  {'CID':>5}  {'a/N²':>12}  {'#th':>4}")
+        print(f"  {'─'*28}")
         for r in cls_rows:
-            print(f"  {r['class_id']:>5}  {r['gauge_pair']:<12}  {r['a_over_N2']:>12.6f}  {r['n_theories']:>4}")
+            print(f"  {r['class_id']:>5}  {r['a_over_N2']:>12.6f}  {r['n_theories']:>4}")
     else:
-        morph_rows = con.execute(
-            "SELECT * FROM morphology_class "
-            "ORDER BY (N_rank2_0+N_rank2_1), N_bif, N_fund_0, N_fund_1, morph_id"
+        # Build ordered group keys: (pair, m0, m1)
+        pair_filter = getattr(args, "pair", None)
+        if pair_filter:
+            pair_filter = pair_filter.replace("×", "-").replace("x", "-")
+
+        all_morph = con.execute(
+            "SELECT * FROM morphology_class ORDER BY gauge_pair, rank0_mult, rank1_mult, "
+            "(N_rank2_0+N_rank2_1), N_bif, N_fund_0, N_fund_1"
         ).fetchall()
-        print(f"\n  {'MorphID':>7}  {'N_r2₀':>6}  {'N_r2₁':>6}  {'N_bif':>5}  "
-              f"{'N_f₀':>4}  {'N_f₁':>4}  {'#th':>5}  {'#cls':>5}")
-        print(f"  {'─'*60}")
-        for r in morph_rows:
-            print(f"  {r['morph_id']:>7}  {r['N_rank2_0']:>6.1f}  {r['N_rank2_1']:>6.1f}  "
-                  f"{r['N_bif']:>5}  {r['N_fund_0']:>4}  {r['N_fund_1']:>4}  "
-                  f"{r['n_theories']:>5}  {r['n_classes']:>5}")
-        print(f"\n  {len(morph_rows)} morphology classes total.")
+
+        # Group by (gauge_pair, rank0_mult, rank1_mult) in PAIR_ORDER
+        from collections import defaultdict
+        groups: dict[tuple, list] = defaultdict(list)
+        for r in all_morph:
+            key = (r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
+            groups[key].append(r)
+
+        def _group_sort_key(k):
+            pair, m0, m1 = k
+            return (PAIR_ORDER.index(pair) if pair in PAIR_ORDER else 99, m0, m1)
+
+        header = (f"  {'MorphID':>7}  {'N_r2₀':>6}  {'N_r2₁':>6}  {'N_bif':>5}  "
+                  f"{'N_f₀':>4}  {'N_f₁':>4}  {'#th':>5}  {'#cls':>5}")
+        divider = f"  {'─'*60}"
+
+        total = 0
+        for key in sorted(groups, key=_group_sort_key):
+            pair, m0, m1 = key
+            if pair_filter and pair != pair_filter:
+                continue
+            rows_g = groups[key]
+            label = _gauge_pair_label(pair.split("-")[0], pair.split("-")[1], m0, m1)
+            print(f"\n{label}")
+            print(header)
+            print(divider)
+            for r in rows_g:
+                print(f"  {r['morph_id']:>7}  {r['N_rank2_0']:>6.1f}  {r['N_rank2_1']:>6.1f}  "
+                      f"{r['N_bif']:>5}  {r['N_fund_0']:>4}  {r['N_fund_1']:>4}  "
+                      f"{r['n_theories']:>5}  {r['n_classes']:>5}")
+            total += len(rows_g)
+        print(f"\n  {total} morphology classes total.")
 
     con.close()
 
@@ -1164,6 +1212,7 @@ def main() -> None:
     p = sub.add_parser("morphologies", help="List secondary morphology classes")
     p.add_argument("--show", type=int, metavar="MORPH_ID",
                    help="Show universality classes within a morphology")
+    p.add_argument("--pair", help="Filter by gauge pair, e.g. SU-SU")
 
     args = parser.parse_args()
 
