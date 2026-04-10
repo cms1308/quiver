@@ -1076,7 +1076,8 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
         # Build ordered group keys: (pair, m0, m1)
         pair_filter = getattr(args, "pair", None)
         if pair_filter:
-            pair_filter = pair_filter.replace("×", "-").replace("x", "-")
+            pair_filter = pair_filter.upper().replace("×", "-").replace("x", "-")
+        rank_filter = getattr(args, "rank", None)  # (m0, m1) tuple or None
 
         all_morph = con.execute(
             "SELECT * FROM morphology_class ORDER BY gauge_pair, rank0_mult, rank1_mult, "
@@ -1103,6 +1104,8 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
         for key in sorted(groups, key=_group_sort_key):
             pair, m0, m1 = key
             if pair_filter and pair != pair_filter:
+                continue
+            if rank_filter and (m0, m1) != rank_filter:
                 continue
             rows_g = groups[key]
             label = _gauge_pair_label(pair.split("-")[0], pair.split("-")[1], m0, m1)
@@ -1241,8 +1244,10 @@ def main() -> None:
     # morphologies
     p = sub.add_parser("morphologies", help="List secondary morphology classes")
     p.add_argument("--show", type=int, metavar="MORPH_ID",
-                   help="Show universality classes within a morphology")
+                   help="Show all theories within a morphology")
     p.add_argument("--pair", help="Filter by gauge pair, e.g. SU-SU")
+    p.add_argument("--rank", type=_parse_rank,
+                   help="Filter by rank multipliers, e.g. '1,1' or '2,1'")
 
     args = parser.parse_args()
 
