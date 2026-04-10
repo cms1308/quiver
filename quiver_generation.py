@@ -661,15 +661,15 @@ def _dedup_conjugation(
 # ── Utilities ──────────────────────────────────────────────────────────────────
 
 def nf_bound_str(alpha: Fraction, gamma: Fraction) -> str:
-    """Format N_f bound as a readable string."""
+    """Format N_f bound as a readable string (≤ since b_0=0 conformal is included)."""
     if alpha == 0 and gamma == 0:
         return "N_f = 0 (conformal)"
     if alpha == 0:
-        return f"N_f < {gamma}"
+        return f"N_f ≤ {gamma}"
     if gamma == 0:
-        return f"N_f < {alpha}*N"
+        return f"N_f ≤ {alpha}*N"
     sign = "+" if gamma > 0 else "-"
-    return f"N_f < {alpha}*N {sign} {abs(gamma)}"
+    return f"N_f ≤ {alpha}*N {sign} {abs(gamma)}"
 
 
 def delta_str(a: int, b: int) -> str:
