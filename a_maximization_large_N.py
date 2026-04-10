@@ -234,16 +234,30 @@ def build_fields_large_N(quiver: Quiver) -> list[LeadField]:
             ))
         idx += 1
 
-    # 3. Bifundamental edges
+    # 3. Bifundamental edges — merge identical (src, dst, rep) groups.
+    # Identical edges must share the same R-charge at an SCFT, so treating
+    # them as one field with count×weights is the physically correct choice.
+    # It also keeps n_free minimal, avoiding spurious symmetry-breaking
+    # critical points in the NSolve polynomial system.
+    from collections import Counter
+    edge_counts: dict[tuple, int] = {}
+    seen_edge_keys: list[tuple] = []
     for e in quiver.edges:
-        i, j = e.src, e.dst
+        key = (e.src, e.dst, e.rep)
+        if key not in edge_counts:
+            edge_counts[key] = 0
+            seen_edge_keys.append(key)
+        edge_counts[key] += 1
+    for key in seen_edge_keys:
+        count = edge_counts[key]
+        i, j, rep = key
         gi, gj = quiver.gauge_types[i], quiver.gauge_types[j]
         m_i, m_j = mults[i], mults[j]
         T_i_base, T_j_base = T_bifund_lead(gi, gj)
-        T_i = T_i_base * m_j   # T at node i scales with neighbor's rank mult
-        T_j = T_j_base * m_i
-        d = dim_bifund_lead(gi, gj) * m_i * m_j
-        rep_label = e.rep.replace("+", "p").replace("-", "m")
+        T_i = T_i_base * m_j * count   # T at node i scales with neighbor's rank mult
+        T_j = T_j_base * m_i * count
+        d = dim_bifund_lead(gi, gj) * m_i * m_j * count
+        rep_label = rep.replace("+", "p").replace("-", "m")
         fields.append(LeadField(
             label=f"edge_{i}_{j}_{rep_label}",
             R_index=idx,

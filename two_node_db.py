@@ -582,7 +582,7 @@ def cmd_build(args: argparse.Namespace) -> None:
     with con:
         for r in diverged_rows:
             mv = r["morph_vec"]
-            mid = _get_or_create_morph_id(con, mv)
+            mid = _get_or_create_morph_id(con, mv, r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
             con.execute(
                 "INSERT INTO theory "
                 "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
