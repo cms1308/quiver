@@ -15,6 +15,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import re
 import signal
 import sqlite3
 import sys
@@ -29,7 +30,8 @@ from quiver_generation import (
 )
 from a_maximization_large_N import (
     a_maximize_large_N_fast, a_maximize_large_N_fast_full,
-    a_maximize_large_N, build_fields_large_N,
+    a_maximize_large_N, a_maximize_batch_mathematica,
+    build_fields_large_N,
     _fmt_matter, _fmt_edges, _fmt_linear, _fmt_expr, _fmt_R,
 )
 
@@ -56,6 +58,18 @@ CREATE TABLE IF NOT EXISTS universality_class (
     veneziano_all  INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS morphology_class (
+    morph_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    N_rank2_0  REAL    NOT NULL,
+    N_rank2_1  REAL    NOT NULL,
+    N_bif      INTEGER NOT NULL,
+    N_fund_0   INTEGER NOT NULL,
+    N_fund_1   INTEGER NOT NULL,
+    n_theories INTEGER NOT NULL DEFAULT 0,
+    n_classes  INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1)
+);
+
 CREATE TABLE IF NOT EXISTS theory (
     theory_id      INTEGER PRIMARY KEY AUTOINCREMENT,
     class_id       INTEGER,
@@ -80,6 +94,12 @@ CREATE TABLE IF NOT EXISTS theory (
     R_numerical    TEXT,
     a_over_c       REAL,
     veneziano      INTEGER NOT NULL DEFAULT 0,
+    N_rank2_0      REAL,
+    N_rank2_1      REAL,
+    N_bif          INTEGER,
+    N_fund_0       INTEGER,
+    N_fund_1       INTEGER,
+    morph_id       INTEGER REFERENCES morphology_class(morph_id),
     FOREIGN KEY (class_id) REFERENCES universality_class(class_id)
 );
 
@@ -93,6 +113,7 @@ _INDEXES = """
 CREATE INDEX IF NOT EXISTS idx_theory_class  ON theory(class_id);
 CREATE INDEX IF NOT EXISTS idx_theory_gpair  ON theory(gauge_pair);
 CREATE INDEX IF NOT EXISTS idx_theory_a      ON theory(a_over_N2);
+CREATE INDEX IF NOT EXISTS idx_theory_morph  ON theory(morph_id);
 CREATE INDEX IF NOT EXISTS idx_class_gpair_a ON universality_class(gauge_pair, a_over_N2);
 """
 
@@ -233,6 +254,85 @@ def _format_R_numerical(fast_result) -> str | None:
     return ",  ".join(parts)
 
 
+# ── Morphology helpers ────────────────────────────────────────────────────────
+
+_RANK2_WEIGHT: dict[str, float] = {
+    "adj": 1.0, "S": 0.5, "Sbar": 0.5, "A": 0.5, "Abar": 0.5,
+    # display aliases used in matter text column
+    "S̄": 0.5, "Ā": 0.5,
+}
+
+
+def _parse_N_rank2(matter_str: str) -> float:
+    """Parse matter text (e.g. '2adj + S̄') → effective rank-2 tensor count."""
+    if matter_str == "—":
+        return 0.0
+    total = 0.0
+    for part in matter_str.split(" + "):
+        part = part.strip()
+        m = re.match(r"^(\d+)?(.*)", part)
+        count = int(m.group(1)) if m and m.group(1) else 1
+        rep = m.group(2).strip() if m else part
+        total += count * _RANK2_WEIGHT.get(rep, 0.0)
+    return total
+
+
+def _parse_N_bif(edges_str: str) -> int:
+    """Parse edges text (e.g. '2×(0→1,+-)') → total bifundamental count."""
+    if edges_str == "—":
+        return 0
+    total = 0
+    for m in re.finditer(r"(\d+)×\(|\(", edges_str):
+        grp = m.group()
+        total += int(grp.rstrip("×(")) if "×" in grp else 1
+    return total
+
+
+def _morph_vec_from_quiver(q: "Quiver", d0_a, d1_a) -> tuple:
+    """Compute (N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1) from a Quiver."""
+    nm0, nm1 = q.node_matter[0], q.node_matter[1]
+    N_rank2_0 = sum(
+        cnt * (1.0 if rep == "adj" else 0.5)
+        for rep, cnt in nm0.items()
+        if rep in _RANK2_WEIGHT
+    )
+    N_rank2_1 = sum(
+        cnt * (1.0 if rep == "adj" else 0.5)
+        for rep, cnt in nm1.items()
+        if rep in _RANK2_WEIGHT
+    )
+    return (N_rank2_0, N_rank2_1, len(q.edges), abs(d0_a or 0), abs(d1_a or 0))
+
+
+def _morph_vec_from_text(matter0: str, matter1: str, edges: str,
+                         delta0_a, delta1_a) -> tuple:
+    """Compute morphology vector from stored text columns (for migration)."""
+    return (
+        _parse_N_rank2(matter0),
+        _parse_N_rank2(matter1),
+        _parse_N_bif(edges),
+        abs(delta0_a or 0),
+        abs(delta1_a or 0),
+    )
+
+
+def _get_or_create_morph_id(con: sqlite3.Connection, vec: tuple) -> int:
+    """INSERT OR IGNORE the morphology vector, then return its morph_id."""
+    N_r0, N_r1, N_bif, N_f0, N_f1 = vec
+    con.execute(
+        "INSERT OR IGNORE INTO morphology_class "
+        "(N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, n_theories, n_classes) "
+        "VALUES (?,?,?,?,?,0,0)",
+        (N_r0, N_r1, N_bif, N_f0, N_f1),
+    )
+    row = con.execute(
+        "SELECT morph_id FROM morphology_class "
+        "WHERE N_rank2_0=? AND N_rank2_1=? AND N_bif=? AND N_fund_0=? AND N_fund_1=?",
+        (N_r0, N_r1, N_bif, N_f0, N_f1),
+    ).fetchone()
+    return row[0]
+
+
 def cmd_build(args: argparse.Namespace) -> None:
     import os
     db_path = args.db
@@ -270,18 +370,20 @@ def cmd_build(args: argparse.Namespace) -> None:
     print(f"  {len(equal_rank)} equal-rank + {len(mixed_21)} [2,1] + {len(mixed_12)} [1,2] "
           f"→ {total} after cross-set dedup  ({time.time()-t0:.1f}s)", flush=True)
 
-    print("Phase 1: fast a-maximization scan...", flush=True)
+    print("Phase 1: Mathematica NSolve batch scan...", flush=True)
     t1 = time.time()
+
+    mma_results = a_maximize_batch_mathematica(
+        [q for q, _ in all_qb], timeout=7200,
+    )
+    print(f"  Mathematica scan done in {time.time()-t1:.1f}s.", flush=True)
 
     from collections import defaultdict
     buckets: dict[tuple, list[dict]] = defaultdict(list)
     diverged_rows: list[dict] = []
     n_diverged = 0
 
-    for i, (q, bounds) in enumerate(all_qb):
-        if i % 200 == 0:
-            print(f"  {i}/{total}\r", end="", flush=True)
-
+    for (q, bounds), fast_res in zip(all_qb, mma_results):
         m0, m1 = q.rank_multipliers[0], q.rank_multipliers[1]
         g0, g1 = q.gauge_types[0], q.gauge_types[1]
         pair = _gauge_pair_key(g0, g1)
@@ -295,7 +397,8 @@ def cmd_build(args: argparse.Namespace) -> None:
             (d1_a is not None and d1_a != 0)
         )
 
-        fast_res = a_maximize_large_N_fast_full(q)
+        morph_vec = _morph_vec_from_quiver(q, d0_a, d1_a)
+
         if fast_res is None:
             n_diverged += 1
             diverged_rows.append({
@@ -311,6 +414,7 @@ def cmd_build(args: argparse.Namespace) -> None:
                 "a_over_N2": None, "c_over_N2": None,
                 "R_numerical": None, "a_over_c": None,
                 "veneziano": veneziano,
+                "morph_vec": morph_vec,
             })
             continue
 
@@ -335,11 +439,11 @@ def cmd_build(args: argparse.Namespace) -> None:
             "veneziano": veneziano,
             "quiver": q,
             "n_fields": len(fields),
+            "morph_vec": morph_vec,
         })
 
     n_stored = sum(len(v) for v in buckets.values())
-    print(f"  Done in {time.time()-t1:.1f}s. "
-          f"{n_diverged} diverged (stored as class NULL), "
+    print(f"  {n_diverged} diverged (stored as class NULL), "
           f"{n_stored} clusterable.", flush=True)
 
     # ── Phase 2: cluster into classes ─────────────────────────────────────────
@@ -436,14 +540,17 @@ def cmd_build(args: argparse.Namespace) -> None:
             theory_ids = []
             for idx in members:
                 r = rows[idx]
+                mv = r["morph_vec"]
+                mid = _get_or_create_morph_id(con, mv)
                 cur = con.execute(
                     "INSERT INTO theory "
                     "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
                     " matter0, matter1, edges, delta0, delta1, "
                     " delta0_a, delta0_b, delta1_a, delta1_b, "
                     " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical, "
-                    " a_over_c, veneziano) "
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    " a_over_c, veneziano, "
+                    " N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, morph_id) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (cid, r["gauge_pair"], r["gauge0"], r["gauge1"],
                      r["rank0_mult"], r["rank1_mult"],
                      r["matter0"], r["matter1"], r["edges"],
@@ -452,7 +559,8 @@ def cmd_build(args: argparse.Namespace) -> None:
                      r["delta1_a"], r["delta1_b"],
                      r["nf_bound0"], r["nf_bound1"],
                      r["a_over_N2"], r["c_over_N2"], r["R_numerical"],
-                     r["a_over_c"], r["veneziano"]),
+                     r["a_over_c"], r["veneziano"],
+                     mv[0], mv[1], mv[2], mv[3], mv[4], mid),
                 )
                 theory_ids.append(cur.lastrowid)
 
@@ -467,14 +575,17 @@ def cmd_build(args: argparse.Namespace) -> None:
     # Insert diverged theories (class_id = NULL)
     with con:
         for r in diverged_rows:
+            mv = r["morph_vec"]
+            mid = _get_or_create_morph_id(con, mv)
             con.execute(
                 "INSERT INTO theory "
                 "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
                 " matter0, matter1, edges, delta0, delta1, "
                 " delta0_a, delta0_b, delta1_a, delta1_b, "
                 " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical, "
-                " a_over_c, veneziano) "
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                " a_over_c, veneziano, "
+                " N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, morph_id) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (None, r["gauge_pair"], r["gauge0"], r["gauge1"],
                  r["rank0_mult"], r["rank1_mult"],
                  r["matter0"], r["matter1"], r["edges"],
@@ -483,7 +594,8 @@ def cmd_build(args: argparse.Namespace) -> None:
                  r["delta1_a"], r["delta1_b"],
                  r["nf_bound0"], r["nf_bound1"],
                  r["a_over_N2"], r["c_over_N2"], r["R_numerical"],
-                 r["a_over_c"], r["veneziano"]),
+                 r["a_over_c"], r["veneziano"],
+                 mv[0], mv[1], mv[2], mv[3], mv[4], mid),
             )
 
     with con:
@@ -501,6 +613,20 @@ def cmd_build(args: argparse.Namespace) -> None:
                 ("exact_timeout", str(exact_timeout)),
             ],
         )
+
+    # Update morphology_class aggregate counts
+    with con:
+        con.execute("""
+            UPDATE morphology_class SET n_theories = (
+                SELECT COUNT(*) FROM theory WHERE theory.morph_id = morphology_class.morph_id
+            )
+        """)
+        con.execute("""
+            UPDATE morphology_class SET n_classes = (
+                SELECT COUNT(DISTINCT class_id) FROM theory
+                WHERE theory.morph_id = morphology_class.morph_id AND class_id IS NOT NULL
+            )
+        """)
 
     con.close()
     print(f"\nDatabase written to '{db_path}'.")
@@ -796,6 +922,130 @@ def cmd_search(args: argparse.Namespace) -> None:
     print(f"\n  {len(rows)} theories found.")
 
 
+# ── Morphology build (migration) ──────────────────────────────────────────────
+
+def cmd_morph_build(args: argparse.Namespace) -> None:
+    """Populate morphology columns on an existing DB without recomputing R-charges."""
+    con = sqlite3.connect(args.db)
+    con.row_factory = sqlite3.Row
+
+    # Add new columns to theory (idempotent)
+    new_cols = [
+        ("N_rank2_0", "REAL"),
+        ("N_rank2_1", "REAL"),
+        ("N_bif",     "INTEGER"),
+        ("N_fund_0",  "INTEGER"),
+        ("N_fund_1",  "INTEGER"),
+        ("morph_id",  "INTEGER"),
+    ]
+    for col, typ in new_cols:
+        try:
+            con.execute(f"ALTER TABLE theory ADD COLUMN {col} {typ}")
+        except sqlite3.OperationalError:
+            pass  # column already exists
+
+    # Create morphology_class table and index
+    con.executescript("""
+        CREATE TABLE IF NOT EXISTS morphology_class (
+            morph_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+            N_rank2_0  REAL    NOT NULL,
+            N_rank2_1  REAL    NOT NULL,
+            N_bif      INTEGER NOT NULL,
+            N_fund_0   INTEGER NOT NULL,
+            N_fund_1   INTEGER NOT NULL,
+            n_theories INTEGER NOT NULL DEFAULT 0,
+            n_classes  INTEGER NOT NULL DEFAULT 0,
+            UNIQUE(N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1)
+        );
+        CREATE INDEX IF NOT EXISTS idx_theory_morph ON theory(morph_id);
+    """)
+
+    rows = con.execute(
+        "SELECT theory_id, matter0, matter1, edges, delta0_a, delta1_a FROM theory"
+    ).fetchall()
+    print(f"Processing {len(rows)} theories...", flush=True)
+
+    with con:
+        for row in rows:
+            vec = _morph_vec_from_text(
+                row["matter0"], row["matter1"], row["edges"],
+                row["delta0_a"], row["delta1_a"],
+            )
+            mid = _get_or_create_morph_id(con, vec)
+            con.execute(
+                "UPDATE theory SET "
+                "N_rank2_0=?, N_rank2_1=?, N_bif=?, N_fund_0=?, N_fund_1=?, morph_id=? "
+                "WHERE theory_id=?",
+                (vec[0], vec[1], vec[2], vec[3], vec[4], mid, row["theory_id"]),
+            )
+
+        # Update aggregate counts
+        con.execute("""
+            UPDATE morphology_class SET n_theories = (
+                SELECT COUNT(*) FROM theory WHERE theory.morph_id = morphology_class.morph_id
+            )
+        """)
+        con.execute("""
+            UPDATE morphology_class SET n_classes = (
+                SELECT COUNT(DISTINCT class_id) FROM theory
+                WHERE theory.morph_id = morphology_class.morph_id AND class_id IS NOT NULL
+            )
+        """)
+
+    n_morph = con.execute("SELECT COUNT(*) FROM morphology_class").fetchone()[0]
+    con.close()
+    print(f"Done. {len(rows)} theories assigned to {n_morph} morphology classes.")
+
+
+# ── Morphologies display ───────────────────────────────────────────────────────
+
+def cmd_morphologies(args: argparse.Namespace) -> None:
+    con = sqlite3.connect(args.db)
+    con.row_factory = sqlite3.Row
+
+    if args.show is not None:
+        # Show universality classes within a morphology
+        mid = args.show
+        morph = con.execute(
+            "SELECT * FROM morphology_class WHERE morph_id=?", (mid,)
+        ).fetchone()
+        if morph is None:
+            print(f"Morphology {mid} not found.")
+            con.close()
+            return
+        print(f"\nMorphology {mid}: "
+              f"N_r2₀={morph['N_rank2_0']}, N_r2₁={morph['N_rank2_1']}, "
+              f"N_bif={morph['N_bif']}, N_f₀={morph['N_fund_0']}, "
+              f"N_f₁={morph['N_fund_1']}  "
+              f"({morph['n_theories']} theories, {morph['n_classes']} classes)")
+        cls_rows = con.execute(
+            "SELECT DISTINCT uc.class_id, uc.gauge_pair, uc.a_over_N2, uc.n_theories "
+            "FROM universality_class uc "
+            "JOIN theory t ON t.class_id = uc.class_id "
+            "WHERE t.morph_id=? ORDER BY uc.a_over_N2",
+            (mid,),
+        ).fetchall()
+        print(f"\n  {'CID':>5}  {'Gauge pair':<12}  {'a/N²':>12}  {'#th':>4}")
+        print(f"  {'─'*40}")
+        for r in cls_rows:
+            print(f"  {r['class_id']:>5}  {r['gauge_pair']:<12}  {r['a_over_N2']:>12.6f}  {r['n_theories']:>4}")
+    else:
+        morph_rows = con.execute(
+            "SELECT * FROM morphology_class "
+            "ORDER BY (N_rank2_0+N_rank2_1), N_bif, N_fund_0, N_fund_1, morph_id"
+        ).fetchall()
+        print(f"\n  {'MorphID':>7}  {'N_r2₀':>6}  {'N_r2₁':>6}  {'N_bif':>5}  "
+              f"{'N_f₀':>4}  {'N_f₁':>4}  {'#th':>5}  {'#cls':>5}")
+        print(f"  {'─'*60}")
+        for r in morph_rows:
+            print(f"  {r['morph_id']:>7}  {r['N_rank2_0']:>6.1f}  {r['N_rank2_1']:>6.1f}  "
+                  f"{r['N_bif']:>5}  {r['N_fund_0']:>4}  {r['N_fund_1']:>4}  "
+                  f"{r['n_theories']:>5}  {r['n_classes']:>5}")
+        print(f"\n  {len(morph_rows)} morphology classes total.")
+
+    con.close()
+
+
 # ── Stats ─────────────────────────────────────────────────────────────────────
 
 def cmd_stats(args: argparse.Namespace) -> None:
@@ -906,6 +1156,15 @@ def main() -> None:
     # stats
     sub.add_parser("stats", help="Database summary and build metadata")
 
+    # morph-build
+    sub.add_parser("morph-build",
+                   help="Populate morphology columns on existing DB (no Mathematica needed)")
+
+    # morphologies
+    p = sub.add_parser("morphologies", help="List secondary morphology classes")
+    p.add_argument("--show", type=int, metavar="MORPH_ID",
+                   help="Show universality classes within a morphology")
+
     args = parser.parse_args()
 
     if args.cmd != "build":
@@ -916,11 +1175,13 @@ def main() -> None:
             sys.exit(1)
 
     dispatch = {
-        "build":   cmd_build,
-        "classes": cmd_classes,
-        "show":    cmd_show,
-        "search":  cmd_search,
-        "stats":   cmd_stats,
+        "build":        cmd_build,
+        "classes":      cmd_classes,
+        "show":         cmd_show,
+        "search":       cmd_search,
+        "stats":        cmd_stats,
+        "morph-build":  cmd_morph_build,
+        "morphologies": cmd_morphologies,
     }
     dispatch[args.cmd](args)
 
