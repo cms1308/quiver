@@ -1047,7 +1047,7 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
     con.row_factory = sqlite3.Row
 
     if args.show is not None:
-        # Show universality classes within a morphology
+        # Show all theories within a morphology
         mid = args.show
         morph = con.execute(
             "SELECT * FROM morphology_class WHERE morph_id=?", (mid,)
@@ -1065,17 +1065,13 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
               f"N_bif={morph['N_bif']}, N_f₀={morph['N_fund_0']}, "
               f"N_f₁={morph['N_fund_1']}  "
               f"({morph['n_theories']} theories, {morph['n_classes']} classes)")
-        cls_rows = con.execute(
-            "SELECT DISTINCT uc.class_id, uc.a_over_N2, uc.n_theories "
-            "FROM universality_class uc "
-            "JOIN theory t ON t.class_id = uc.class_id "
-            "WHERE t.morph_id=? ORDER BY uc.a_over_N2",
+        print("─" * 100)
+        theories = con.execute(
+            "SELECT * FROM theory WHERE morph_id=? "
+            "ORDER BY class_id, length(edges), matter0, matter1",
             (mid,),
         ).fetchall()
-        print(f"\n  {'CID':>5}  {'a/N²':>12}  {'#th':>4}")
-        print(f"  {'─'*28}")
-        for r in cls_rows:
-            print(f"  {r['class_id']:>5}  {r['a_over_N2']:>12.6f}  {r['n_theories']:>4}")
+        _print_theory_table(theories)
     else:
         # Build ordered group keys: (pair, m0, m1)
         pair_filter = getattr(args, "pair", None)
