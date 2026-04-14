@@ -1,0 +1,342 @@
+{
+  "project_reference": {
+    "project_md_updated": null,
+    "core_research_question": null,
+    "current_focus": null
+  },
+  "project_contract": {
+    "schema_version": 1,
+    "scope": {
+      "question": "What is the complete classification of 4D N=1 asymptotically free quiver gauge theories (1-node and 2-node) that admit a large N limit, with their IR superconformal data (R-charges, central charges, a/c ratios)?",
+      "in_scope": [
+        "Single-node classification (19 theories) as comparison section",
+        "Two-node classification (135 universality classes, 4560 theories) from Modules 1-3",
+        "R-charges and central charges (a/N^2, c/N^2) for all classes",
+        "Conformal window analysis for N_rank2=0 nodes using SQCD criterion",
+        "Distribution analysis of central charges and a/c ratios",
+        "Comparison with arXiv:2510.19136 for single-node results"
+      ],
+      "out_of_scope": [
+        "Module 4 boundary analysis (B_a < 0 IR fixed point filter)",
+        "k >= 3 node quivers",
+        "Exact symbolic results for the 59 numerical-only classes",
+        "Conformal window analysis for nodes with rank-2 matter"
+      ],
+      "unresolved_questions": [
+        "How to present the 135 classes compactly in JHEP format (tables vs appendix)",
+        "Whether distribution of a/c ratios reveals interesting structure worth highlighting"
+      ]
+    },
+    "context_intake": {
+      "must_read_refs": [
+        "ref-2510-19136"
+      ],
+      "must_include_prior_outputs": [
+        "quivers.db",
+        "a_maximization_large_N.py"
+      ],
+      "user_asserted_anchors": [
+        "Single-node results must be consistent with arXiv:2510.19136"
+      ],
+      "known_good_baselines": [
+        "SQCD conformal window 3/2 < N_f/N_c < 3 for single-node SU(N)"
+      ],
+      "context_gaps": [
+        "No independent benchmark exists for two-node results"
+      ],
+      "crucial_inputs": [
+        "Distribution plots of a/N^2 and a/c ratios",
+        "Conformal window classification for N_rank2=0 nodes"
+      ]
+    },
+    "approach_policy": {
+      "formulations": [
+        "Large N leading order with equal-rank assumption for all nodes"
+      ],
+      "allowed_estimator_families": [
+        "Numerical a-maximization via Mathematica NSolve"
+      ],
+      "forbidden_estimator_families": [],
+      "allowed_fit_families": [],
+      "forbidden_fit_families": [],
+      "stop_and_rethink_conditions": [
+        "Single-node results disagree with arXiv:2510.19136"
+      ]
+    },
+    "observables": [
+      {
+        "id": "obs-classification-table",
+        "name": "Complete classification table",
+        "kind": "classification",
+        "definition": "All 1-node and 2-node N=1 AF quiver gauge theories with large N limit, listing gauge groups, matter content, R-charges, a/N^2, c/N^2, a/c",
+        "regime": null,
+        "units": null
+      },
+      {
+        "id": "obs-central-charge-distribution",
+        "name": "Central charge distribution",
+        "kind": "curve",
+        "definition": "Distribution (histogram) of a/N^2 and a/c ratios across all classified theories",
+        "regime": null,
+        "units": null
+      },
+      {
+        "id": "obs-conformal-window",
+        "name": "Conformal window classification",
+        "kind": "classification",
+        "definition": "For each N_rank2=0 node, whether x = N_bif/2 falls inside SQCD conformal window 3/2 < x < 3",
+        "regime": null,
+        "units": null
+      }
+    ],
+    "claims": [
+      {
+        "id": "claim-complete-classification",
+        "statement": "We present the complete classification of 1-node and 2-node 4D N=1 AF quiver gauge theories admitting a large N limit, with their superconformal R-charges and central charges from a-maximization",
+        "observables": [
+          "obs-classification-table"
+        ],
+        "deliverables": [
+          "deliv-classification-tables",
+          "deliv-paper"
+        ],
+        "acceptance_tests": [
+          "test-single-node-comparison",
+          "test-internal-consistency"
+        ],
+        "references": [
+          "ref-2510-19136"
+        ]
+      },
+      {
+        "id": "claim-central-charge-structure",
+        "statement": "The distribution of central charges and a/c ratios across classified theories reveals structural patterns",
+        "observables": [
+          "obs-central-charge-distribution"
+        ],
+        "deliverables": [
+          "deliv-distribution-plots"
+        ],
+        "acceptance_tests": [
+          "test-internal-consistency"
+        ],
+        "references": []
+      },
+      {
+        "id": "claim-conformal-window",
+        "statement": "Conformal window analysis identifies which N_rank2=0 nodes lie inside/outside the SQCD conformal window at large N",
+        "observables": [
+          "obs-conformal-window"
+        ],
+        "deliverables": [
+          "deliv-conformal-window-table"
+        ],
+        "acceptance_tests": [
+          "test-sqcd-limit"
+        ],
+        "references": []
+      }
+    ],
+    "deliverables": [
+      {
+        "id": "deliv-paper",
+        "kind": "note",
+        "path": null,
+        "description": "JHEP paper presenting the complete classification",
+        "must_contain": [
+          "classification tables",
+          "central charge distributions",
+          "conformal window analysis",
+          "comparison with 2510.19136"
+        ]
+      },
+      {
+        "id": "deliv-classification-tables",
+        "kind": "table",
+        "path": null,
+        "description": "Tables of all universality classes with gauge pair, matter content, R-charges, a/N^2, c/N^2, a/c",
+        "must_contain": [
+          "19 single-node theories",
+          "135 two-node universality classes"
+        ]
+      },
+      {
+        "id": "deliv-distribution-plots",
+        "kind": "figure",
+        "path": "paper/figures/central-charge-distribution.pdf",
+        "description": "Histograms of a/N^2 and a/c ratio distributions",
+        "must_contain": [
+          "a/N^2 histogram",
+          "a/c ratio histogram"
+        ]
+      },
+      {
+        "id": "deliv-conformal-window-table",
+        "kind": "table",
+        "path": null,
+        "description": "Table of N_rank2=0 morphologies with conformal window status",
+        "must_contain": [
+          "x = N_bif/2 value",
+          "inside/outside classification"
+        ]
+      }
+    ],
+    "acceptance_tests": [
+      {
+        "id": "test-single-node-comparison",
+        "subject": "claim-complete-classification",
+        "kind": "benchmark",
+        "procedure": "Compare single-node classification results against arXiv:2510.19136",
+        "pass_condition": "All overlapping theories agree on R-charges and central charges",
+        "evidence_required": [
+          "deliv-classification-tables",
+          "ref-2510-19136"
+        ],
+        "automation": "hybrid"
+      },
+      {
+        "id": "test-internal-consistency",
+        "subject": "claim-complete-classification",
+        "kind": "consistency",
+        "procedure": "Verify a-theorem (a_UV >= a_IR), check a/c > 0, verify anomaly-free conditions hold",
+        "pass_condition": "No violations found across all classified theories",
+        "evidence_required": [
+          "deliv-classification-tables"
+        ],
+        "automation": "automated"
+      },
+      {
+        "id": "test-sqcd-limit",
+        "subject": "claim-conformal-window",
+        "kind": "limiting_case",
+        "procedure": "Verify SQCD conformal window reproduces known 3/2 < N_f/N_c < 3 for single SU(N) node",
+        "pass_condition": "Exact match with Seiberg result",
+        "evidence_required": [
+          "deliv-conformal-window-table"
+        ],
+        "automation": "automated"
+      }
+    ],
+    "references": [
+      {
+        "id": "ref-2510-19136",
+        "kind": "paper",
+        "locator": "arXiv:2510.19136",
+        "aliases": [
+          "single-node-classification"
+        ],
+        "role": "benchmark",
+        "why_it_matters": "Contains partial single-node classification to compare against",
+        "applies_to": [
+          "claim-complete-classification"
+        ],
+        "carry_forward_to": [
+          "planning",
+          "execution",
+          "verification",
+          "writing"
+        ],
+        "must_surface": true,
+        "required_actions": [
+          "read",
+          "compare",
+          "cite"
+        ]
+      }
+    ],
+    "forbidden_proxies": [
+      {
+        "id": "fp-tables-without-structure",
+        "subject": "claim-complete-classification",
+        "proxy": "Raw classification tables without distribution analysis or conformal window filtering",
+        "reason": "Tables alone are a catalog, not physics \u2014 the distribution and conformal window analysis give the paper scientific content"
+      }
+    ],
+    "links": [
+      {
+        "id": "link-tables-to-paper",
+        "source": "deliv-classification-tables",
+        "target": "deliv-paper",
+        "relation": "supports",
+        "verified_by": [
+          "test-single-node-comparison",
+          "test-internal-consistency"
+        ]
+      },
+      {
+        "id": "link-distribution-to-paper",
+        "source": "deliv-distribution-plots",
+        "target": "deliv-paper",
+        "relation": "supports",
+        "verified_by": [
+          "test-internal-consistency"
+        ]
+      }
+    ],
+    "uncertainty_markers": {
+      "weakest_anchors": [
+        "Comparison with 2510.19136 is partial \u2014 they do not have the full single-node classification"
+      ],
+      "unvalidated_assumptions": [
+        "Equal-rank assumption (all nodes share same N)",
+        "Large N leading order is sufficient for classification"
+      ],
+      "competing_explanations": [],
+      "disconfirming_observations": [
+        "If single-node results disagree with 2510.19136 on overlapping theories, the a-maximization pipeline has a bug"
+      ]
+    }
+  },
+  "position": {
+    "current_phase": null,
+    "current_phase_name": null,
+    "total_phases": null,
+    "current_plan": null,
+    "total_plans_in_phase": null,
+    "status": null,
+    "last_activity": null,
+    "last_activity_desc": null,
+    "progress_percent": 0,
+    "paused_at": null
+  },
+  "active_calculations": [],
+  "intermediate_results": [],
+  "open_questions": [
+    "How to present the 135 classes compactly in JHEP format (tables vs appendix)",
+    "Whether distribution of a/c ratios reveals interesting structure worth highlighting"
+  ],
+  "performance_metrics": {
+    "rows": []
+  },
+  "decisions": [],
+  "approximations": [],
+  "convention_lock": {
+    "metric_signature": null,
+    "fourier_convention": null,
+    "natural_units": null,
+    "gauge_choice": null,
+    "regularization_scheme": null,
+    "renormalization_scheme": null,
+    "coordinate_system": null,
+    "spin_basis": null,
+    "state_normalization": null,
+    "coupling_convention": null,
+    "index_positioning": null,
+    "time_ordering": null,
+    "commutation_convention": null,
+    "levi_civita_sign": null,
+    "generator_normalization": null,
+    "covariant_derivative_sign": null,
+    "gamma_matrix_convention": null,
+    "creation_annihilation_order": null,
+    "custom_conventions": {}
+  },
+  "propagated_uncertainties": [],
+  "pending_todos": [],
+  "blockers": [],
+  "session": {
+    "last_date": null,
+    "stopped_at": null,
+    "resume_file": null
+  }
+}
