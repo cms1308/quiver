@@ -57,7 +57,7 @@ Plans:
 
 ### Phase 3: Conformal window analysis
 
-**Goal:** Classify all N_rank2=0 nodes by SQCD conformal window criterion (3/2 < x < 3 where x = N_bif/2).
+**Goal:** Classify all N_rank2=0 nodes by SQCD conformal window criterion (3/2 < x < 3 where x_a = N_bif * T_bifund_lead(ga,gb)[a] * m_b / m_a).
 **Depends on:** Phase 2 (needs morphology data)
 **Requirements:** CONF-01, CONF-02, CONF-03
 **Contract coverage:**
@@ -70,9 +70,11 @@ Plans:
 2. Each classified as inside/outside conformal window with x value
 3. SQCD single-node limit verified
 
+**Plans:** 1 plan
+
 Plans:
 
-- [ ] 03-01: [TBD — created during /gpd:plan-phase]
+- [ ] 03-01-PLAN.md -- Compute x for all N_rank2=0 nodes using general T_bifund_lead formula, classify inside/outside conformal window, verify SQCD limit
 
 ### Phase 4: Distribution analysis
 
