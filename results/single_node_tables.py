@@ -183,7 +183,9 @@ def classify_single_node() -> list[dict]:
         # Count rank-2 + adjoint fields
         n_rank2 = sum(matter.get(rep, 0) for rep in RANK2_ADJ_REPS[g])
 
-        # Determine type
+        # Determine type by n_rank2 (matching paper convention)
+        # For SO/Sp this equals effective T; for SU the universality
+        # is finer (depends on effective_T = n_adj + n_tensor/2).
         if n_rank2 == 1:
             theory_type = "I"
         elif n_rank2 == 2:
