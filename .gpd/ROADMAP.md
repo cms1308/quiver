@@ -6,7 +6,7 @@ Systematic classification of all 4D N=1 asymptotically free quiver gauge theorie
 
 ## Phases
 
-- [ ] **Phase 1: Single-node summary** - Compile and verify 19 single-node theories with R-charges and central charges
+- [ ] **Phase 1: Single-node summary** - Compile and verify 67 single-node theories (52 SU + 6 SO + 9 Sp) with R-charges and central charges
 - [ ] **Phase 2: Two-node summary** - Compile 135 universality classes with full superconformal data (R, a/N^2, c/N^2, a/c)
 - [ ] **Phase 3: Conformal window analysis** - SQCD conformal window for N_rank2=0 nodes
 - [ ] **Phase 4: Distribution analysis** - Central charge and a/c ratio distributions with physics interpretation
@@ -17,7 +17,7 @@ Systematic classification of all 4D N=1 asymptotically free quiver gauge theorie
 
 ### Phase 1: Single-node summary
 
-**Goal:** Compile the complete single-node classification table (19 theories) with matter content, R-charges, a/N^2, c/N^2, a/c for all SU(N), SO(N), Sp(N) theories with rank-2 matter.
+**Goal:** Compile the complete single-node classification table (67 theories: 52 SU + 6 SO + 9 Sp) with matter content, N_f bound, R-charges, a/N^2, c/N^2, a/c for all SU(N), SO(N), Sp(N) theories with rank-2 matter, including Veneziano-limit and conformal manifold theories.
 **Depends on:** Nothing (first phase; uses existing `a_maximization_large_N.py`)
 **Requirements:** ENUM-01
 **Contract coverage:**
@@ -25,8 +25,8 @@ Systematic classification of all 4D N=1 asymptotically free quiver gauge theorie
 - Anchor: ref-2510-19136 (comparison target)
 **Success Criteria** (what must be TRUE):
 
-1. Table of all 19 single-node theories with gauge type, matter content, R-charges, a/N^2, c/N^2, a/c
-2. Results formatted for direct comparison with arXiv:2510.19136
+1. Table of all 67 single-node theories (52 SU + 6 SO + 9 Sp) with gauge type, matter content, N_f bound, R-charges, a/N^2, c/N^2, a/c
+2. Results formatted for direct comparison with arXiv:2510.19136 (35 non-Veneziano theories match; 31 SU Veneziano-limit theories are new)
 
 Plans:
 

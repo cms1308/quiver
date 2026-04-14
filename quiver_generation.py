@@ -624,17 +624,19 @@ def _dedup_symmetries(
     for q, bounds in results:
         sig      = _quiver_signature(q)
         conj_sig = _conjugate_signature(q)
-        swap_sig = _node_swap_signature(q)
 
-        q_swap = Quiver(
-            [q.gauge_types[1], q.gauge_types[0]],
-            [Edge(1 - e.src, 1 - e.dst, e.rep) for e in q.edges],
-            [dict(q.node_matter[1]), dict(q.node_matter[0])],
-            rank_multipliers=[q.rank_multipliers[1], q.rank_multipliers[0]],
-        )
-        swap_conj_sig = _conjugate_signature(q_swap)
-
-        canonical = min(sig, conj_sig, swap_sig, swap_conj_sig, key=_canonical_key)
+        if len(q.gauge_types) >= 2:
+            swap_sig = _node_swap_signature(q)
+            q_swap = Quiver(
+                [q.gauge_types[1], q.gauge_types[0]],
+                [Edge(1 - e.src, 1 - e.dst, e.rep) for e in q.edges],
+                [dict(q.node_matter[1]), dict(q.node_matter[0])],
+                rank_multipliers=[q.rank_multipliers[1], q.rank_multipliers[0]],
+            )
+            swap_conj_sig = _conjugate_signature(q_swap)
+            canonical = min(sig, conj_sig, swap_sig, swap_conj_sig, key=_canonical_key)
+        else:
+            canonical = min(sig, conj_sig, key=_canonical_key)
         # Only keep this quiver if it IS the canonical form and we haven't seen it yet
         if sig == canonical and canonical not in seen:
             seen.add(canonical)
