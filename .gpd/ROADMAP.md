@@ -7,7 +7,7 @@ Systematic classification of all 4D N=1 asymptotically free quiver gauge theorie
 ## Phases
 
 - [x] **Phase 1: Single-node summary** - Compile and verify 67 single-node theories (52 SU + 6 SO + 9 Sp) with R-charges and central charges (completed 2026-04-14)
-- [ ] **Phase 2: Two-node summary** - Compile 135 universality classes with full superconformal data (R, a/N^2, c/N^2, a/c)
+- [x] **Phase 2: Two-node summary** - Compile 326 universality classes with full superconformal data (R, a/N^2, c/N^2, a/c) (completed 2026-04-14)
 - [ ] **Phase 3: Conformal window analysis** - SQCD conformal window for N_rank2=0 nodes
 - [ ] **Phase 4: Distribution analysis** - Central charge and a/c ratio distributions with physics interpretation
 - [ ] **Phase 5: Validation and comparison** - Internal consistency checks and comparison with arXiv:2510.19136
@@ -49,12 +49,11 @@ Plans:
 3. Summary statistics per gauge pair type
 4. All classes pass Hofman-Maldacena bounds, exact-numerical consistency, positivity checks
 
-**Plans:** 2 plans
+**Plans:** 1 plan
 
 Plans:
 
-- [ ] 02-01-PLAN.md -- Extract all 326 classes from quivers.db with complete data, compile JSON and markdown tables
-- [ ] 02-02-PLAN.md -- Validate all data: Hofman-Maldacena bounds, exact vs numerical, c-a relation, decoupled limit
+- [x] 02-01-PLAN.md -- Extract all 326 classes from quivers.db with complete data, compile JSON and markdown tables (completed 2026-04-14)
 
 ### Phase 3: Conformal window analysis
 
@@ -138,7 +137,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|---------------|--------|-----------|
 | 1. Single-node summary | 1/1 | Complete | 2026-04-14 |
-| 2. Two-node summary | 0/TBD | Not started | - |
+| 2. Two-node summary | 1/1 | Complete | 2026-04-14 |
 | 3. Conformal window | 0/TBD | Not started | - |
 | 4. Distribution analysis | 0/TBD | Not started | - |
 | 5. Validation & comparison | 0/TBD | Not started | - |
