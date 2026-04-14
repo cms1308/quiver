@@ -28,9 +28,11 @@ Systematic classification of all 4D N=1 asymptotically free quiver gauge theorie
 1. Table of all 67 single-node theories (52 SU + 6 SO + 9 Sp) with gauge type, matter content, N_f bound, R-charges, a/N^2, c/N^2, a/c
 2. Results formatted for direct comparison with arXiv:2510.19136 (35 non-Veneziano theories match; 31 SU Veneziano-limit theories are new)
 
+**Plans:** 1 plan
+
 Plans:
 
-- [ ] 01-01: [TBD — created during /gpd:plan-phase]
+- [ ] 01-01-PLAN.md -- Enumerate all 67 theories, compute exact R-charges and central charges, format tables, validate against universal formulas and arXiv:2510.19136
 
 ### Phase 2: Two-node summary
 
