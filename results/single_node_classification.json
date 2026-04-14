@@ -1,0 +1,1728 @@
+[
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 1
+    },
+    "matter_str": "A",
+    "n_rank2": 1,
+    "type": "I",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "-3 + sqrt(73)/3",
+      "antifund": "3 - sqrt(73)/3"
+    },
+    "a_over_N2": "-105/16 + 73*sqrt(73)/96",
+    "c_over_N2": "-53/8 + 37*sqrt(73)/48",
+    "a_over_c": "48*sqrt(73)/1187 + 3167/2374",
+    "a_over_N2_float": -0.06549715199812733,
+    "c_over_N2_float": -0.03899711298440306
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 1,
+      "Abar": 1
+    },
+    "matter_str": "A + Abar",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "0",
+      "Abar": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 1,
+      "Abar": 2
+    },
+    "matter_str": "A + 2Abar",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "5",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "sqrt(89)/51 + 5/17",
+      "Abar": "sqrt(89)/51 + 5/17",
+      "fund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 1,
+      "Abar": 3
+    },
+    "matter_str": "A + 3Abar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 2,
+    "chiral_excess_b": -8,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "8",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "2/3",
+      "Abar": "2/3",
+      "fund": "2/3"
+    },
+    "a_over_N2": "13/48",
+    "c_over_N2": "7/24",
+    "a_over_c": "13/14",
+    "a_over_N2_float": 0.2708333333333333,
+    "c_over_N2_float": 0.2916666666666667
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 2
+    },
+    "matter_str": "2A",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": -2,
+    "chiral_excess_b": 8,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "6",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "-1 + sqrt(19)/3",
+      "antifund": "2 - sqrt(19)/3"
+    },
+    "a_over_N2": "-3/2 + 19*sqrt(19)/48",
+    "c_over_N2": "-25/16 + 5*sqrt(19)/12",
+    "a_over_c": "364/395 - 3*sqrt(19)/395",
+    "a_over_N2_float": 0.22539749848484994,
+    "c_over_N2_float": 0.2537078931419473
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 2,
+      "Abar": 2
+    },
+    "matter_str": "2A + 2Abar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "1/2",
+      "Abar": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 2,
+      "Abar": 3
+    },
+    "matter_str": "2A + 3Abar",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": 1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "7",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "2/3",
+      "Abar": "2/3",
+      "fund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 3
+    },
+    "matter_str": "3A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -3,
+    "chiral_excess_b": 12,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "9",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "9/32",
+    "c_over_N2": "5/16",
+    "a_over_c": "9/10",
+    "a_over_N2_float": 0.28125,
+    "c_over_N2_float": 0.3125
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "A": 3,
+      "Abar": 3
+    },
+    "matter_str": "3A + 3Abar",
+    "n_rank2": 6,
+    "type": "n=6",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "6",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "2/3",
+      "Abar": "2/3"
+    },
+    "a_over_N2": "1/4",
+    "c_over_N2": "1/4",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.25,
+    "c_over_N2_float": 0.25
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "Sbar": 1,
+      "A": 1
+    },
+    "matter_str": "Sbar + A",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 8,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "-4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "Sbar": "0",
+      "A": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "Sbar": 1,
+      "A": 1,
+      "Abar": 2
+    },
+    "matter_str": "Sbar + A + 2Abar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 2,
+    "chiral_excess_b": 0,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "Sbar": "2/3",
+      "A": "2/3",
+      "Abar": "2/3",
+      "fund": "2/3"
+    },
+    "a_over_N2": "13/48",
+    "c_over_N2": "7/24",
+    "a_over_c": "13/14",
+    "a_over_N2_float": 0.2708333333333333,
+    "c_over_N2_float": 0.2916666666666667
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "Sbar": 1,
+      "A": 2
+    },
+    "matter_str": "Sbar + 2A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 12,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "7",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "Sbar": "sqrt(89)/51 + 5/17",
+      "A": "sqrt(89)/51 + 5/17",
+      "antifund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "Sbar": 1,
+      "A": 3
+    },
+    "matter_str": "Sbar + 3A",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": -2,
+    "chiral_excess_b": 16,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "10",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "Sbar": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "13/48",
+    "c_over_N2": "7/24",
+    "a_over_c": "13/14",
+    "a_over_N2_float": 0.2708333333333333,
+    "c_over_N2_float": 0.2916666666666667
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "Sbar": 2,
+      "A": 1
+    },
+    "matter_str": "2Sbar + A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 1,
+    "chiral_excess_b": 12,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-7",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "Sbar": "sqrt(89)/51 + 5/17",
+      "A": "sqrt(89)/51 + 5/17",
+      "fund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "Sbar": 2,
+      "A": 2
+    },
+    "matter_str": "2Sbar + 2A",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 16,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-8",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "Sbar": "1/2",
+      "A": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "Sbar": 2,
+      "A": 3
+    },
+    "matter_str": "2Sbar + 3A",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 20,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "11",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "Sbar": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1
+    },
+    "matter_str": "S",
+    "n_rank2": 1,
+    "type": "I",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "-3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "-3 + sqrt(73)/3",
+      "antifund": "3 - sqrt(73)/3"
+    },
+    "a_over_N2": "-105/16 + 73*sqrt(73)/96",
+    "c_over_N2": "-53/8 + 37*sqrt(73)/48",
+    "a_over_c": "48*sqrt(73)/1187 + 3167/2374",
+    "a_over_N2_float": -0.06549715199812733,
+    "c_over_N2_float": -0.03899711298440306
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "A": 1
+    },
+    "matter_str": "S + A",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": -2,
+    "chiral_excess_b": 0,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "-1 + sqrt(19)/3",
+      "A": "-1 + sqrt(19)/3",
+      "antifund": "2 - sqrt(19)/3"
+    },
+    "a_over_N2": "-3/2 + 19*sqrt(19)/48",
+    "c_over_N2": "-25/16 + 5*sqrt(19)/12",
+    "a_over_c": "364/395 - 3*sqrt(19)/395",
+    "a_over_N2_float": 0.22539749848484994,
+    "c_over_N2_float": 0.2537078931419473
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "A": 1,
+      "Abar": 1
+    },
+    "matter_str": "S + A + Abar",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-1",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "sqrt(89)/51 + 5/17",
+      "A": "sqrt(89)/51 + 5/17",
+      "Abar": "sqrt(89)/51 + 5/17",
+      "antifund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "A": 1,
+      "Abar": 2
+    },
+    "matter_str": "S + A + 2Abar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": -8,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "1/2",
+      "A": "1/2",
+      "Abar": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "A": 1,
+      "Abar": 3
+    },
+    "matter_str": "S + A + 3Abar",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": 1,
+    "chiral_excess_b": -12,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "9",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "2/3",
+      "A": "2/3",
+      "Abar": "2/3",
+      "fund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "A": 2
+    },
+    "matter_str": "S + 2A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -3,
+    "chiral_excess_b": 4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "9/32",
+    "c_over_N2": "5/16",
+    "a_over_c": "9/10",
+    "a_over_N2_float": 0.28125,
+    "c_over_N2_float": 0.3125
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "A": 2,
+      "Abar": 2
+    },
+    "matter_str": "S + 2A + 2Abar",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "1",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "2/3",
+      "A": "2/3",
+      "Abar": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "A": 2,
+      "Abar": 3
+    },
+    "matter_str": "S + 2A + 3Abar",
+    "n_rank2": 6,
+    "type": "n=6",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": -8,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": true,
+    "R_charges": {
+      "S": "2/3",
+      "A": "2/3",
+      "Abar": "2/3"
+    },
+    "a_over_N2": "1/4",
+    "c_over_N2": "1/4",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.25,
+    "c_over_N2_float": 0.25
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 1
+    },
+    "matter_str": "S + Sbar",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "-2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "0",
+      "Sbar": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 1,
+      "A": 1
+    },
+    "matter_str": "S + Sbar + A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "1",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "sqrt(89)/51 + 5/17",
+      "Sbar": "sqrt(89)/51 + 5/17",
+      "A": "sqrt(89)/51 + 5/17",
+      "antifund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 1,
+      "A": 1,
+      "Abar": 1
+    },
+    "matter_str": "S + Sbar + A + Abar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "1/2",
+      "Sbar": "1/2",
+      "A": "1/2",
+      "Abar": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 1,
+      "A": 1,
+      "Abar": 2
+    },
+    "matter_str": "S + Sbar + A + 2Abar",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": 1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "2/3",
+      "Sbar": "2/3",
+      "A": "2/3",
+      "Abar": "2/3",
+      "fund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 1,
+      "A": 2
+    },
+    "matter_str": "S + Sbar + 2A",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": -2,
+    "chiral_excess_b": 8,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "2/3",
+      "Sbar": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "13/48",
+    "c_over_N2": "7/24",
+    "a_over_c": "13/14",
+    "a_over_N2_float": 0.2708333333333333,
+    "c_over_N2_float": 0.2916666666666667
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 1,
+      "A": 2,
+      "Abar": 2
+    },
+    "matter_str": "S + Sbar + 2A + 2Abar",
+    "n_rank2": 6,
+    "type": "n=6",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "2/3",
+      "Sbar": "2/3",
+      "A": "2/3",
+      "Abar": "2/3"
+    },
+    "a_over_N2": "1/4",
+    "c_over_N2": "1/4",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.25,
+    "c_over_N2_float": 0.25
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 2
+    },
+    "matter_str": "S + 2Sbar",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 1,
+    "chiral_excess_b": 4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-5",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "sqrt(89)/51 + 5/17",
+      "Sbar": "sqrt(89)/51 + 5/17",
+      "fund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 2,
+      "A": 1
+    },
+    "matter_str": "S + 2Sbar + A",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 8,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-6",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "1/2",
+      "Sbar": "1/2",
+      "A": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 1,
+      "Sbar": 2,
+      "A": 2
+    },
+    "matter_str": "S + 2Sbar + 2A",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 12,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "5",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "2/3",
+      "Sbar": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 2
+    },
+    "matter_str": "2S",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": -2,
+    "chiral_excess_b": -8,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-6",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "-1 + sqrt(19)/3",
+      "antifund": "2 - sqrt(19)/3"
+    },
+    "a_over_N2": "-3/2 + 19*sqrt(19)/48",
+    "c_over_N2": "-25/16 + 5*sqrt(19)/12",
+    "a_over_c": "364/395 - 3*sqrt(19)/395",
+    "a_over_N2_float": 0.22539749848484994,
+    "c_over_N2_float": 0.2537078931419473
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "S": 2,
+      "Sbar": 2
+    },
+    "matter_str": "2S + 2Sbar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "1/2",
+      "Sbar": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1
+    },
+    "matter_str": "adj",
+    "n_rank2": 1,
+    "type": "I",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "A": 1
+    },
+    "matter_str": "adj + A",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "sqrt(89)/51 + 5/17",
+      "A": "sqrt(89)/51 + 5/17",
+      "antifund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "A": 1,
+      "Abar": 1
+    },
+    "matter_str": "adj + A + Abar",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2",
+      "A": "1/2",
+      "Abar": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "A": 1,
+      "Abar": 2
+    },
+    "matter_str": "adj + A + 2Abar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "5",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "A": "2/3",
+      "Abar": "2/3",
+      "fund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "A": 2
+    },
+    "matter_str": "adj + 2A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -2,
+    "chiral_excess_b": 8,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "6",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "13/48",
+    "c_over_N2": "7/24",
+    "a_over_c": "13/14",
+    "a_over_N2_float": 0.2708333333333333,
+    "c_over_N2_float": 0.2916666666666667
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "A": 2,
+      "Abar": 2
+    },
+    "matter_str": "adj + 2A + 2Abar",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "A": "2/3",
+      "Abar": "2/3"
+    },
+    "a_over_N2": "1/4",
+    "c_over_N2": "1/4",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.25,
+    "c_over_N2_float": 0.25
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "Sbar": 1,
+      "A": 1
+    },
+    "matter_str": "adj + Sbar + A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 8,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2",
+      "Sbar": "1/2",
+      "A": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "Sbar": 1,
+      "A": 2
+    },
+    "matter_str": "adj + Sbar + 2A",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 12,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "7",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "Sbar": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "S": 1
+    },
+    "matter_str": "adj + S",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": -4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "sqrt(89)/51 + 5/17",
+      "S": "sqrt(89)/51 + 5/17",
+      "antifund": "19/17 - sqrt(89)/17"
+    },
+    "a_over_N2": "89*sqrt(89)/9248 + 591/4624",
+    "c_over_N2": "53*sqrt(89)/4624 + 287/2312",
+    "a_over_c": "179/110 - 4*sqrt(89)/55",
+    "a_over_N2_float": 0.21860124575616757,
+    "c_over_N2_float": 0.23226665224891868
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "S": 1,
+      "A": 1
+    },
+    "matter_str": "adj + S + A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -2,
+    "chiral_excess_b": 0,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": true,
+    "R_charges": {
+      "adj": "2/3",
+      "S": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "13/48",
+    "c_over_N2": "7/24",
+    "a_over_c": "13/14",
+    "a_over_N2_float": 0.2708333333333333,
+    "c_over_N2_float": 0.2916666666666667
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "S": 1,
+      "Sbar": 1
+    },
+    "matter_str": "adj + S + Sbar",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2",
+      "S": "1/2",
+      "Sbar": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "S": 1,
+      "Sbar": 1,
+      "A": 1
+    },
+    "matter_str": "adj + S + Sbar + A",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "1",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "S": "2/3",
+      "Sbar": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 1,
+      "S": 1,
+      "Sbar": 1,
+      "A": 1,
+      "Abar": 1
+    },
+    "matter_str": "adj + S + Sbar + A + Abar",
+    "n_rank2": 5,
+    "type": "n=5",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": true,
+    "R_charges": {
+      "adj": "2/3",
+      "S": "2/3",
+      "Sbar": "2/3",
+      "A": "2/3",
+      "Abar": "2/3"
+    },
+    "a_over_N2": "1/4",
+    "c_over_N2": "1/4",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.25,
+    "c_over_N2_float": 0.25
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 2
+    },
+    "matter_str": "2adj",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2"
+    },
+    "a_over_N2": "27/128",
+    "c_over_N2": "27/128",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.2109375,
+    "c_over_N2_float": 0.2109375
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 2,
+      "A": 1
+    },
+    "matter_str": "2adj + A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": -1,
+    "chiral_excess_b": 4,
+    "is_veneziano": true,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "A": "2/3",
+      "antifund": "2/3"
+    },
+    "a_over_N2": "25/96",
+    "c_over_N2": "13/48",
+    "a_over_c": "25/26",
+    "a_over_N2_float": 0.2604166666666667,
+    "c_over_N2_float": 0.2708333333333333
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 2,
+      "A": 1,
+      "Abar": 1
+    },
+    "matter_str": "2adj + A + Abar",
+    "n_rank2": 4,
+    "type": "n=4",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "A": "2/3",
+      "Abar": "2/3"
+    },
+    "a_over_N2": "1/4",
+    "c_over_N2": "1/4",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.25,
+    "c_over_N2_float": 0.25
+  },
+  {
+    "gauge_type": "SU",
+    "matter": {
+      "adj": 3
+    },
+    "matter_str": "3adj",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": true,
+    "R_charges": {
+      "adj": "2/3"
+    },
+    "a_over_N2": "1/4",
+    "c_over_N2": "1/4",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.25,
+    "c_over_N2_float": 0.25
+  },
+  {
+    "gauge_type": "SO",
+    "matter": {
+      "S": 1
+    },
+    "matter_str": "S",
+    "n_rank2": 1,
+    "type": "I",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "-8",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "SO",
+    "matter": {
+      "S": 2
+    },
+    "matter_str": "2S",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-10",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "S": "1/2"
+    },
+    "a_over_N2": "27/256",
+    "c_over_N2": "27/256",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.10546875,
+    "c_over_N2_float": 0.10546875
+  },
+  {
+    "gauge_type": "SO",
+    "matter": {
+      "adj": 1
+    },
+    "matter_str": "adj",
+    "n_rank2": 1,
+    "type": "I",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "-4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "SO",
+    "matter": {
+      "adj": 1,
+      "S": 1
+    },
+    "matter_str": "adj + S",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-6",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2",
+      "S": "1/2"
+    },
+    "a_over_N2": "27/256",
+    "c_over_N2": "27/256",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.10546875,
+    "c_over_N2_float": 0.10546875
+  },
+  {
+    "gauge_type": "SO",
+    "matter": {
+      "adj": 2
+    },
+    "matter_str": "2adj",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "-2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2"
+    },
+    "a_over_N2": "27/256",
+    "c_over_N2": "27/256",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.10546875,
+    "c_over_N2_float": 0.10546875
+  },
+  {
+    "gauge_type": "SO",
+    "matter": {
+      "adj": 3
+    },
+    "matter_str": "3adj",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": true,
+    "R_charges": {
+      "adj": "2/3"
+    },
+    "a_over_N2": "1/8",
+    "c_over_N2": "1/8",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.125,
+    "c_over_N2_float": 0.125
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "A": 1
+    },
+    "matter_str": "A",
+    "n_rank2": 1,
+    "type": "I",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "A": 2
+    },
+    "matter_str": "2A",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "5",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "1/2"
+    },
+    "a_over_N2": "27/64",
+    "c_over_N2": "27/64",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.421875,
+    "c_over_N2_float": 0.421875
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "A": 3
+    },
+    "matter_str": "3A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "6",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "A": "2/3"
+    },
+    "a_over_N2": "1/2",
+    "c_over_N2": "1/2",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.5,
+    "c_over_N2_float": 0.5
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "adj": 1
+    },
+    "matter_str": "adj",
+    "n_rank2": 1,
+    "type": "I",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "2",
+    "nf_bound_gamma": "2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "0"
+    },
+    "a_over_N2": "0",
+    "c_over_N2": "0",
+    "a_over_c": "n/a",
+    "a_over_N2_float": 0.0,
+    "c_over_N2_float": 0.0
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "adj": 1,
+      "A": 1
+    },
+    "matter_str": "adj + A",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "3",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2",
+      "A": "1/2"
+    },
+    "a_over_N2": "27/64",
+    "c_over_N2": "27/64",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.421875,
+    "c_over_N2_float": 0.421875
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "adj": 1,
+      "A": 2
+    },
+    "matter_str": "adj + 2A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "4",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "A": "2/3"
+    },
+    "a_over_N2": "1/2",
+    "c_over_N2": "1/2",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.5,
+    "c_over_N2_float": 0.5
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "adj": 2
+    },
+    "matter_str": "2adj",
+    "n_rank2": 2,
+    "type": "II",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "1",
+    "nf_bound_gamma": "1",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "1/2"
+    },
+    "a_over_N2": "27/64",
+    "c_over_N2": "27/64",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.421875,
+    "c_over_N2_float": 0.421875
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "adj": 2,
+      "A": 1
+    },
+    "matter_str": "2adj + A",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "2",
+    "is_conformal_manifold": false,
+    "R_charges": {
+      "adj": "2/3",
+      "A": "2/3"
+    },
+    "a_over_N2": "1/2",
+    "c_over_N2": "1/2",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.5,
+    "c_over_N2_float": 0.5
+  },
+  {
+    "gauge_type": "Sp",
+    "matter": {
+      "adj": 3
+    },
+    "matter_str": "3adj",
+    "n_rank2": 3,
+    "type": "III",
+    "chiral_excess_a": 0,
+    "chiral_excess_b": 0,
+    "is_veneziano": false,
+    "nf_bound_alpha": "0",
+    "nf_bound_gamma": "0",
+    "is_conformal_manifold": true,
+    "R_charges": {
+      "adj": "2/3"
+    },
+    "a_over_N2": "1/2",
+    "c_over_N2": "1/2",
+    "a_over_c": "1",
+    "a_over_N2_float": 0.5,
+    "c_over_N2_float": 0.5
+  }
+]
