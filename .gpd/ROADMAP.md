@@ -36,7 +36,7 @@ Plans:
 
 ### Phase 2: Two-node summary
 
-**Goal:** Compile all 135 two-node universality classes with complete superconformal data including c/N^2 and a/c ratios.
+**Goal:** Compile all 326 two-node universality classes (129 rank(1,1) + 25 rank(1,2) + 172 rank(2,1)) with complete superconformal data including R-charges, c/N^2, and a/c ratios, validated against Hofman-Maldacena bounds and internal consistency checks.
 **Depends on:** Nothing (uses existing quivers.db)
 **Requirements:** ENUM-02, AMAX-01, AMAX-02
 **Contract coverage:**
@@ -44,13 +44,17 @@ Plans:
 - Deliverable: deliv-classification-tables
 **Success Criteria** (what must be TRUE):
 
-1. All 135 classes have a/N^2, c/N^2, and a/c values
-2. Data organized by gauge pair type (SU-SU, SU-SO, SU-Sp, SO-SO, SO-Sp, Sp-Sp)
+1. All 326 classes have a/N^2, c/N^2, and a/c values (or a/c=N/A for 10 Type-I a=0 classes)
+2. Data organized by gauge pair type (SU-SU, SU-SO, SU-Sp, SO-SO, SO-Sp, Sp-Sp) and rank sector
 3. Summary statistics per gauge pair type
+4. All classes pass Hofman-Maldacena bounds, exact-numerical consistency, positivity checks
+
+**Plans:** 2 plans
 
 Plans:
 
-- [ ] 02-01: [TBD — created during /gpd:plan-phase]
+- [ ] 02-01-PLAN.md -- Extract all 326 classes from quivers.db with complete data, compile JSON and markdown tables
+- [ ] 02-02-PLAN.md -- Validate all data: Hofman-Maldacena bounds, exact vs numerical, c-a relation, decoupled limit
 
 ### Phase 3: Conformal window analysis
 
