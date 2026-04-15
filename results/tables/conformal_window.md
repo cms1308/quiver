@@ -351,8 +351,10 @@ treated as an isolated gauge theory with effective flavors from bifundamental
 matter. The conformal window criterion 3/2 < x < 3 is **necessary but not
 sufficient** for a non-trivial IR fixed point. Nodes outside the window
 (x <= 3/2) are in the confining regime and cannot support an SQCD-like fixed
-point. Nodes inside may or may not flow to an interacting SCFT, depending on
-the coupled dynamics of the full two-node quiver (Module 4 analysis, deferred).
+point — their a, c, and R-charge values from a-maximization are set to "—"
+(84 universality classes, 571 theories affected). Nodes inside may or may not
+flow to an interacting SCFT, depending on the coupled dynamics of the full
+two-node quiver (Module 4 analysis, deferred).
 
 ### Gauge Pair Comparison
 
@@ -383,37 +385,3 @@ Intriligator-Seiberg window (hep-th/9503179) for SO(N_c), and the
 Intriligator-Pouliot window (hep-th/9505006) for Sp(N_c). At large N, all
 three reduce to the universal form 3/2 < x < 3 when x is defined as the
 ratio of total matter Dynkin index to adjoint Dynkin index at leading order.
-
-### Both-Node Analysis
-
-Among the 199 morphologies with at least one N_rank2=0 node, 38 have **both** nodes
-with N_rank2=0. For these 38 morphologies:
-
-| Category | Count |
-|---|---|
-| Both nodes inside window | 7 |
-| Exactly one node inside | 12 |
-| Neither node inside | 19 |
-
-For a morphology to potentially support an SQCD-like fixed point at **every** node,
-both nodes must be inside their respective conformal windows. Only 7/38 (18%) of
-the both-qualifying morphologies satisfy this stronger condition.
-
-Of the 161 morphologies with exactly one N_rank2=0 node, 53 have that node inside the
-window (33%).
-
-### T_bifund_lead Verification
-
-The T_bifund_lead values used in the x computation have been independently verified
-from first-principles Dynkin index calculations:
-
-| Gauge Pair | T_lead_0 | Derivation | T_lead_1 | Derivation |
-|---|---|---|---|---|
-| SU-SU | 1/2 | dim_lead(SU) x T(SU) = 1 x 1/2 | 1/2 | dim_lead(SU) x T(SU) = 1 x 1/2 |
-| SU-SO | 1/2 | dim_lead(SO) x T(SU) = 1 x 1/2 | 1 | dim_lead(SU) x T(SO) = 1 x 1 |
-| SU-Sp | 1 | dim_lead(Sp) x T(SU) = 2 x 1/2 | 1/2 | dim_lead(SU) x T(Sp) = 1 x 1/2 |
-| SO-SO | 1 | dim_lead(SO) x T(SO) = 1 x 1 | 1 | dim_lead(SO) x T(SO) = 1 x 1 |
-| SO-Sp | 2 | dim_lead(Sp) x T(SO) = 2 x 1 | 1/2 | dim_lead(SO) x T(Sp) = 1 x 1/2 |
-| Sp-Sp | 1 | dim_lead(Sp) x T(Sp) = 2 x 1/2 | 1 | dim_lead(Sp) x T(Sp) = 2 x 1/2 |
-
-where dim_lead(SU) = dim_lead(SO) = 1 and dim_lead(Sp) = 2 (since dim(f_{Sp(mN)}) = 2mN).
