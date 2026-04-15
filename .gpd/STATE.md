@@ -5,18 +5,18 @@
 See: .gpd/PROJECT.md (updated 2026-04-14)
 
 **Core research question:** What is the complete classification of 4D N=1 asymptotically free quiver gauge theories (1-node and 2-node) that admit a large N limit, with their IR superconformal data?
-**Current focus:** Phase 2 — Two-node summary
+**Current focus:** Phase 3 — Conformal window analysis
 
 ## Current Position
 
-**Current Phase:** 2
-**Current Phase Name:** Two-node summary
+**Current Phase:** 3
+**Current Phase Name:** Conformal window analysis
 **Total Phases:** 6
 **Current Plan:** 1
 **Total Plans in Phase:** 1
-**Status:** Plan 02-01 complete — ready for verification
-**Last Activity:** 2026-04-14
-**Last Activity Description:** Two-node classification: 326 classes, 27 checks pass
+**Status:** Plan 03-01 complete — ready for verification
+**Last Activity:** 2026-04-15
+**Last Activity Description:** Conformal window: 237 nodes classified, 79 inside, 7 validation checks pass
 
 **Progress:** [██████████] 100%
 
@@ -35,6 +35,10 @@ None.
 - Three-tier: 285 unitary + 10 Type-I + 31 non-unitary
 - a/c range [0.500, 1.000] for unitary (mean 0.939, median 0.956)
 - Non-unitary fraction: SU-SO 14.8%, SU-SU 8.2%, SU-Sp 10.8%, SO/Sp pairs 0%
+- 237 N_rank2=0 nodes classified: 79 inside (33%), 130 below (55%), 18 lower boundary, 10 upper boundary
+- SO-SO highest inside fraction (56%), SU-Sp lowest (23%)
+- 7 morphologies with both nodes inside conformal window out of 38 with both N_rank2=0
+- Rank multipliers increase inside fraction: 39% for rank!=(1,1) vs 28% for rank(1,1)
 
 ## Open Questions
 
@@ -49,6 +53,7 @@ None.
 |-------|----------|-------|-------|
 | 01-01 | ~12 min | 2 | 6 |
 | 02-01 | ~5 min | 2 | 4 |
+| 03-01 | ~8 min | 2 | 4 |
 
 ## Accumulated Context
 
@@ -64,6 +69,8 @@ None.
 - [02-01]: Use exact symbolic c when available (181 classes), numerical otherwise (145)
 - [02-01]: Class 31 discrepancy documented, not treated as error
 - [02-01]: 7537 classified theories (220 unclassified excluded from counts)
+- [03-01]: Strict inequality 3/2 < x < 3 for inside classification; boundary values at x=3/2 and x=3 reported separately
+- [03-01]: Per-node classification (not per-morphology); general formula x = N_bif * T_lead * m_other/m_self with rank multipliers
 
 ### Active Approximations
 
@@ -87,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-**Last session:** 2026-04-14
-**Stopped at:** Phase 2 execution complete, awaiting verification
-**Resume file:** .gpd/phases/02-two-node-summary/02-01-SUMMARY.md
+**Last session:** 2026-04-15
+**Stopped at:** Phase 3 plan 01 complete, awaiting verification
+**Resume file:** .gpd/phases/03-conformal-window-analysis/03-01-SUMMARY.md

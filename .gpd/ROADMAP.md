@@ -8,7 +8,7 @@ Systematic classification of all 4D N=1 asymptotically free quiver gauge theorie
 
 - [x] **Phase 1: Single-node summary** - Compile and verify 67 single-node theories (52 SU + 6 SO + 9 Sp) with R-charges and central charges (completed 2026-04-14)
 - [x] **Phase 2: Two-node summary** - Compile 326 universality classes with full superconformal data (R, a/N^2, c/N^2, a/c) (completed 2026-04-14)
-- [ ] **Phase 3: Conformal window analysis** - SQCD conformal window for N_rank2=0 nodes
+- [x] **Phase 3: Conformal window analysis** - SQCD conformal window for N_rank2=0 nodes (completed 2026-04-15)
 - [ ] **Phase 4: Distribution analysis** - Central charge and a/c ratio distributions with physics interpretation
 - [ ] **Phase 5: Validation and comparison** - Internal consistency checks and comparison with arXiv:2510.19136
 - [ ] **Phase 6: Paper writing** - JHEP paper with all results
@@ -74,7 +74,7 @@ Plans:
 
 Plans:
 
-- [ ] 03-01-PLAN.md -- Compute x for all N_rank2=0 nodes using general T_bifund_lead formula, classify inside/outside conformal window, verify SQCD limit
+- [x] 03-01-PLAN.md -- Compute x for all N_rank2=0 nodes using general T_bifund_lead formula, classify inside/outside conformal window, verify SQCD limit (completed 2026-04-15)
 
 ### Phase 4: Distribution analysis
 
@@ -140,7 +140,7 @@ Plans:
 |-------|---------------|--------|-----------|
 | 1. Single-node summary | 1/1 | Complete | 2026-04-14 |
 | 2. Two-node summary | 1/1 | Complete | 2026-04-14 |
-| 3. Conformal window | 0/TBD | Not started | - |
+| 3. Conformal window | 1/1 | Complete | 2026-04-15 |
 | 4. Distribution analysis | 0/TBD | Not started | - |
 | 5. Validation & comparison | 0/TBD | Not started | - |
 | 6. Paper writing | 0/TBD | Not started | - |
