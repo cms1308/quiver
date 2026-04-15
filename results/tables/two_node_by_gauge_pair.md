@@ -3,11 +3,11 @@
 Complete classification of two-node universality classes
 with superconformal data from a-maximization at large N.
 
-**242 classes** with valid superconformal data + **1 merged class** (478 theories below conformal window, a = c = R = —).
+**242 classes** with valid superconformal data + **11 below-window classes** (one per gauge-pair/rank sector, 478 theories total with a = c = R = —).
 
-**Tiers:** unitary (a > 0, HM bounds satisfied), Type-I (a = c = 0), non-unitary (a < 0)
+**Tiers:** unitary (a > 0, HM bounds satisfied), Type-I (a = c = 0), non-unitary (a < 0), below (below conformal window)
 
-**Quality:** exact = exact symbolic from a-maximization, num = numerical only
+**Quality:** exact = exact symbolic, num = numerical only, below = below conformal window
 
 ## SO-SO
 
@@ -16,6 +16,7 @@ with superconformal data from a-maximization at large N.
 | Class | Gauge0 | Gauge1 | Matter0 | Matter1 | N_bif | a/N² | c/N² | a/c | R-charges | #Th | Quality |
 |-------|--------|--------|---------|---------|-------|-------|-------|-----|-----------|-----|---------|
 | 123 | SO | SO | S | S | 1 | 0.210938 | 0.210938 | 1.000000 | R_bif=1/2 | 4 | exact |
+| 325 | SO | SO | — | — | 1 | — | — | — | — | 3 | below |
 
 ### SO-SO &mdash; rank(2,1)
 
@@ -25,16 +26,16 @@ with superconformal data from a-maximization at large N.
 | 293 | SO | SO | 2S | — | 1 | 0.573486 | 0.573486 | 1.000000 | R_S_0=5/8,  R_bif=1/2 | 3 | exact |
 
 **SO-SO Summary:**
-- Classes: 3 (exact: 3, numerical: 0)
-- Theories: 9
-- Tiers: 3 unitary, 0 Type-I, 0 non-unitary
+- Classes: 4 (exact: 3, numerical: 0, below: 1)
+- Theories: 12
+- Tiers: 3 unitary, 0 Type-I, 0 non-unitary, 1 below-window
 - a/N² range (unitary): [0.210938, 0.573486]
 - c/N² range (unitary): [0.210938, 0.573486]
 - a/c range (unitary): [1.000000, 1.000000]
 - a/c mean (unitary): 1.000000
 
-  - rank(1,1): 1 classes (1U / 0I / 0NU)
-  - rank(2,1): 2 classes (2U / 0I / 0NU)
+  - rank(1,1): 2 classes (1U / 0I / 0NU / 1BW)
+  - rank(2,1): 2 classes (2U / 0I / 0NU / 0BW)
 
 ## SO-Sp
 
@@ -51,18 +52,19 @@ with superconformal data from a-maximization at large N.
 |-------|--------|--------|---------|---------|-------|-------|-------|-----|-----------|-----|---------|
 | 295 | SO | Sp | S | A | 1 | 0.843750 | 0.843750 | 1.000000 | R_bif=1/2 | 7 | exact |
 | 296 | SO | Sp | S | 2A | 1 | 0.905694 | 0.905694 | 1.000000 | R_S_0=-5/3 + 2*√(10)/3,  R_A_1=-1/3 + √(10)/3,  R_bif=8/3 - 2*√(10)/3 | 6 | exact |
+| 326 | SO | Sp | — | — | 1 | — | — | — | — | 7 | below |
 
 **SO-Sp Summary:**
-- Classes: 4 (exact: 4, numerical: 0)
-- Theories: 18
-- Tiers: 4 unitary, 0 Type-I, 0 non-unitary
+- Classes: 5 (exact: 4, numerical: 0, below: 1)
+- Theories: 25
+- Tiers: 4 unitary, 0 Type-I, 0 non-unitary, 1 below-window
 - a/N² range (unitary): [0.395508, 0.905694]
 - c/N² range (unitary): [0.395508, 0.905694]
 - a/c range (unitary): [1.000000, 1.000000]
 - a/c mean (unitary): 1.000000
 
-  - rank(1,1): 2 classes (2U / 0I / 0NU)
-  - rank(2,1): 2 classes (2U / 0I / 0NU)
+  - rank(1,1): 2 classes (2U / 0I / 0NU / 0BW)
+  - rank(2,1): 3 classes (2U / 0I / 0NU / 1BW)
 
 ## SU-SO
 
@@ -83,6 +85,7 @@ with superconformal data from a-maximization at large N.
 | 91 | SU | SO | A | — | 2 | 0.371960 | 0.397332 | 0.936144 | R_A_0=9/7 - √(11)/7,  R_□̄_0=√(11)/21 + 4/7,  R_bif=1/2 | 1 | exact |
 | 92 | SU | SO | 2A + Ā | S | 1 | 0.372651 | 0.392613 | 0.949155 | — | 12 | num |
 | 93 | SU | SO | 2A | S | 1 | 0.383005 | 0.412771 | 0.927889 | — | 4 | num |
+| 327 | SU | SO | — | — | 1 | — | — | — | — | 49 | below |
 
 ### SU-SO &mdash; rank(1,2)
 
@@ -103,6 +106,7 @@ with superconformal data from a-maximization at large N.
 | 322 | SU | SO | 2S̄ + A | 2S | 1 | 0.731962 | 0.742099 | 0.986340 | — | 18 | num |
 | 323 | SU | SO | A + Ā | 2S | 1 | 0.742353 | 0.762553 | 0.973510 | — | 9 | num |
 | 324 | SU | SO | A | 2S | 1 | 0.752736 | 0.782888 | 0.961486 | — | 3 | num |
+| 328 | SU | SO | 3Ā | — | 1 | — | — | — | — | 20 | below |
 
 ### SU-SO &mdash; rank(2,1)
 
@@ -119,19 +123,20 @@ with superconformal data from a-maximization at large N.
 | 252 | SU | SO | 2A | — | 1 | 1.147372 | 1.263926 | 0.907784 | R_A_0=-3 + 5*√(910)/42,  R_□̄_0=7/2 - 2*√(910)/21,  R_bif=1/2 | 3 | exact |
 | 253 | SU | SO | A + 3Ā | — | 1 | 1.158045 | 1.218919 | 0.950059 | R_A_0=√(1358)/238 + 9/17,  R_Ā_0=√(1358)/238 + 9/17,  R_□_0=37/34 - 4*√(1358)/357,  R_bif=1/2 | 6 | exact |
 | 254 | SU | SO | 3Ā | — | 1 | 1.199617 | 1.300753 | 0.922248 | R_Ā_0=5/47 + 5*√(1070)/282,  R_□_0=129/94 - √(1070)/47,  R_bif=1/2 | 2 | exact |
+| 329 | SU | SO | — | — | 1 | — | — | — | — | 1 | below |
 
 **SU-SO Summary:**
-- Classes: 39 (exact: 25, numerical: 14)
-- Theories: 285
-- Tiers: 38 unitary, 0 Type-I, 1 non-unitary
+- Classes: 42 (exact: 25, numerical: 14, below: 3)
+- Theories: 355
+- Tiers: 38 unitary, 0 Type-I, 1 non-unitary, 3 below-window
 - a/N² range (unitary): [0.035156, 1.199617]
 - c/N² range (unitary): [0.035156, 1.300753]
 - a/c range (unitary): [0.849129, 1.000000]
 - a/c mean (unitary): 0.966028
 
-  - rank(1,1): 13 classes (13U / 0I / 0NU)
-  - rank(1,2): 15 classes (15U / 0I / 0NU)
-  - rank(2,1): 11 classes (10U / 0I / 1NU)
+  - rank(1,1): 14 classes (13U / 0I / 0NU / 1BW)
+  - rank(1,2): 16 classes (15U / 0I / 0NU / 1BW)
+  - rank(2,1): 12 classes (10U / 0I / 1NU / 1BW)
 
 ## SU-SU
 
@@ -190,6 +195,7 @@ with superconformal data from a-maximization at large N.
 | 67 | SU | SU | 2A | 2A + 2Ā | 1 | 0.541667 | 0.583333 | 0.928571 | R_S̄_1=2/3,  R_□̄_0=2/3,  R_□̄_1=2/3,  R_bif=2/3 | 180 | exact |
 | 68 | SU | SU | 2A | 2A + Ā | 1 | 0.552083 | 0.604167 | 0.913793 | R_S̄_1=2/3,  R_□̄_0=2/3,  R_□̄_1=2/3,  R_bif=2/3 | 38 | exact |
 | 69 | SU | SU | 2A | 2A | 1 | 0.562500 | 0.625000 | 0.900000 | R_□̄_0=2/3,  R_□̄_1=2/3,  R_bif=2/3 | 10 | exact |
+| 330 | SU | SU | — | — | 1 | — | — | — | — | 173 | below |
 
 ### SU-SU &mdash; rank(2,1)
 
@@ -290,18 +296,19 @@ with superconformal data from a-maximization at large N.
 | 239 | SU | SU | 3Ā | 2A + Ā | 1 | 1.364583 | 1.479167 | 0.922535 | R_Ā_0=2/3,  R_Ā_1=2/3,  R_□_0=2/3,  R_□_1=2/3,  R_bif=2/3 | 24 | exact |
 | 240 | SU | SU | 3Ā | A + Ā | 1 | 1.375000 | 1.500000 | 0.916667 | R_Ā_0=2/3,  R_adj_1=2/3,  R_□_0=2/3,  R_□̄_1=2/3,  R_bif=2/3 | 16 | exact |
 | 241 | SU | SU | 3Ā | A | 1 | 1.385417 | 1.520833 | 0.910959 | R_Ā_0=2/3,  R_A_1=2/3,  R_□_0=2/3,  R_□̄_1=2/3,  R_bif=2/3 | 8 | exact |
+| 331 | SU | SU | — | 3Ā | 1 | — | — | — | — | 142 | below |
 
 **SU-SU Summary:**
-- Classes: 146 (exact: 50, numerical: 96)
-- Theories: 6260
-- Tiers: 138 unitary, 2 Type-I, 6 non-unitary
+- Classes: 148 (exact: 50, numerical: 96, below: 2)
+- Theories: 6575
+- Tiers: 138 unitary, 2 Type-I, 6 non-unitary, 2 below-window
 - a/N² range (unitary): [0.152162, 1.385417]
 - c/N² range (unitary): [0.152162, 1.520833]
 - a/c range (unitary): [0.856621, 1.000000]
 - a/c mean (unitary): 0.945424
 
-  - rank(1,1): 51 classes (50U / 1I / 0NU)
-  - rank(2,1): 95 classes (88U / 1I / 6NU)
+  - rank(1,1): 52 classes (50U / 1I / 0NU / 1BW)
+  - rank(2,1): 96 classes (88U / 1I / 6NU / 1BW)
 
 ## SU-Sp
 
@@ -327,6 +334,7 @@ with superconformal data from a-maximization at large N.
 | 117 | SU | Sp | A + Ā | 2A | 2 | 0.750000 | 0.750000 | 1.000000 | R_adj_0=2/3,  R_A_1=2/3,  R_bif=2/3,  R_bif=2/3 | 6 | exact |
 | 118 | SU | Sp | A | 2A | 1 | 0.752736 | 0.782888 | 0.961486 | — | 3 | num |
 | 119 | SU | Sp | A | 2A | 2 | 0.760417 | 0.770833 | 0.986486 | R_A_0=2/3,  R_A_1=2/3,  R_□̄_0=2/3,  R_bif=2/3,  R_bif=2/3 | 3 | exact |
+| 332 | SU | Sp | 3Ā | — | 1 | — | — | — | — | 20 | below |
 
 ### SU-Sp &mdash; rank(2,1)
 
@@ -357,18 +365,19 @@ with superconformal data from a-maximization at large N.
 | 289 | SU | Sp | 2A + 2Ā | 2A | 1 | 1.541667 | 1.583333 | 0.973684 | R_S̄_0=2/3,  R_□̄_0=2/3,  R_bif=2/3 | 69 | exact |
 | 290 | SU | Sp | 2A + Ā | 2A | 1 | 1.583333 | 1.666667 | 0.950000 | R_S̄_0=2/3,  R_□̄_0=2/3,  R_bif=2/3 | 30 | exact |
 | 291 | SU | Sp | 2A | 2A | 1 | 1.625000 | 1.750000 | 0.928571 | R_□̄_0=2/3,  R_bif=2/3 | 9 | exact |
+| 333 | SU | Sp | — | — | 1 | — | — | — | — | 56 | below |
 
 **SU-Sp Summary:**
-- Classes: 43 (exact: 27, numerical: 16)
-- Theories: 451
-- Tiers: 43 unitary, 0 Type-I, 0 non-unitary
+- Classes: 45 (exact: 27, numerical: 16, below: 2)
+- Theories: 527
+- Tiers: 43 unitary, 0 Type-I, 0 non-unitary, 2 below-window
 - a/N² range (unitary): [0.140625, 1.625000]
 - c/N² range (unitary): [0.140625, 1.750000]
 - a/c range (unitary): [0.833333, 1.000000]
 - a/c mean (unitary): 0.972966
 
-  - rank(1,1): 18 classes (18U / 0I / 0NU)
-  - rank(2,1): 25 classes (25U / 0I / 0NU)
+  - rank(1,1): 19 classes (18U / 0I / 0NU / 1BW)
+  - rank(2,1): 26 classes (25U / 0I / 0NU / 1BW)
 
 ## Sp-Sp
 
@@ -379,6 +388,7 @@ with superconformal data from a-maximization at large N.
 | 127 | Sp | Sp | A | A | 1 | 0.843750 | 0.843750 | 1.000000 | R_bif=1/2 | 6 | exact |
 | 128 | Sp | Sp | 2A | adj | 1 | 0.905694 | 0.905694 | 1.000000 | R_A_0=-5/3 + 2*√(10)/3,  R_A_1=-1/3 + √(10)/3,  R_bif=8/3 - 2*√(10)/3 | 6 | exact |
 | 129 | Sp | Sp | 2A | 2A | 1 | 1.000000 | 1.000000 | 1.000000 | R_bif=2/3 | 9 | exact |
+| 334 | Sp | Sp | — | — | 1 | — | — | — | — | 5 | below |
 
 ### Sp-Sp &mdash; rank(2,1)
 
@@ -388,29 +398,16 @@ with superconformal data from a-maximization at large N.
 | 299 | Sp | Sp | A | A | 1 | 1.584459 | 1.584459 | 1.000000 | R_A_0=5/9 - √(7)/9,  R_A_1=20/9 - 4*√(7)/9,  R_bif=-1/9 + 2*√(7)/9 | 4 | exact |
 | 300 | Sp | Sp | 2A | — | 1 | 2.293945 | 2.293945 | 1.000000 | R_A_0=5/8,  R_bif=1/2 | 3 | exact |
 | 301 | Sp | Sp | 2A | A | 1 | 2.385130 | 2.385130 | 1.000000 | R_A_0=25/33 - √(31)/33,  R_A_1=68/33 - 8*√(31)/33,  R_bif=-1/33 + 4*√(31)/33 | 6 | exact |
+| 335 | Sp | Sp | — | A | 1 | — | — | — | — | 2 | below |
 
 **Sp-Sp Summary:**
-- Classes: 7 (exact: 7, numerical: 0)
-- Theories: 36
-- Tiers: 7 unitary, 0 Type-I, 0 non-unitary
+- Classes: 9 (exact: 7, numerical: 0, below: 2)
+- Theories: 43
+- Tiers: 7 unitary, 0 Type-I, 0 non-unitary, 2 below-window
 - a/N² range (unitary): [0.843750, 2.385130]
 - c/N² range (unitary): [0.843750, 2.385130]
 - a/c range (unitary): [1.000000, 1.000000]
 - a/c mean (unitary): 1.000000
 
-  - rank(1,1): 3 classes (3U / 0I / 0NU)
-  - rank(2,1): 4 classes (4U / 0I / 0NU)
-
-## Below Conformal Window
-
-478 theories merged into a single class (class 0). These have at least one
-N_rank2=0 node with x < 3/2 (confining regime) and no valid superconformal data.
-
-| Gauge Pair | Theories |
-|------------|----------|
-| SO-SO | 3 |
-| SO-Sp | 7 |
-| SU-SO | 70 |
-| SU-SU | 315 |
-| SU-Sp | 76 |
-| Sp-Sp | 7 |
+  - rank(1,1): 4 classes (3U / 0I / 0NU / 1BW)
+  - rank(2,1): 5 classes (4U / 0I / 0NU / 1BW)
