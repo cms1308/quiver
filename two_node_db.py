@@ -258,14 +258,24 @@ def _format_R_numerical(fast_result) -> str | None:
 
 # ── Morphology helpers ────────────────────────────────────────────────────────
 
-_RANK2_WEIGHT: dict[str, float] = {
-    "adj": 1.0, "S": 0.5, "Sbar": 0.5, "A": 0.5, "Abar": 0.5,
-    # display aliases used in matter text column
-    "S̄": 0.5, "Ā": 0.5,
-}
+_RANK2_REPS = {"adj", "S", "Sbar", "A", "Abar", "S̄", "Ā"}
 
 
-def _parse_N_rank2(matter_str: str) -> float:
+def _rank2_weight(rep: str, gauge: str) -> float:
+    """Effective rank-2 weight per field: T(rep)/N at large N.
+
+    SU(N): adj → 1, {S,Sbar,A,Abar} → 1/2.
+    SO(N), Sp(N): adj is itself a rank-2 tensor (A for SO, S for Sp); all
+    rank-2 reps {adj, S, A} contribute 1 each.
+    """
+    if rep not in _RANK2_REPS:
+        return 0.0
+    if gauge == "SU":
+        return 1.0 if rep == "adj" else 0.5
+    return 1.0
+
+
+def _parse_N_rank2(matter_str: str, gauge: str) -> float:
     """Parse matter text (e.g. '2adj + S̄') → effective rank-2 tensor count."""
     if matter_str == "—":
         return 0.0
@@ -275,7 +285,7 @@ def _parse_N_rank2(matter_str: str) -> float:
         m = re.match(r"^(\d+)?(.*)", part)
         count = int(m.group(1)) if m and m.group(1) else 1
         rep = m.group(2).strip() if m else part
-        total += count * _RANK2_WEIGHT.get(rep, 0.0)
+        total += count * _rank2_weight(rep, gauge)
     return total
 
 
@@ -293,25 +303,18 @@ def _parse_N_bif(edges_str: str) -> int:
 def _morph_vec_from_quiver(q: "Quiver", d0_a, d1_a) -> tuple:
     """Compute (N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1) from a Quiver."""
     nm0, nm1 = q.node_matter[0], q.node_matter[1]
-    N_rank2_0 = sum(
-        cnt * (1.0 if rep == "adj" else 0.5)
-        for rep, cnt in nm0.items()
-        if rep in _RANK2_WEIGHT
-    )
-    N_rank2_1 = sum(
-        cnt * (1.0 if rep == "adj" else 0.5)
-        for rep, cnt in nm1.items()
-        if rep in _RANK2_WEIGHT
-    )
+    g0, g1 = q.gauge_types[0], q.gauge_types[1]
+    N_rank2_0 = sum(cnt * _rank2_weight(rep, g0) for rep, cnt in nm0.items())
+    N_rank2_1 = sum(cnt * _rank2_weight(rep, g1) for rep, cnt in nm1.items())
     return (N_rank2_0, N_rank2_1, len(q.edges), abs(d0_a or 0), abs(d1_a or 0))
 
 
 def _morph_vec_from_text(matter0: str, matter1: str, edges: str,
-                         delta0_a, delta1_a) -> tuple:
+                         delta0_a, delta1_a, gauge0: str, gauge1: str) -> tuple:
     """Compute morphology vector from stored text columns (for migration)."""
     return (
-        _parse_N_rank2(matter0),
-        _parse_N_rank2(matter1),
+        _parse_N_rank2(matter0, gauge0),
+        _parse_N_rank2(matter1, gauge1),
         _parse_N_bif(edges),
         abs(delta0_a or 0),
         abs(delta1_a or 0),
@@ -692,10 +695,10 @@ def cmd_classes(args: argparse.Namespace) -> None:
         return
 
     a_exact_w = max(
-        (len(r["a_exact"] or f"{r['a_over_N2']:.6f}") for r in rows),
+        (len(r["a_exact"] or (f"{r['a_over_N2']:.6f}" if r["a_over_N2"] is not None else "—")) for r in rows),
         default=10,
     )
-    a_exact_w = max(a_exact_w, 10)
+    a_exact_w = max(min(a_exact_w, 40), 10)
 
     current_group = None
     total = 0
@@ -715,10 +718,15 @@ def cmd_classes(args: argparse.Namespace) -> None:
         m1 = r["matter1"] or "—"
         e  = r["edges"] or "—"
         rep = f"({m0})  |  ({m1})  |  {e}"
-        a_ex = r["a_exact"] or f"≈ {r['a_over_N2']:.6f}"
+        if r["a_over_N2"] is not None:
+            a_ex = r["a_exact"] or f"≈ {r['a_over_N2']:.6f}"
+            a_num = f"{r['a_over_N2']:>10.6f}"
+        else:
+            a_ex = "—"
+            a_num = "         —"
         ven = "Y" if r["veneziano_any"] else "N"
         print(f"  {r['class_id']:>5}  {a_ex:<{a_exact_w}}  "
-              f"{r['a_over_N2']:>10.6f}  {r['n_theories']:>4}  {ven:>3}  {rep}")
+              f"{a_num}  {r['n_theories']:>4}  {ven:>3}  {rep}")
         total += 1
 
     print(f"\n  Total: {total} classes")
@@ -829,15 +837,21 @@ def cmd_show(args: argparse.Namespace) -> None:
           f"{label}  "
           f"({cls['n_theories']} theories)")
 
-    a_ex  = cls["a_exact"] or f"≈ {cls['a_over_N2']:.8f}  (numerical)"
-    c_ex  = cls["c_exact"] or "(numerical only)"
-    R_ex  = cls["R_exact"] or "(numerical only)"
-    ac_s  = f"{cls['a_over_c']:.6f}" if cls["a_over_c"] is not None else "(n/a)"
+    if cls["a_over_N2"] is not None:
+        a_ex  = cls["a_exact"] or f"≈ {cls['a_over_N2']:.8f}  (numerical)"
+        c_ex  = cls["c_exact"] or "(numerical only)"
+        R_ex  = cls["R_exact"] or "(numerical only)"
+        ac_s  = f"{cls['a_over_c']:.6f}" if cls["a_over_c"] is not None else "(n/a)"
+        print(f"  a/N² = {a_ex}  ≈ {cls['a_over_N2']:.8f}")
+        print(f"  c/N² = {c_ex}")
+        print(f"  a/c  = {ac_s}")
+        print(f"  R-charges (large N): {R_ex}")
+    else:
+        print("  a/N² = —  (below conformal window)")
+        print("  c/N² = —")
+        print("  a/c  = —")
+        print("  R-charges: —")
     ven_s = f"any={cls['veneziano_any']} all={cls['veneziano_all']}"
-    print(f"  a/N² = {a_ex}  ≈ {cls['a_over_N2']:.8f}")
-    print(f"  c/N² = {c_ex}")
-    print(f"  a/c  = {ac_s}")
-    print(f"  R-charges (large N): {R_ex}")
     print(f"  Veneziano: {ven_s}")
     print("─" * 100)
 
@@ -973,7 +987,7 @@ def cmd_morph_build(args: argparse.Namespace) -> None:
     """)
 
     rows = con.execute(
-        "SELECT theory_id, gauge_pair, rank0_mult, rank1_mult, "
+        "SELECT theory_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
         "matter0, matter1, edges, delta0_a, delta1_a FROM theory"
     ).fetchall()
     print(f"Processing {len(rows)} theories...", flush=True)
@@ -985,6 +999,7 @@ def cmd_morph_build(args: argparse.Namespace) -> None:
         vec = _morph_vec_from_text(
             row["matter0"], row["matter1"], row["edges"],
             row["delta0_a"], row["delta1_a"],
+            row["gauge0"], row["gauge1"],
         )
         vecs[row["theory_id"]] = vec
         key = (row["gauge_pair"], row["rank0_mult"], row["rank1_mult"]) + vec
@@ -1077,6 +1092,7 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
         if pair_filter:
             pair_filter = pair_filter.upper().replace("×", "-").replace("x", "-")
         rank_filter = getattr(args, "rank", None)  # (m0, m1) tuple or None
+        ven_filter = getattr(args, "veneziano", None)  # True, False, or None
 
         all_morph = con.execute(
             "SELECT * FROM morphology_class ORDER BY gauge_pair, rank0_mult, rank1_mult, "
@@ -1095,8 +1111,8 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
             return (PAIR_ORDER.index(pair) if pair in PAIR_ORDER else 99, m0, m1)
 
         header = (f"  {'MorphID':>7}  {'N_r2₀':>6}  {'N_r2₁':>6}  {'N_bif':>5}  "
-                  f"{'N_f₀':>4}  {'N_f₁':>4}  {'#th':>5}  {'#cls':>5}")
-        divider = f"  {'─'*60}"
+                  f"{'N_f₀':>4}  {'N_f₁':>4}  {'Ven':>3}  {'#th':>5}  {'#cls':>5}")
+        divider = f"  {'─'*65}"
 
         group_counts: list[tuple[str, int]] = []
         total = 0
@@ -1107,14 +1123,22 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
             if rank_filter and (m0, m1) != rank_filter:
                 continue
             rows_g = groups[key]
+            if ven_filter is not None:
+                rows_g = [
+                    r for r in rows_g
+                    if (((r['N_fund_0'] or 0) > 0 or (r['N_fund_1'] or 0) > 0) == ven_filter)
+                ]
+                if not rows_g:
+                    continue
             label = _gauge_pair_label(pair.split("-")[0], pair.split("-")[1], m0, m1)
             print(f"\n{label}")
             print(header)
             print(divider)
             for r in rows_g:
+                ven = 1 if (r['N_fund_0'] or 0) > 0 or (r['N_fund_1'] or 0) > 0 else 0
                 print(f"  {r['morph_id']:>7}  {r['N_rank2_0']:>6.1f}  {r['N_rank2_1']:>6.1f}  "
                       f"{r['N_bif']:>5}  {r['N_fund_0']:>4}  {r['N_fund_1']:>4}  "
-                      f"{r['n_theories']:>5}  {r['n_classes']:>5}")
+                      f"{ven:>3}  {r['n_theories']:>5}  {r['n_classes']:>5}")
             group_counts.append((label, len(rows_g)))
             total += len(rows_g)
 
@@ -1247,6 +1271,10 @@ def main() -> None:
     p.add_argument("--pair", help="Filter by gauge pair, e.g. SU-SU")
     p.add_argument("--rank", type=_parse_rank,
                    help="Filter by rank multipliers, e.g. '1,1' or '2,1'")
+    p.add_argument("--veneziano", action="store_true", default=None,
+                   help="Show only Veneziano morphologies (N_fund > 0)")
+    p.add_argument("--no-veneziano", dest="veneziano", action="store_false",
+                   help="Show only non-Veneziano morphologies")
 
     args = parser.parse_args()
 
