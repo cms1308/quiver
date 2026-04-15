@@ -31,8 +31,7 @@ None.
 - Type II: a/N² = c/N² = (27/128)·dim(G)/N², R_rank2 = 1/2
 - Type III: a/N² = c/N² = (1/4)·dim(G)/N², R_rank2 = 2/3
 - Type I SO/Sp: a = c = 0 at leading order
-- 326 two-node universality classes: 242 with superconformal data, 84 below conformal window (a=c=R=None)
-- Of 242 valid: unitary + Type-I + non-unitary (571 theories nulled for below-window nodes)
+- 243 two-node universality classes: 242 with superconformal data + 1 merged below-window class (478 theories, a=c=R=None)
 - Non-unitary fraction: SU-SO 14.8%, SU-SU 8.2%, SU-Sp 10.8%, SO/Sp pairs 0%
 - 237 N_rank2=0 nodes classified: 79 inside (33%), 130 below (55%), 18 lower boundary, 10 upper boundary
 - SO-SO highest inside fraction (56%), SU-Sp lowest (23%)

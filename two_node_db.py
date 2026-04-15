@@ -706,9 +706,12 @@ def cmd_classes(args: argparse.Namespace) -> None:
         group_key = (r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
         if group_key != current_group:
             current_group = group_key
-            label = _gauge_pair_label(r["gauge_pair"].split("-")[0],
-                                      r["gauge_pair"].split("-")[1],
-                                      r["rank0_mult"], r["rank1_mult"])
+            parts = r["gauge_pair"].split("-")
+            if len(parts) == 2:
+                label = _gauge_pair_label(parts[0], parts[1],
+                                          r["rank0_mult"], r["rank1_mult"])
+            else:
+                label = r["gauge_pair"]
             print(f"\n  {label}")
             print(f"  {'─'*100}")
             print(f"  {'ID':>5}  {'a/N² (exact)':<{a_exact_w}}  {'≈':>10}  "
@@ -830,9 +833,12 @@ def cmd_show(args: argparse.Namespace) -> None:
     ).fetchall()
     con.close()
 
-    label = _gauge_pair_label(cls["gauge_pair"].split("-")[0],
-                              cls["gauge_pair"].split("-")[1],
-                              cls["rank0_mult"], cls["rank1_mult"])
+    parts = cls["gauge_pair"].split("-")
+    if len(parts) == 2:
+        label = _gauge_pair_label(parts[0], parts[1],
+                                  cls["rank0_mult"], cls["rank1_mult"])
+    else:
+        label = cls["gauge_pair"]
     print(f"\nUniversality class #{cls['class_id']}  "
           f"{label}  "
           f"({cls['n_theories']} theories)")
