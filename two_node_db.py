@@ -806,7 +806,11 @@ def cmd_classes(args: argparse.Namespace) -> None:
           AND (:min_a IS NULL OR uc.a_over_N2 >= :min_a)
           AND (:max_a IS NULL OR uc.a_over_N2 <= :max_a)
           {veneziano_cond}
-        ORDER BY uc.gauge_pair, uc.rank0_mult, uc.rank1_mult, uc.a_over_N2
+        ORDER BY CASE SUBSTR(uc.gauge_pair,1,2)
+                   WHEN 'SU' THEN 0 WHEN 'SO' THEN 1 WHEN 'Sp' THEN 2 END,
+                 CASE SUBSTR(uc.gauge_pair,4,2)
+                   WHEN 'SU' THEN 0 WHEN 'SO' THEN 1 WHEN 'Sp' THEN 2 END,
+                 uc.rank0_mult, uc.rank1_mult, uc.a_over_N2
     """
     rows = con.execute(query, {
         "pair":  pair_filter,
