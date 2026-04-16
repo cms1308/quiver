@@ -102,73 +102,71 @@ That's the same as the UV beta function! The difference arises because at the IR
 
 ---
 
-## 6. Multi-Node Analysis: Detailed Procedure
+## 6. Two-Node Analysis: Detailed Procedure
 
 ### For a 2-node quiver $G \times G'$:
 
-**Boundary 1: $g = 0$**
+Two boundary fixed points:
+- **A:** $(g = g^*, g' = 0)$ — node 0 interacting, node 1 free
+- **B:** $(g = 0, g' = g'^*)$ — node 1 interacting, node 0 free
 
-- $G$ is free; $G'$ sees bifundamental fields as $N_{\mathrm{bif}}$ free fundamentals (with $R = 2/3$)
-- Compute the R-charges of all matter in the $G'$ sector using a-maximization with the bifundamentals having $R = 2/3$
-- Compute $\mathcal{B}_G$ using these R-charges
+**Boundary A: $g' = 0$**
 
-**Boundary 2: $g' = 0$**
+1. Build single-node sub-theory for $G$: all matter at node 0 (rank-2/adj, Veneziano fundamentals) plus bifundamentals as fundamentals of $G$.
+2. A-maximize the sub-theory. Bifundamental R-charges are determined dynamically by the a-maximization, **not** fixed at $R = 2/3$. Only fields exclusively charged under $G'$ (node 1's own matter) have $R = 2/3$.
+3. Compute $\mathcal{B}_{G'}$ using these R-charges:
+$$\mathcal{B}_{G'} = T(\mathrm{adj}_{G'}) + \sum_{i \in \text{node 1 matter}} T_{G'}(r_i)(2/3 - 1) + \sum_{i \in \text{bif}} T_{G'}(r_i)(R_i^{(A)} - 1)$$
 
-- Symmetric analysis for $G'$
+**Boundary B: $g = 0$**
 
-**Non-trivial fixed point exists if both $\mathcal{B}_G < 0$ and $\mathcal{B}_{G'} < 0$.**
+- Symmetric analysis with nodes swapped.
 
-### For a $k$-node quiver:
-
-For each node $a$, the decoupled theory is the sub-quiver with $G_a$ removed. One can also consider **simultaneous decoupling** of subsets of nodes, but typically the pairwise analysis is sufficient to determine the existence of a non-trivial fixed point.
+**We do not impose $\mathcal{B} < 0$ at both boundaries.** Instead, we compute the condition on $N_f$ such that $\mathcal{B} \geq 0$ at each boundary separately, and store these conditions in the database.
 
 ---
 
 ## 7. Relation to the Conformal Window
 
-The conformal window for each gauge group in the quiver is bounded by:
-$$N_f^{\mathrm{lower}} < N_f < N_f^{\mathrm{upper}}$$
+The conformal window for each gauge group is bounded by UV asymptotic freedom from above:
+$$N_f < N_f^{\mathrm{upper}} \quad \text{(set by } b_0 > 0\text{)}$$
 
-where:
-- $N_f^{\mathrm{upper}}$: set by $b_0 > 0$ (UV AF)
-- $N_f^{\mathrm{lower}}$: set by $\mathcal{B}_a < 0$ at the boundary (non-trivial IR FP)
+The boundary analysis provides an additional constraint on $N_f$ via the condition $\mathcal{B} \geq 0$ at each boundary. However, $\mathcal{B} \leq 0$ does **not** in general give the lower bound of the conformal window (cf. the SQCD counterexample in §9). The relationship between $\mathcal{B}$ and $N_f$ can be non-monotonic in quiver theories, and the condition must be evaluated case by case.
 
-For quiver theories, this analysis couples the conformal windows of different nodes.
+For two-node quivers, the condition at each boundary couples the matter content of both nodes.
 
 ---
 
-## 8. Practical Computation
+## 8. Practical Computation (Two-Node)
 
-### Step-by-step for a quiver $Q$:
+### Step-by-step for a 2-node quiver $Q$ with nodes 0, 1:
 
 ```
-for each gauge node a in Q:
-    # Build the decoupled theory Q_a = Q with G_a set free
-    Q_a = Q.decouple(a)
+for active_node in [0, 1]:
+    free_node = 1 - active_node
 
-    # All fields charged under G_a become free fields in Q_a
-    # They contribute as external flavors with R = 2/3 to the remaining nodes
+    # Build single-node sub-theory: active node's matter + bifundamentals
+    fields = build_fields_boundary(Q, active_node)
+    sub_Q = single_node_quiver(Q, active_node)
 
-    # a-maximize the remaining sub-quiver Q_a to get R^{(a)}
-    R_a = a_maximize(Q_a, treat_external_as_free=True)
+    # A-maximize the sub-theory to get R-charges
+    # Bifundamental R is determined by a-maximization, NOT fixed at 2/3
+    R = a_maximize(sub_Q, fields)
 
-    # Compute Tr[R^{(a)} G_a^2]
-    B_a = T_adj(G_a)
-    for field_i in Q.fields_charged_under(a):
-        B_a += T_{G_a}(r_i) * (R_a[field_i] - 1)
+    # Compute B for the free node
+    B = T_adj_lead(G_free) * m_free
+    for field_i in Q.fields_at_node(free_node):
+        if field_i is bifundamental:
+            B += T_{G_free}(bif) * (R[bif] - 1)    # R from a-max
+        else:
+            B += T_{G_free}(r_i) * (2/3 - 1)       # free field R = 2/3
 
-    if B_a >= 0:
-        # G_a does not need to become strongly coupled
-        # → no non-trivial IR fixed point with G_a interacting
-        Q.mark_no_nontrivial_fp()
-        break
-
-# If all B_a < 0: non-trivial IR fixed point exists
+    # Store condition B >= 0 as N_f constraint
+    store_B_condition(Q, boundary=active_node, B=B)
 ```
 
 ### Notes:
-- If $Q_a$ itself has no non-trivial fixed point (i.e., the sub-quiver is in the free or confined phase), the boundary analysis is more subtle.
-- For free sub-quivers, set all remaining fields to $R = 2/3$ and compute $\mathcal{B}_a$ with these values.
+- If the sub-theory has no non-trivial fixed point (below conformal window or gaugino-only), set all R = 2/3 and compute $\mathcal{B}$ with free-field values.
+- For Veneziano theories, $\mathcal{B}$ depends on $N_f$ through the a-maximized R-charges. The condition $\mathcal{B} \geq 0$ gives a constraint on $N_f$.
 
 ---
 
@@ -195,23 +193,46 @@ The hep-th/0502049 method is most useful for **multi-node quivers** where coupli
 
 ---
 
-## 10. Summary of Conditions
+## 10. Summary
 
-A quiver $Q$ has a non-trivial IR superconformal fixed point if:
+For each two-node theory, we compute:
 
-| Condition | Meaning |
-|-----------|---------|
-| $b_0^{(a)} > 0$ for all $a$ | UV asymptotically free |
-| $\mathcal{B}_a < 0$ for all $a$ | Each node is driven to strong coupling |
-| $R_i^* \geq 2/3$ for all chiral fields | No operator hits unitarity bound (or must decouple) |
+| Quantity | At boundary A $(g', g'=0)$ | At boundary B $(g=0, g'^*)$ |
+|----------|---------------------------|------------------------------|
+| Sub-theory | Node 0 + bifs as funds | Node 1 + bifs as funds |
+| A-maximize | Sub-theory for node 0 | Sub-theory for node 1 |
+| Compute | $\mathcal{B}_{G'}$ (free node 1) | $\mathcal{B}_G$ (free node 0) |
+| Store | $N_f$ condition for $\mathcal{B}_{G'} \geq 0$ | $N_f$ condition for $\mathcal{B}_G \geq 0$ |
 
-Additionally, the existence of an IR fixed point is confirmed if:
-- The a-function has a local maximum (not just a saddle)
-- The theory is not equivalent to a free or confined theory in the IR
+We do **not** impose $\mathcal{B} < 0$ at both boundaries as a filter. The conditions are computed and stored for each boundary independently.
 
 ---
 
-## 11. Advanced: Fixed Point Merging and Loss
+## 11. Implementation Plan
+
+Scope: **two-node theories only**. For each theory, compute $\mathcal{B}$ at both boundaries A and B, and store the $N_f$ condition for $\mathcal{B} \geq 0$ as two columns in `quivers.db`.
+
+### Required new functions (in `a_maximization_large_N.py`):
+
+1. `build_fields_boundary(quiver, active_node)` — build leading-order fields for single-node sub-theory at boundary. Bifundamentals included as fundamentals of the active node with T_lead only at that node.
+2. `compute_B_boundary(quiver, active_node, R_charges)` — compute $\mathcal{B}$ for the free node using R-charges from step 1.
+3. `boundary_analysis(quiver)` — orchestrate: build sub-theory → a-maximize → compute $\mathcal{B}$ at both boundaries.
+
+### Database changes (in `two_node_db.py`):
+
+- Add columns `B_cond_A TEXT` and `B_cond_B TEXT` to the `theory` table.
+- Add CLI command `boundary-analysis` to compute and populate these columns.
+
+### Existing ingredients to reuse:
+
+- `_solve_a_max(fields, quiver)` — core symbolic a-maximization solver
+- `build_fields_large_N()` — pattern for field construction
+- `T_adj_lead()`, `T_rep_lead()`, `T_bifund_lead()` — scaling coefficients
+- `chiral_excess_coeffs()` — Veneziano parameter extraction
+
+---
+
+## 12. Advanced: Fixed Point Merging and Loss
 
 As parameters (like $N_f$ or N) vary, fixed points can:
 - **Merge**: two fixed points collide and annihilate → loss of conformal window
