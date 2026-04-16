@@ -841,6 +841,7 @@ def cmd_classes(args: argparse.Namespace) -> None:
 
     current_group = None
     total = 0
+    seq = 0
     for r in rows:
         group_key = (r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
         if group_key != current_group:
@@ -853,21 +854,22 @@ def cmd_classes(args: argparse.Namespace) -> None:
                 label = r["gauge_pair"]
             print(f"\n  {label}")
             print(f"  {'─'*100}")
-            print(f"  {'ID':>5}  {'a/N² (exact)':<{a_exact_w}}  {'≈':>10}  "
+            print(f"  {'#':>5}  {'a/N² (exact)':<{a_exact_w}}  {'≈':>10}  "
                   f"{'#th':>4}  {'Ven':>3}  Representative theory")
             print(f"  {'─'*100}")
+        seq += 1
         m0 = r["matter0"] or "—"
         m1 = r["matter1"] or "—"
         e  = r["edges"] or "—"
         rep = f"({m0})  |  ({m1})  |  {e}"
         if r["a_over_N2"] is not None:
-            a_ex = r["a_exact"] or f"≈ {r['a_over_N2']:.6f}"
+            a_ex = r["a_exact"] if r["a_exact"] and len(r["a_exact"]) <= a_exact_w else f"≈ {r['a_over_N2']:.6f}"
             a_num = f"{r['a_over_N2']:>10.6f}"
         else:
             a_ex = "—"
             a_num = "         —"
         ven = "Y" if r["veneziano_any"] else "N"
-        print(f"  {r['class_id']:>5}  {a_ex:<{a_exact_w}}  "
+        print(f"  {seq:>5}  {a_ex:<{a_exact_w}}  "
               f"{a_num}  {r['n_theories']:>4}  {ven:>3}  {rep}")
         total += 1
 
