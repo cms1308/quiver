@@ -37,6 +37,38 @@ from a_maximization_large_N import (
 DEFAULT_DB = "quivers.db"
 TOL = 1e-5
 
+T_BIFUND_LEAD = {
+    "SU-SU": (Fraction(1, 2), Fraction(1, 2)),
+    "SU-SO": (Fraction(1, 2), Fraction(1)),
+    "SU-Sp": (Fraction(1), Fraction(1, 2)),
+    "SO-SO": (Fraction(1), Fraction(1)),
+    "SO-Sp": (Fraction(2), Fraction(1, 2)),
+    "Sp-Sp": (Fraction(1), Fraction(1)),
+}
+
+
+def _is_below_conformal_window(gauge_pair: str, rank0_mult, rank1_mult,
+                               N_rank2_0: float, N_rank2_1: float,
+                               N_bif: int) -> bool:
+    """True if at least one N_rank2=0 node is below the SQCD conformal window.
+
+    For a node with no rank-2 tensors, the effective flavour ratio is
+    x = N_bif * T_lead * m_other / m_self.  Below the window means x < 3/2.
+    """
+    if N_rank2_0 != 0 and N_rank2_1 != 0:
+        return False
+    T0, T1 = T_BIFUND_LEAD[gauge_pair]
+    lower = Fraction(3, 2)
+    if N_rank2_0 == 0:
+        x0 = Fraction(N_bif) * T0 * Fraction(rank1_mult) / Fraction(rank0_mult)
+        if x0 < lower:
+            return True
+    if N_rank2_1 == 0:
+        x1 = Fraction(N_bif) * T1 * Fraction(rank0_mult) / Fraction(rank1_mult)
+        if x1 < lower:
+            return True
+    return False
+
 
 # ── Schema ────────────────────────────────────────────────────────────────────
 
@@ -46,7 +78,7 @@ CREATE TABLE IF NOT EXISTS universality_class (
     gauge_pair     TEXT    NOT NULL,
     rank0_mult     INTEGER NOT NULL DEFAULT 1,
     rank1_mult     INTEGER NOT NULL DEFAULT 1,
-    a_over_N2      REAL    NOT NULL,
+    a_over_N2      REAL,
     n_theories     INTEGER NOT NULL,
     rep_theory_id  INTEGER,
     a_exact        TEXT,
@@ -450,8 +482,35 @@ def cmd_build(args: argparse.Namespace) -> None:
             "morph_vec": morph_vec,
         })
 
+    # Move below-window theories out of convergent buckets
+    for key in list(buckets.keys()):
+        keep = []
+        for r in buckets[key]:
+            mv = r["morph_vec"]
+            if _is_below_conformal_window(r["gauge_pair"], r["rank0_mult"], r["rank1_mult"],
+                                          mv[0], mv[1], mv[2]):
+                diverged_rows.append(r)
+            else:
+                keep.append(r)
+        buckets[key] = keep
+
     n_stored = sum(len(v) for v in buckets.values())
-    print(f"  {n_diverged} diverged (stored as class NULL), "
+
+    below_window_rows: list[dict] = []
+    truly_diverged: list[dict] = []
+    for r in diverged_rows:
+        mv = r["morph_vec"]
+        if _is_below_conformal_window(r["gauge_pair"], r["rank0_mult"], r["rank1_mult"],
+                                      mv[0], mv[1], mv[2]):
+            below_window_rows.append(r)
+        else:
+            truly_diverged.append(r)
+    diverged_rows = truly_diverged
+    n_below = len(below_window_rows)
+    n_truly_diverged = len(diverged_rows)
+
+    print(f"  {n_below} below conformal window, "
+          f"{n_truly_diverged} diverged (class NULL), "
           f"{n_stored} clusterable.", flush=True)
 
     # ── Phase 2: cluster into classes ─────────────────────────────────────────
@@ -475,8 +534,28 @@ def cmd_build(args: argparse.Namespace) -> None:
                 "a_over_c": rows[rep_local].get("a_over_c"),
             })
 
+    # Group below-window theories into classes by (gauge_pair, m0, m1)
+    bw_buckets: dict[tuple, list[dict]] = defaultdict(list)
+    for r in below_window_rows:
+        bw_buckets[(r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])].append(r)
+
+    bw_class_list: list[dict] = []
+    for (pair, m0, m1), bw_rows in bw_buckets.items():
+        flags = [r["veneziano"] for r in bw_rows]
+        bw_class_list.append({
+            "pair": pair, "m0": m0, "m1": m1,
+            "centroid": None,
+            "rows": bw_rows,
+            "members": list(range(len(bw_rows))),
+            "veneziano_any": int(any(flags)),
+            "veneziano_all": int(all(flags)),
+            "a_over_c": None,
+            "below_window": True,
+        })
+
     total_classes = len(class_list)
-    print(f"  {total_classes} universality classes identified.", flush=True)
+    print(f"  {total_classes} universality classes + "
+          f"{len(bw_class_list)} below-window classes.", flush=True)
 
     # ── Phase 3: exact symbolic a-maximization per class ──────────────────────
     print(f"Phase 3: exact a-maximization ({total_classes} classes, "
@@ -580,6 +659,58 @@ def cmd_build(args: argparse.Namespace) -> None:
             )
             total_theories += len(members)
 
+    # Insert below-window classes
+    n_bw_classes = len(bw_class_list)
+    for bwi, bwc in enumerate(bw_class_list):
+        bw_cid = total_classes + bwi + 1
+        rows = bwc["rows"]
+        members = bwc["members"]
+        m0, m1 = bwc["m0"], bwc["m1"]
+
+        with con:
+            con.execute(
+                "INSERT INTO universality_class "
+                "(class_id, gauge_pair, rank0_mult, rank1_mult, "
+                " a_over_N2, n_theories, a_exact, c_exact, R_exact, "
+                " a_over_c, veneziano_any, veneziano_all) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                (bw_cid, bwc["pair"], m0, m1, None, len(members),
+                 None, None, None, None,
+                 bwc["veneziano_any"], bwc["veneziano_all"]),
+            )
+
+            theory_ids = []
+            for idx in members:
+                r = rows[idx]
+                mv = r["morph_vec"]
+                mid = _get_or_create_morph_id(con, mv, r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
+                cur = con.execute(
+                    "INSERT INTO theory "
+                    "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
+                    " matter0, matter1, edges, delta0, delta1, "
+                    " delta0_a, delta0_b, delta1_a, delta1_b, "
+                    " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical, "
+                    " a_over_c, veneziano, "
+                    " N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, morph_id) "
+                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    (bw_cid, r["gauge_pair"], r["gauge0"], r["gauge1"],
+                     r["rank0_mult"], r["rank1_mult"],
+                     r["matter0"], r["matter1"], r["edges"],
+                     r["delta0"], r["delta1"],
+                     r["delta0_a"], r["delta0_b"],
+                     r["delta1_a"], r["delta1_b"],
+                     r["nf_bound0"], r["nf_bound1"],
+                     None, None, None, None, r["veneziano"],
+                     mv[0], mv[1], mv[2], mv[3], mv[4], mid),
+                )
+                theory_ids.append(cur.lastrowid)
+
+            con.execute(
+                "UPDATE universality_class SET rep_theory_id=? WHERE class_id=?",
+                (theory_ids[0], bw_cid),
+            )
+            total_theories += len(members)
+
     # Insert diverged theories (class_id = NULL)
     with con:
         for r in diverged_rows:
@@ -606,14 +737,17 @@ def cmd_build(args: argparse.Namespace) -> None:
                  mv[0], mv[1], mv[2], mv[3], mv[4], mid),
             )
 
+    all_classes = total_classes + n_bw_classes
     with con:
         con.executemany(
             "INSERT OR REPLACE INTO build_info (key, value) VALUES (?,?)",
             [
                 ("built_at",      datetime.now().isoformat(timespec="seconds")),
                 ("n_theories",    str(total_theories)),
-                ("n_diverged",    str(n_diverged)),
-                ("n_classes",     str(total_classes)),
+                ("n_diverged",    str(n_truly_diverged)),
+                ("n_below_window", str(n_below)),
+                ("n_classes",     str(all_classes)),
+                ("n_bw_classes",  str(n_bw_classes)),
                 ("n_exact",       str(n_exact_ok)),
                 ("n_exact_fail",  str(n_exact_fail)),
                 ("tolerance",     str(TOL)),
@@ -638,9 +772,10 @@ def cmd_build(args: argparse.Namespace) -> None:
 
     con.close()
     print(f"\nDatabase written to '{db_path}'.")
-    print(f"  {total_theories} theories in {total_classes} classes "
+    print(f"  {total_theories} theories in {all_classes} classes "
+          f"({total_classes} SCFT + {n_bw_classes} below-window); "
           f"({n_exact_ok} exact, {n_exact_fail} numerical); "
-          f"{n_diverged} diverged (class_id NULL).")
+          f"{n_truly_diverged} diverged (class_id NULL).")
 
 
 # ── Classes ───────────────────────────────────────────────────────────────────
@@ -1199,6 +1334,136 @@ def cmd_stats(args: argparse.Namespace) -> None:
     con.close()
 
 
+def cmd_fix_below_window(args: argparse.Namespace) -> None:
+    """Consolidate below-window classes: one per (gauge_pair, rank)."""
+    con = sqlite3.connect(args.db)
+    con.row_factory = sqlite3.Row
+
+    # Step 1: find misplaced theories — below-window but in non-below-window class
+    T_MAP = {
+        "SU-SU": (0.5, 0.5), "SU-SO": (0.5, 1.0), "SU-Sp": (1.0, 0.5),
+        "SO-SO": (1.0, 1.0), "SO-Sp": (2.0, 0.5), "Sp-Sp": (1.0, 1.0),
+    }
+    all_theories = con.execute(
+        "SELECT t.theory_id, t.class_id, t.gauge_pair, t.rank0_mult, t.rank1_mult, "
+        "       t.N_rank2_0, t.N_rank2_1, t.N_bif, uc.a_over_N2 as class_a "
+        "FROM theory t "
+        "LEFT JOIN universality_class uc ON t.class_id = uc.class_id"
+    ).fetchall()
+
+    misplaced = []
+    for r in all_theories:
+        gp = r["gauge_pair"]
+        if gp not in T_MAP:
+            continue
+        T0, T1 = T_MAP[gp]
+        m0, m1 = r["rank0_mult"], r["rank1_mult"]
+        nr0, nr1, nb = r["N_rank2_0"], r["N_rank2_1"], r["N_bif"]
+        if nr0 is None or nr1 is None or nb is None:
+            continue
+        is_bw = False
+        if nr0 == 0 and nb * T0 * m1 / m0 < 1.5:
+            is_bw = True
+        if nr1 == 0 and nb * T1 * m0 / m1 < 1.5:
+            is_bw = True
+        if not is_bw:
+            continue
+        # Below-window theory: check if it's in the wrong place
+        if r["class_id"] is None or r["class_a"] is not None:
+            misplaced.append(r)
+
+    if misplaced:
+        print(f"Step 1: {len(misplaced)} below-window theories in wrong classes.")
+    else:
+        print("Step 1: no misplaced theories found.")
+
+    # Step 2: for each (gauge_pair, rank), find the target below-window class
+    bw_classes = con.execute(
+        "SELECT class_id, gauge_pair, rank0_mult, rank1_mult "
+        "FROM universality_class WHERE a_over_N2 IS NULL"
+    ).fetchall()
+    bw_map: dict[tuple, list[int]] = {}
+    for r in bw_classes:
+        key = (r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
+        bw_map.setdefault(key, []).append(r["class_id"])
+
+    # Step 3: reassign misplaced theories
+    with con:
+        for r in misplaced:
+            key = (r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
+            targets = bw_map.get(key)
+            if not targets:
+                print(f"  WARNING: no below-window class for {key}, skipping theory {r['theory_id']}")
+                continue
+            target_cid = min(targets)
+            old_cid = r["class_id"]
+            con.execute("UPDATE theory SET class_id=?, a_over_N2=NULL, c_over_N2=NULL, "
+                        "R_numerical=NULL, a_over_c=NULL WHERE theory_id=?",
+                        (target_cid, r["theory_id"]))
+            print(f"  theory {r['theory_id']}: class {old_cid} → {target_cid}")
+
+    # Step 4: merge fragmented below-window classes
+    n_merged = 0
+    with con:
+        for key, cids in sorted(bw_map.items()):
+            if len(cids) <= 1:
+                continue
+            keep = min(cids)
+            for drop in sorted(cids):
+                if drop == keep:
+                    continue
+                con.execute("UPDATE theory SET class_id=? WHERE class_id=?", (keep, drop))
+                con.execute("DELETE FROM universality_class WHERE class_id=?", (drop,))
+                n_merged += 1
+                print(f"  merged class {drop} → {keep} ({key[0]} rank={key[1]},{key[2]})")
+
+    # Step 5: update n_theories counts on all below-window classes
+    with con:
+        for key, cids in bw_map.items():
+            keep = min(cids)
+            con.execute(
+                "UPDATE universality_class SET n_theories = "
+                "(SELECT COUNT(*) FROM theory WHERE class_id = ?) "
+                "WHERE class_id = ?", (keep, keep))
+
+        # Also update source classes that lost theories
+        if misplaced:
+            source_cids = set(r["class_id"] for r in misplaced if r["class_id"] is not None)
+            for cid in source_cids:
+                con.execute(
+                    "UPDATE universality_class SET n_theories = "
+                    "(SELECT COUNT(*) FROM theory WHERE class_id = ?) "
+                    "WHERE class_id = ?", (cid, cid))
+
+    # Step 6: validate
+    n_bw = con.execute("SELECT COUNT(*) c FROM universality_class WHERE a_over_N2 IS NULL").fetchone()["c"]
+    n_bw_theories = con.execute(
+        "SELECT SUM(n_theories) s FROM universality_class WHERE a_over_N2 IS NULL").fetchone()["s"]
+    dupes = con.execute(
+        "SELECT gauge_pair, rank0_mult, rank1_mult, COUNT(*) c "
+        "FROM universality_class WHERE a_over_N2 IS NULL "
+        "GROUP BY gauge_pair, rank0_mult, rank1_mult HAVING c > 1"
+    ).fetchall()
+    orphans = con.execute(
+        "SELECT COUNT(*) c FROM theory t "
+        "WHERE t.class_id IS NOT NULL "
+        "AND NOT EXISTS (SELECT 1 FROM universality_class uc WHERE uc.class_id = t.class_id)"
+    ).fetchone()["c"]
+
+    con.close()
+
+    print(f"\nResult: {n_bw} below-window classes, {n_bw_theories} theories.")
+    print(f"  merged {n_merged} duplicate classes, reassigned {len(misplaced)} theories.")
+    if dupes:
+        print(f"  WARNING: {len(dupes)} gauge_pair+rank combos still have duplicates!")
+    else:
+        print("  OK: one class per (gauge_pair, rank).")
+    if orphans:
+        print(f"  WARNING: {orphans} orphaned theory references!")
+    else:
+        print("  OK: no orphaned references.")
+
+
 # ── CLI entry point ───────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -1266,6 +1531,10 @@ def main() -> None:
     # stats
     sub.add_parser("stats", help="Database summary and build metadata")
 
+    # fix-below-window
+    sub.add_parser("fix-below-window",
+                   help="Consolidate below-window classes: one per (gauge_pair, rank)")
+
     # morph-build
     sub.add_parser("morph-build",
                    help="Populate morphology columns on existing DB (no Mathematica needed)")
@@ -1297,6 +1566,7 @@ def main() -> None:
         "show":         cmd_show,
         "search":       cmd_search,
         "stats":        cmd_stats,
+        "fix-below-window": cmd_fix_below_window,
         "morph-build":  cmd_morph_build,
         "morphologies": cmd_morphologies,
     }
