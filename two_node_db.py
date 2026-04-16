@@ -1338,6 +1338,144 @@ def cmd_stats(args: argparse.Namespace) -> None:
     con.close()
 
 
+# ── Boundary analysis (Module 4) ─────────────────────────────────────────────
+
+def _parse_R_bif(R_str: str | None) -> float | None:
+    """Extract R_bif from R_numerical or R_exact string.
+
+    R_numerical format: "R_Ā=0.14590,  R_edge_0_1_pp=0.53665"
+    R_exact format:     "R_Ā_0=-7/2 + 3*√(5)/2,  R_bif=7/2 - 3*√(5)/2"
+    All bifundamentals share the same R at leading order.
+    """
+    if not R_str:
+        return None
+    # Try R_numerical format: R_edge_X_Y_ZZ=value
+    m = re.search(r'R_edge_\d+_\d+_\w+=([0-9.eE+-]+)', R_str)
+    if m:
+        return float(m.group(1))
+    # Try R_exact format: R_bif=expr  (take numerical value)
+    m = re.search(r'R_bif=([^,]+)', R_str)
+    if m:
+        expr = m.group(1).strip()
+        try:
+            # Handle √ notation: replace √(X) with X**0.5
+            expr_py = re.sub(r'√\(([^)]+)\)', r'(\1)**0.5', expr)
+            return float(eval(expr_py))
+        except Exception:
+            return None
+    return None
+
+
+def _compute_B(gauge_type: str, m_self: int, m_other: int,
+               N_rank2: float, delta_a: int | None,
+               N_bif: int, T_bif_self: Fraction,
+               R_bif: float) -> float:
+    """Compute B/N at a boundary where this node is free.
+
+    B/N = T_adj_lead * m_self
+        + N_rank2 * m_self * (2/3 - 1)
+        + |delta_a|/2 * (2/3 - 1)          [SU only]
+        + N_bif * T_bif_self * m_other * (R_bif - 1)
+    """
+    B = float(Fraction(1) * m_self)   # T_adj_lead = 1 for all types
+    B += N_rank2 * m_self * (2/3 - 1)
+    if gauge_type == "SU" and delta_a is not None and delta_a != 0:
+        B += abs(delta_a) / 2 * (2/3 - 1)
+    B += N_bif * float(T_bif_self) * m_other * (R_bif - 1)
+    return B
+
+
+def cmd_boundary_analysis(args: argparse.Namespace) -> None:
+    """Compute B = Tr[R G²] at both boundary fixed points for each theory."""
+    con = sqlite3.connect(args.db)
+    con.row_factory = sqlite3.Row
+
+    # Add columns if they don't exist
+    for col in ("B_boundary_A", "B_boundary_B"):
+        try:
+            con.execute(f"ALTER TABLE theory ADD COLUMN {col} REAL")
+        except sqlite3.OperationalError:
+            pass  # already exists
+
+    # Fetch all non-below-window theories with R-charges
+    theories = con.execute("""
+        SELECT t.theory_id, t.gauge_pair, t.gauge0, t.gauge1,
+               t.rank0_mult, t.rank1_mult,
+               t.N_rank2_0, t.N_rank2_1, t.N_bif,
+               t.delta0_a, t.delta1_a,
+               t.R_numerical, uc.R_exact, uc.a_over_N2
+        FROM theory t
+        JOIN universality_class uc ON t.class_id = uc.class_id
+        WHERE uc.a_over_N2 IS NOT NULL
+    """).fetchall()
+
+    n_ok = 0
+    n_skip = 0
+
+    with con:
+        for t in theories:
+            # Parse R_bif: prefer R_numerical (per theory), fall back to R_exact (per class)
+            R_bif = _parse_R_bif(t["R_numerical"])
+            if R_bif is None:
+                R_bif = _parse_R_bif(t["R_exact"])
+            if R_bif is None:
+                n_skip += 1
+                continue
+
+            gp = t["gauge_pair"]
+            g0, g1 = t["gauge0"], t["gauge1"]
+            m0, m1 = t["rank0_mult"], t["rank1_mult"]
+            T0, T1 = T_BIFUND_LEAD[gp]
+
+            # Boundary A: node 0 active (g=g*), node 1 free (g'=0)
+            # Compute B₁ for the free node 1
+            B_A = _compute_B(
+                gauge_type=g1, m_self=m1, m_other=m0,
+                N_rank2=t["N_rank2_1"] or 0,
+                delta_a=t["delta1_a"],
+                N_bif=t["N_bif"] or 0,
+                T_bif_self=T1,
+                R_bif=R_bif,
+            )
+
+            # Boundary B: node 1 active (g'=g'*), node 0 free (g=0)
+            # Compute B₀ for the free node 0
+            B_B = _compute_B(
+                gauge_type=g0, m_self=m0, m_other=m1,
+                N_rank2=t["N_rank2_0"] or 0,
+                delta_a=t["delta0_a"],
+                N_bif=t["N_bif"] or 0,
+                T_bif_self=T0,
+                R_bif=R_bif,
+            )
+
+            con.execute(
+                "UPDATE theory SET B_boundary_A=?, B_boundary_B=? WHERE theory_id=?",
+                (B_A, B_B, t["theory_id"]),
+            )
+            n_ok += 1
+
+    con.close()
+    print(f"Boundary analysis complete: {n_ok} theories computed, {n_skip} skipped (no R_bif).")
+
+    # Summary
+    con = sqlite3.connect(args.db)
+    con.row_factory = sqlite3.Row
+    stats = con.execute("""
+        SELECT COUNT(*) total,
+               SUM(CASE WHEN B_boundary_A < 0 AND B_boundary_B < 0 THEN 1 ELSE 0 END) both_neg,
+               SUM(CASE WHEN B_boundary_A < 0 THEN 1 ELSE 0 END) A_neg,
+               SUM(CASE WHEN B_boundary_B < 0 THEN 1 ELSE 0 END) B_neg,
+               SUM(CASE WHEN B_boundary_A >= 0 AND B_boundary_B >= 0 THEN 1 ELSE 0 END) both_pos
+        FROM theory WHERE B_boundary_A IS NOT NULL
+    """).fetchone()
+    print(f"  B_A < 0 (node 1 driven to interact): {stats['A_neg']}")
+    print(f"  B_B < 0 (node 0 driven to interact): {stats['B_neg']}")
+    print(f"  Both B < 0 (non-trivial IR FP expected): {stats['both_neg']}")
+    print(f"  Both B >= 0 (free IR FP stable): {stats['both_pos']}")
+    con.close()
+
+
 def cmd_fix_below_window(args: argparse.Namespace) -> None:
     """Consolidate below-window classes: one per (gauge_pair, rank)."""
     con = sqlite3.connect(args.db)
@@ -1535,6 +1673,10 @@ def main() -> None:
     # stats
     sub.add_parser("stats", help="Database summary and build metadata")
 
+    # boundary-analysis
+    sub.add_parser("boundary-analysis",
+                   help="Compute B = Tr[R G²] at both boundary fixed points")
+
     # fix-below-window
     sub.add_parser("fix-below-window",
                    help="Consolidate below-window classes: one per (gauge_pair, rank)")
@@ -1570,6 +1712,7 @@ def main() -> None:
         "show":         cmd_show,
         "search":       cmd_search,
         "stats":        cmd_stats,
+        "boundary-analysis": cmd_boundary_analysis,
         "fix-below-window": cmd_fix_below_window,
         "morph-build":  cmd_morph_build,
         "morphologies": cmd_morphologies,
