@@ -1340,6 +1340,12 @@ def cmd_stats(args: argparse.Namespace) -> None:
 
 # ── Boundary analysis (Module 4) ─────────────────────────────────────────────
 
+# dim_fund coefficient per unit N_base: SU(m*N)→m, SO(m*N)→m, Sp(m*N)→2m
+_FUND_DIM_COEFF = {"SU": 1, "SO": 1, "Sp": 2}
+# T(fund) exact: SU→1/2, SO→1, Sp→1/2
+_FUND_T = {"SU": Fraction(1, 2), "SO": Fraction(1), "Sp": Fraction(1, 2)}
+
+
 def _parse_R_bif(R_str: str | None) -> float | None:
     """Extract R_bif from R_numerical or R_exact string.
 
@@ -1358,7 +1364,6 @@ def _parse_R_bif(R_str: str | None) -> float | None:
     if m:
         expr = m.group(1).strip()
         try:
-            # Handle √ notation: replace √(X) with X**0.5
             expr_py = re.sub(r'√\(([^)]+)\)', r'(\1)**0.5', expr)
             return float(eval(expr_py))
         except Exception:
@@ -1366,43 +1371,105 @@ def _parse_R_bif(R_str: str | None) -> float | None:
     return None
 
 
-def _compute_B(gauge_type: str, m_self: int, m_other: int,
-               N_rank2: float, delta_a: int | None,
-               N_bif: int, T_bif_self: Fraction,
-               R_bif: float) -> float:
-    """Compute B/N at a boundary where this node is free.
+def _parse_nf_bound(s: str) -> tuple[Fraction, Fraction] | None:
+    """Parse nf_bound string → (alpha, gamma) or None if unparseable.
 
-    B/N = T_adj_lead * m_self
-        + N_rank2 * m_self * (2/3 - 1)
-        + |delta_a|/2 * (2/3 - 1)          [SU only]
-        + N_bif * T_bif_self * m_other * (R_bif - 1)
+    Formats: "N_f ≤ 2*N - 1", "N_f ≤ 5/2*N + 5/2", "N_f ≤ 1*N",
+             "N_f ≤ 9", "N_f = 0 (conformal)", "—"
     """
-    B = float(Fraction(1) * m_self)   # T_adj_lead = 1 for all types
-    B += N_rank2 * m_self * (2/3 - 1)
-    if gauge_type == "SU" and delta_a is not None and delta_a != 0:
-        B += abs(delta_a) / 2 * (2/3 - 1)
-    B += N_bif * float(T_bif_self) * m_other * (R_bif - 1)
-    return B
+    if not s or s == "—":
+        return None
+    if "conformal" in s:
+        return Fraction(0), Fraction(0)
+    m = re.match(r'N_f\s*≤\s*(.+)', s)
+    if not m:
+        return None
+    rhs = m.group(1).strip()
+    # Parse alpha*N ± gamma
+    m2 = re.match(r'([0-9/]+)\*N\s*([+-])\s*([0-9/]+)$', rhs)
+    if m2:
+        alpha = Fraction(m2.group(1))
+        gamma = Fraction(m2.group(3))
+        if m2.group(2) == '-':
+            gamma = -gamma
+        return alpha, gamma
+    # alpha*N only
+    m2 = re.match(r'([0-9/]+)\*N$', rhs)
+    if m2:
+        return Fraction(m2.group(1)), Fraction(0)
+    # gamma only (no N term)
+    m2 = re.match(r'([0-9/]+)$', rhs)
+    if m2:
+        return Fraction(0), Fraction(m2.group(1))
+    return None
+
+
+def _nf_bound_str_corrected(alpha: float, gamma: Fraction) -> str:
+    """Format corrected N_f bound. Alpha may be float (from R_bif correction)."""
+    # Try to express alpha as a nice fraction
+    alpha_frac = Fraction(alpha).limit_denominator(100)
+    if abs(float(alpha_frac) - alpha) < 1e-8:
+        a = alpha_frac
+    else:
+        # Fall back to decimal
+        return f"N_f ≤ {alpha:.4f}*N" if gamma == 0 else (
+            f"N_f ≤ {alpha:.4f}*N {'+' if gamma > 0 else '-'} {abs(gamma)}")
+
+    if a == 0 and gamma == 0:
+        return "N_f = 0 (conformal)"
+    if a == 0:
+        return f"N_f ≤ {gamma}"
+    if gamma == 0:
+        return f"N_f ≤ {a}*N"
+    sign = "+" if gamma > 0 else "-"
+    return f"N_f ≤ {a}*N {sign} {abs(gamma)}"
+
+
+def _corrected_nf_bound(nf_str: str, g_free: str, g_active: str,
+                         m_active: int, N_bif: int,
+                         R_bif: float) -> str | None:
+    """Compute corrected N_f bound at a boundary where g_free is decoupled.
+
+    The standard nf_bound uses R = 2/3 for bifundamentals.
+    The corrected bound uses R = R_bif from a-maximization.
+
+    Correction to b₀: Δ = T_bif_total * (3*R_bif - 2)
+    where T_bif_total(N) = N_bif * T_fund(g_free) * dim_fund(g_active, m_active*N).
+    This is linear in N with zero intercept, so only alpha changes.
+
+    Δ_alpha = N_bif * T_fund(g_free) * dim_fund_coeff(g_active) * m_active * (3*R_bif - 2)
+    """
+    parsed = _parse_nf_bound(nf_str)
+    if parsed is None:
+        return None
+    alpha, gamma = parsed
+    delta_alpha = (N_bif * _FUND_T[g_free]
+                   * _FUND_DIM_COEFF[g_active] * m_active
+                   * (3 * R_bif - 2))
+    new_alpha = float(alpha) + float(delta_alpha)
+    return _nf_bound_str_corrected(new_alpha, gamma)
 
 
 def cmd_boundary_analysis(args: argparse.Namespace) -> None:
-    """Compute B = Tr[R G²] at both boundary fixed points for each theory."""
+    """Compute corrected N_f bounds at both boundary fixed points."""
     con = sqlite3.connect(args.db)
     con.row_factory = sqlite3.Row
 
-    # Add columns if they don't exist
-    for col in ("B_boundary_A", "B_boundary_B"):
+    # Add TEXT columns if they don't exist
+    for col in ("B_cond_A", "B_cond_B"):
         try:
-            con.execute(f"ALTER TABLE theory ADD COLUMN {col} REAL")
+            con.execute(f"ALTER TABLE theory ADD COLUMN {col} TEXT")
         except sqlite3.OperationalError:
             pass  # already exists
+
+    # Drop old REAL columns from previous wrong implementation if present
+    # (SQLite doesn't support DROP COLUMN before 3.35, just leave them)
 
     # Fetch all non-below-window theories with R-charges
     theories = con.execute("""
         SELECT t.theory_id, t.gauge_pair, t.gauge0, t.gauge1,
-               t.rank0_mult, t.rank1_mult,
-               t.N_rank2_0, t.N_rank2_1, t.N_bif,
-               t.delta0_a, t.delta1_a,
+               t.rank0_mult, t.rank1_mult, t.N_bif,
+               t.nf_bound0, t.nf_bound1,
                t.R_numerical, uc.R_exact, uc.a_over_N2
         FROM theory t
         JOIN universality_class uc ON t.class_id = uc.class_id
@@ -1414,7 +1481,6 @@ def cmd_boundary_analysis(args: argparse.Namespace) -> None:
 
     with con:
         for t in theories:
-            # Parse R_bif: prefer R_numerical (per theory), fall back to R_exact (per class)
             R_bif = _parse_R_bif(t["R_numerical"])
             if R_bif is None:
                 R_bif = _parse_R_bif(t["R_exact"])
@@ -1422,57 +1488,52 @@ def cmd_boundary_analysis(args: argparse.Namespace) -> None:
                 n_skip += 1
                 continue
 
-            gp = t["gauge_pair"]
             g0, g1 = t["gauge0"], t["gauge1"]
             m0, m1 = t["rank0_mult"], t["rank1_mult"]
-            T0, T1 = T_BIFUND_LEAD[gp]
+            N_bif = t["N_bif"] or 0
 
             # Boundary A: node 0 active (g=g*), node 1 free (g'=0)
-            # Compute B₁ for the free node 1
-            B_A = _compute_B(
-                gauge_type=g1, m_self=m1, m_other=m0,
-                N_rank2=t["N_rank2_1"] or 0,
-                delta_a=t["delta1_a"],
-                N_bif=t["N_bif"] or 0,
-                T_bif_self=T1,
-                R_bif=R_bif,
+            # Corrected nf_bound for node 1 (free)
+            cond_A = _corrected_nf_bound(
+                t["nf_bound1"], g_free=g1, g_active=g0,
+                m_active=m0, N_bif=N_bif, R_bif=R_bif,
             )
 
             # Boundary B: node 1 active (g'=g'*), node 0 free (g=0)
-            # Compute B₀ for the free node 0
-            B_B = _compute_B(
-                gauge_type=g0, m_self=m0, m_other=m1,
-                N_rank2=t["N_rank2_0"] or 0,
-                delta_a=t["delta0_a"],
-                N_bif=t["N_bif"] or 0,
-                T_bif_self=T0,
-                R_bif=R_bif,
+            # Corrected nf_bound for node 0 (free)
+            cond_B = _corrected_nf_bound(
+                t["nf_bound0"], g_free=g0, g_active=g1,
+                m_active=m1, N_bif=N_bif, R_bif=R_bif,
             )
 
             con.execute(
-                "UPDATE theory SET B_boundary_A=?, B_boundary_B=? WHERE theory_id=?",
-                (B_A, B_B, t["theory_id"]),
+                "UPDATE theory SET B_cond_A=?, B_cond_B=? WHERE theory_id=?",
+                (cond_A, cond_B, t["theory_id"]),
             )
             n_ok += 1
 
     con.close()
     print(f"Boundary analysis complete: {n_ok} theories computed, {n_skip} skipped (no R_bif).")
 
-    # Summary
+    # Summary: compare original vs corrected bounds
     con = sqlite3.connect(args.db)
     con.row_factory = sqlite3.Row
-    stats = con.execute("""
-        SELECT COUNT(*) total,
-               SUM(CASE WHEN B_boundary_A < 0 AND B_boundary_B < 0 THEN 1 ELSE 0 END) both_neg,
-               SUM(CASE WHEN B_boundary_A < 0 THEN 1 ELSE 0 END) A_neg,
-               SUM(CASE WHEN B_boundary_B < 0 THEN 1 ELSE 0 END) B_neg,
-               SUM(CASE WHEN B_boundary_A >= 0 AND B_boundary_B >= 0 THEN 1 ELSE 0 END) both_pos
-        FROM theory WHERE B_boundary_A IS NOT NULL
-    """).fetchone()
-    print(f"  B_A < 0 (node 1 driven to interact): {stats['A_neg']}")
-    print(f"  B_B < 0 (node 0 driven to interact): {stats['B_neg']}")
-    print(f"  Both B < 0 (non-trivial IR FP expected): {stats['both_neg']}")
-    print(f"  Both B >= 0 (free IR FP stable): {stats['both_pos']}")
+    samples = con.execute("""
+        SELECT theory_id, gauge_pair, nf_bound0, nf_bound1,
+               B_cond_A, B_cond_B
+        FROM theory
+        WHERE B_cond_A IS NOT NULL
+        ORDER BY gauge_pair, theory_id
+        LIMIT 10
+    """).fetchall()
+    print("\n  Sample results (original nf_bound → corrected at boundary):")
+    print(f"  {'ID':>5}  {'Pair':<7}  {'nf_bound1':<20}  {'→ B_cond_A':<20}  "
+          f"{'nf_bound0':<20}  {'→ B_cond_B':<20}")
+    print(f"  {'─'*100}")
+    for s in samples:
+        print(f"  {s['theory_id']:>5}  {s['gauge_pair']:<7}  "
+              f"{s['nf_bound1']:<20}  {s['B_cond_A'] or '—':<20}  "
+              f"{s['nf_bound0']:<20}  {s['B_cond_B'] or '—':<20}")
     con.close()
 
 
