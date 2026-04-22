@@ -1,0 +1,141 @@
+% ══════════════════════════════════════════════════════════════════════
+% § 3   Classification
+% ══════════════════════════════════════════════════════════════════════
+
+\subsection{Enumeration pipeline}
+\label{sec:class-enumeration}
+
+The two-node equal-rank sector is enumerated as follows.  We fix the
+bifundamental multiplicity vector
+\mbox{$k=(k_{++},k_{--},k_{+-},k_{-+})$} with total
+$k_{\text{tot}}\le 4$ and, for each choice, scan over the allowed
+tensor multiplicity tuples
+$(n_{\adj}^{(a)},n_{S}^{(a)},n_{\bar S}^{(a)},n_{A}^{(a)},n_{\bar A}^{(a)})$
+at each node~$a$ subject to
+\begin{enumerate}\setlength{\itemsep}{2pt}
+  \item the leading-$N$ asymptotic-freedom condition
+    \eqref{eq:AF-lead};
+  \item the cubic-anomaly cancellation
+    \eqref{eq:anomaly} at leading order in~$N$, with
+    $\Nf^{(a),\pm}=0$ (non-Veneziano limit); and
+  \item discrete symmetries interchanging the two nodes, node-0/1
+    reflections, and (anti-)bifundamental flips, whose quotient
+    defines the universality class.
+\end{enumerate}
+Each resulting representative is then subjected to symbolic
+$a$-maximisation: the R-charge manifold is parameterised subject to the
+gauge-anomaly-free constraints~\eqref{eq:anomaly-free}, the $a$-function
+\eqref{eq:a-trial} is extremised symbolically, and only critical points
+with a negative-definite Hessian are retained.  Theories sharing the
+same $a/N^{2}$ to high precision are grouped into a universality
+class.\footnote{Classes are labelled by their position in the global
+$135$-class table of the full database; we inherit the original
+indexing without relabelling.}
+
+\subsection{The seven non-Veneziano equal-rank classes}
+\label{sec:class-seven}
+
+\begin{table}[h]
+  \centering
+  \small
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{cllllcr}
+    \toprule
+    Class & Matter at node 0 & Matter at node 1 &
+    Bifundamentals & $a/N^{2}$ & $a=c$? & $\#$\,theories\\
+    \midrule
+    $1$  & $\bar A$          & $\bar A$         & $1\times(\fund,\fund)$                & $0$                         & deg. & $6$ \\
+    $2$  & $\bar A$          & $S+2\bar A$      & $1\times(\fund,\fund)$                & $-\tfrac{297}{32}+\tfrac{135\sqrt 5}{32}$        & yes & $32$ \\
+    $4$  & $2A+3\bar A$      & $\bar A$         & $1\times(\fund,\fund)$                & $-\tfrac{229}{32}+\tfrac{65\sqrt{13}}{32}$       & yes & $12$ \\
+    $16$ & $A+2\bar A$       & $\bar A$         & $2\times(\fund,\fund)+(\afund,\afund)$   & $\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}$             & yes & $8$ \\
+    $21$ & $A+\bar A$        & $2\,\adj$        & $(\fund,\fund)+(\afund,\afund)$          & $-\tfrac{7}{2}+\tfrac{5\sqrt{10}}{4}$            & yes & $77$ \\
+    $23$ & $A+2\bar A$       & $2A+3\bar A$     & $1\times(\fund,\fund)$                & $\tfrac{30159}{86528}+\tfrac{2295\sqrt{17}}{86528}$ & yes & $48$ \\
+    $44$ & $2A+3\bar A$      & $2A+3\bar A$     & $1\times(\fund,\fund)$                & $\tfrac{1}{2}$                                    & free & $81$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{The seven non-Veneziano $\SU(N)\times\SU(N)$ universality
+    classes.  Matter columns list the node content in the notation of
+    Table~\ref{tab:SU-reps}.  The number of equivalent theories in
+    each class is shown in the rightmost column.  Classes
+    $1$ and $44$ are degenerate: their a-maximum is at the free
+    field value $R=2/3$ for all bifundamentals, corresponding to
+    non-interacting fixed points.}
+  \label{tab:seven-classes}
+\end{table}
+
+The five interacting classes in Table~\ref{tab:seven-classes} share
+three salient features:
+
+\begin{itemize}
+  \item \textbf{$a=c$ to leading order.}  In each case the central
+    charges coincide to leading order in $1/N$, $a/c=1$.  This is a
+    strong signature: in general two-coupling SCFTs allow $a\neq c$
+    at $\mathcal O(1)$ in $1/N$, but the extremal R-symmetry of these
+    seven classes lies in a subgroup of the flavour symmetry that
+    enforces $\Tr R^{3}=\Tr R$ at leading $N$.
+  \item \textbf{Exact R-charges with square-root irrationals.}  The
+    extremisation problem at each node reduces to a low-dimensional
+    polynomial system in the node R-charges, whose solutions involve
+    square roots of small integers ($\sqrt 5,\sqrt{10},\sqrt{13},
+    \sqrt{17}$).
+  \item \textbf{Positivity of all gauge-invariant operator
+    dimensions.}  We verify that the a-maximising R-charges satisfy
+    the unitarity bound $\Delta(\mathcal O)\ge 1$ for every
+    gauge-invariant operator built from the matter content.  No
+    accidental symmetries are required.
+\end{itemize}
+
+\paragraph{Degenerate classes.}  Class $1$ has $a/N^{2}=0$ with all
+bifundamental R-charges vanishing; the a-maximum is at the corner of
+the allowed region and the theory is free in the $1/N$ expansion (and
+not unitary as an SCFT).  Class $44$ returns $R=2/3$ for every
+bifundamental, giving the free-field value of $a/N^{2}=1/2$.  Both
+degenerate classes are included in our tables for completeness but are
+excluded from the RG-phase analysis below.
+
+\subsection{Representative matter and R-charges}
+\label{sec:class-representative}
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{cl}
+    \toprule
+    Class & R-charges of the representative \\
+    \midrule
+    $2$  & $R_{\bar A}^{(0)}=-\tfrac{7}{2}+\tfrac{3\sqrt 5}{2},\;
+            R_{S}^{(1)}=R_{\bar A}^{(1)}=-\tfrac{1}{2}+\tfrac{\sqrt 5}{2},\;
+            R_{\text{bif}}=\tfrac{7}{2}-\tfrac{3\sqrt 5}{2}$\\[2pt]
+    $4$  & $R_{A}^{(0)}=R_{\bar A}^{(0)}=\tfrac{1}{6}+\tfrac{\sqrt{13}}{6},\;
+            R_{\bar A}^{(1)}=-\tfrac{19}{6}+\tfrac{5\sqrt{13}}{6},\;
+            R_{\text{bif}}=\tfrac{19}{6}-\tfrac{5\sqrt{13}}{6}$\\[2pt]
+    $16$ & $R_{A}^{(0)}=R_{\bar A}^{(0)}=\tfrac{7}{6}-\tfrac{\sqrt 5}{6},\;
+            R_{\bar A}^{(1)}=\tfrac{3}{2}-\tfrac{\sqrt 5}{2},\;
+            R_{\text{bif}}=\tfrac{1}{6}+\tfrac{\sqrt 5}{6}$\\[2pt]
+    $21$ & $R_{\adj}^{(0)}=-\tfrac{5}{3}+\tfrac{2\sqrt{10}}{3},\;
+            R_{\adj}^{(1)}=-\tfrac{1}{3}+\tfrac{\sqrt{10}}{3},\;
+            R_{\text{bif}}=\tfrac{8}{3}-\tfrac{2\sqrt{10}}{3}$\\[2pt]
+    $23$ & $R_{A}^{(0)}=R_{\bar A}^{(0)}=\tfrac{29}{104}+\tfrac{5\sqrt{17}}{104},\;
+            R_{A}^{(1)}=R_{\bar A}^{(1)}=\tfrac{59}{104}+\tfrac{3\sqrt{17}}{104},\;
+            R_{\text{bif}}=\tfrac{121}{104}-\tfrac{15\sqrt{17}}{104}$\\
+    \bottomrule
+  \end{tabular}
+  \caption{Exact R-charges of a representative theory in each of the
+    five interacting non-Veneziano equal-rank classes.  For classes
+    with multiple bifundamentals the R-charges are all equal at the
+    symmetric critical point.}
+  \label{tab:R-charges}
+\end{table}
+
+For instance, class $16$ has the bifundamental structure
+$2\,(\fund,\fund)+(\afund,\afund)$ with tensors $A+2\bar A$ on node $0$
+and $\bar A$ on node $1$.  Its a-maximum is
+\begin{equation}
+  a/N^{2}\bigl|_{16}\;=\;\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}
+  \;\simeq\;0.4431\,,
+  \qquad
+  R_{\text{bif}}\bigl|_{16}\;=\;\tfrac{1+\sqrt 5}{6}\;\simeq\;0.539\,,
+\end{equation}
+with the tensor and anti-tensor R-charges at node~$0$ degenerate,
+$R_{A}^{(0)}=R_{\bar A}^{(0)}=(7-\sqrt 5)/6\simeq 0.794$.  This class
+will play a central role in Section~\ref{sec:phases}.

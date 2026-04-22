@@ -1,0 +1,46 @@
+% Inline TikZ: Figure 5 topology (both axes IR-unstable, interior SCFT attracts)
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}[
+    scale=1.4,
+    flow/.style={thick, -{Stealth[length=3mm]},
+      postaction={decorate},
+      decoration={markings, mark=at position 0.55 with
+        {\arrow{Stealth[length=2.5mm]}}}},
+    fp/.style={circle, draw=black, fill=white, inner sep=1.6pt},
+    fpIR/.style={circle, draw=red!70!black, fill=red!70!black, inner sep=2pt},
+    fpUV/.style={circle, draw=blue!70!black, fill=blue!70!black, inner sep=2pt},
+  ]
+    % axes
+    \draw[->, thick] (-0.3,0) -- (5.2,0) node[right] {$g_{0}$};
+    \draw[->, thick] (0,-0.3) -- (0,4.5) node[above] {$g_{1}$};
+    % fixed points
+    \node[fpUV, label={below left:UV: $(0,0)$}] (UV) at (0,0) {};
+    \node[fp,   label={left:$(0,\,g_{1}^{\star})$}]      (A1) at (0,3.2) {};
+    \node[fp,   label={below:$(g_{0}^{\star},\,0)$}]     (A0) at (4.0,0) {};
+    \node[fpIR, label={[align=left]above right:{\textbf{IR SCFT $C$}\\$(g_{0}^{\star\star},g_{1}^{\star\star})$}}]
+          (IR) at (2.8,2.2) {};
+    % flows from UV
+    \draw[flow, blue!60!black] (UV) -- (A1);
+    \draw[flow, blue!60!black] (UV) -- (A0);
+    % off-axis flows away from boundary SCFTs
+    \draw[flow, red!70!black] (A1) to[out=-20, in=165] (IR);
+    \draw[flow, red!70!black] (A0) to[out=110, in=-75] (IR);
+    % interior flow from UV
+    \draw[flow, violet!70!black] (UV) to[out=50, in=225] (IR);
+    % generic trajectories
+    \draw[flow, gray!70, dashed] (0.6,0.2) to[out=60, in=210] (IR);
+    \draw[flow, gray!70, dashed] (0.2,0.6) to[out=30, in=195] (IR);
+    \draw[flow, gray!70, dashed] (1.2,0.1) to[out=80, in=240] (IR);
+    \draw[flow, gray!70, dashed] (0.1,1.2) to[out=10, in=175] (IR);
+    % labels
+    \node[red!70!black]  at (0.95, 3.40) {\small $\Bcond_{A}<0$};
+    \node[red!70!black]  at (4.05, 0.48) {\small $\Bcond_{B}<0$};
+  \end{tikzpicture}
+  \caption{Topology (i): $\Bcond_{A},\Bcond_{B}<0$.  Both axes release
+    the flow into the interior, and the two-coupling SCFT $C$ at
+    $(g_{0}^{\star\star},g_{1}^{\star\star})$ is the global IR
+    attractor.  Realised by class~$2$ in the $\SU(N)\times\SU(N)$
+    non-Veneziano landscape.}
+  \label{fig:fig5}
+\end{figure}

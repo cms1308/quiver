@@ -1,0 +1,120 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.markings, positioning}
+\usepackage{booktabs, array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{authblk}
+\usepackage{bm}
+\usepackage{siunitx}
+\usepackage{caption}
+\hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=green!50!black, urlcolor=blue!60!black}
+
+% ── Physics macros ──────────────────────────────────────────────────────
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\U}{\mathrm{U}}
+\newcommand{\SU}{\mathrm{SU}}
+\newcommand{\SO}{\mathrm{SO}}
+\newcommand{\Sp}{\mathrm{Sp}}
+\newcommand{\USp}{\mathrm{USp}}
+\newcommand{\adj}{\mathrm{adj}}
+\newcommand{\fund}{\square}
+\newcommand{\afund}{\bar{\square}}
+\newcommand{\Rch}{R}
+\newcommand{\abar}{\bar{a}}
+\newcommand{\Bcond}{\mathcal{B}}
+\newcommand{\Nf}{N_{\!f}}
+\newcommand{\Nc}{N}
+
+% ── Title ──────────────────────────────────────────────────────────────
+\title{\bfseries IR fixed points and RG phases of $\SU(N)\times\SU(N)$\\
+  quiver gauge theories in the non-Veneziano large-$N$ limit}
+\author{%
+  % AUTHOR PLACEHOLDER
+}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+% ABSTRACT PLACEHOLDER
+We classify four-dimensional $\N=1$ asymptotically free $\SU(N)\times\SU(N)$
+quiver gauge theories admitting a non-trivial large-$N$ limit without Veneziano
+scaling of fundamental matter, and analyse the superconformal fixed points and
+renormalisation-group flow phases that arise in the two-coupling space.
+Seven universality classes are found, each saturating $a=c$ to leading order
+in $1/N$. Applying the boundary-analysis prescription of
+Intriligator--Wecht (\texttt{hep-th/0502049}) to both decoupled single-node
+fixed points, we classify each class by the sign pattern of the boundary
+functions $\Bcond$ and compute the flow topology in the $(g_{0},g_{1})$-plane.
+As our main result, we exhibit an explicit realisation of the
+``both boundaries IR-stable'' topology (Figure~6 of \cite{IW2005}), which
+those authors noted had no known examples: deforming class~16 by adding $\Nf$
+fundamentals on a single node in the window
+$0.427\,N-1<\Nf<N-1$ yields precisely this phase.
+\end{abstract}
+
+\tableofcontents
+\bigskip
+\hrule
+\bigskip
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Introduction}
+\label{sec:intro}
+
+% INTRO PLACEHOLDER
+\input{sections/01-intro.tex}
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Setup: two-node quivers in the non-Veneziano large-$N$ limit}
+\label{sec:setup}
+
+\input{sections/02-setup.tex}
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Classification via \texorpdfstring{$a$}{a}-maximisation}
+\label{sec:classification}
+
+\input{sections/03-classification.tex}
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Boundary analysis}
+\label{sec:boundary}
+
+\input{sections/04-boundary.tex}
+
+% ══════════════════════════════════════════════════════════════════════
+\section{RG flow phases and a realisation of the Intriligator--Wecht
+  Figure~6 topology}
+\label{sec:phases}
+
+\input{sections/05-phases.tex}
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Discussion}
+\label{sec:discussion}
+
+\input{sections/06-discussion.tex}
+
+% ══════════════════════════════════════════════════════════════════════
+\appendix
+\section{Mixed-rank $\SU(m_{0}N)\times\SU(m_{1}N)$ classes}
+\label{app:mixed}
+
+\input{sections/A-mixed-rank.tex}
+
+% ══════════════════════════════════════════════════════════════════════
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

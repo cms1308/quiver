@@ -1,0 +1,84 @@
+% ══════════════════════════════════════════════════════════════════════
+% § 1   Introduction
+% ══════════════════════════════════════════════════════════════════════
+
+Four-dimensional $\N=1$ gauge theories with multiple gauge group factors
+often flow in the infra-red to superconformal field theories with a
+continuous family of exactly marginal couplings, parameterised by the
+independent ratios of the gauge couplings of the individual factors.  In
+two-coupling systems one may then ask how the RG flow in the
+$(g_{0},g_{1})$ plane organises itself between the Gaussian fixed point
+in the ultra-violet and the available infra-red fixed points --- both the
+interacting interior fixed point (when it exists) and the
+``boundary'' fixed points associated with decoupling one of the two
+gauge groups.
+
+A systematic answer at large $N$ was given by Intriligator and
+Wecht~\cite{IW2005}: at each boundary one $a$-maximises the decoupled
+sub-quiver to obtain R-charges, and asks whether the second gauge
+coupling is relevant or irrelevant at that fixed point.  This criterion
+is encoded in the anomalous-dimension combination
+\begin{equation}
+  \Bcond_{a}\;=\;\Tr\!\bigl[R^{(a)}\,G_{a}^{2}\bigr]
+  \label{eq:Bcond-def-intro}
+\end{equation}
+computed at the opposite boundary's $a$-max point, whose sign
+determines whether the axis is IR-unstable (and hence releases the flow
+into the interior) or IR-stable (and hence traps it).  The authors of
+\cite{IW2005} identified two representative topologies, reproduced as
+Figures~5 and 6 of that paper, corresponding respectively to both
+boundaries being IR-unstable (and the flow ending at an interior SCFT
+$C$) and both boundaries being IR-stable (so that generic flows are
+captured by the single-node axis fixed points).  The latter topology
+would require a separatrix between two basins of attraction, and
+\cite{IW2005} remarked that they did not find examples of it.
+
+\medskip
+In the present paper we close this gap with a systematic scan.  We
+classify \emph{all} four-dimensional $\N=1$ asymptotically free
+$\SU(N)\times\SU(N)$ quiver gauge theories with only bifundamental
+inter-node matter and adjoint/rank-two tensor intra-node matter,
+admitting a large-$N$ limit \emph{without} Veneziano scaling of
+fundamental matter (i.e.\ with no fundamentals whose number grows
+linearly with $N$).  Seven universality classes emerge, each having
+$a=c$ to leading order in $1/N$ and each falling into one of three RG
+phases depending on the sign pattern of its two boundary functions
+$(\Bcond_{A},\Bcond_{B})$:
+
+\begin{itemize}
+  \item Both IR-unstable --- interior SCFT $C$ is the global IR
+        attractor.  This is the phase of \cite[Fig.~5]{IW2005}.
+  \item Mixed --- one axis attracts, the other repels.  Generic flows
+        end on the attracting axis SCFT; $C$ is either a saddle or a
+        non-global attractor.
+  \item Both IR-stable --- the axes trap every generic flow.  This is
+        the phase of \cite[Fig.~6]{IW2005}, which had not previously
+        been explicitly realised.
+\end{itemize}
+
+Our main result is that the last phase is accessible within the
+classified database by a single-parameter deformation:
+deforming the eight-theory class~16 (with matter content
+$A+2\bar A$ on node~$0$, $\bar A$ on node~$1$, and three bifundamentals)
+by adding $\Nf$ fundamentals on node~$1$ in the window
+\begin{equation}
+  0.427\,N-1\;<\;\Nf\;<\;N-1\,,
+  \label{eq:main-window}
+\end{equation}
+we find $b_{0}^{(0,1)}>0$ (both nodes UV-asymptotically free) while
+$\Bcond_{A}$ and $\Bcond_{B}$ are \emph{both} negative, i.e.\ both axis
+fixed points are IR-stable, in precise correspondence with
+\cite[Fig.~6]{IW2005}.
+
+\medskip
+The rest of the paper is organised as follows.  Section~\ref{sec:setup}
+fixes conventions and spells out the large-$N$ and non-Veneziano limits.
+Section~\ref{sec:classification} describes the enumeration and
+$a$-maximisation pipeline and reports the seven equal-rank universality
+classes.  Section~\ref{sec:boundary} reviews the boundary prescription
+\cite{IW2005} and tabulates the corrected asymptotic-freedom budget
+$\Bcond$ for each class.  Section~\ref{sec:phases} classifies each
+class's RG flow topology and presents the Figure~6 realisation.
+Section~\ref{sec:discussion} discusses implications and open
+directions; Appendix~\ref{app:mixed} collects the mixed-rank
+$\SU(m_{0}N)\times\SU(m_{1}N)$ data.

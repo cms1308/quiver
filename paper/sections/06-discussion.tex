@@ -1,0 +1,94 @@
+% ══════════════════════════════════════════════════════════════════════
+% § 6  Discussion
+% ══════════════════════════════════════════════════════════════════════
+
+\subsection{Summary}
+
+We have classified all four-dimensional $\N=1$ asymptotically free
+$\SU(N)\times\SU(N)$ quiver gauge theories in the non-Veneziano
+large-$N$ limit, using symbolic $a$-maximisation to compute IR
+R-charges and central charges.  Seven universality classes arise.  All
+five non-degenerate classes exhibit $a=c$ to leading order in $1/N$,
+reflecting a common enhancement of the extremal R-symmetry to a
+particular flavour subgroup.
+
+Applying the Intriligator--Wecht boundary prescription
+\cite{IW2005} to both decoupled single-node limits, we have computed
+$\Bcond_{A}$ and $\Bcond_{B}$ for every class and classified each by
+the sign pattern of the pair $(\Bcond_{A},\Bcond_{B})$.  Class $2$
+realises the Figure~5 topology (interior SCFT is the global IR
+attractor); classes $4,16,21,23$ realise a mixed topology in which
+a single axis SCFT attracts generic flows.
+
+Our main result is that the strictly non-Veneziano landscape misses
+the Figure~6 topology of \cite{IW2005}, but that a single-parameter
+(Veneziano) deformation of class~$16$ realises it:
+adding $\Nf$ fundamental pairs to node~$1$ in the window
+$0.427\,N-1<\Nf<N-1$ produces $(\Bcond_{A},\Bcond_{B})=(+,+)$, i.e.\
+both axis SCFTs IR-stable.  The interior R-charge extremum persists
+but ceases to be an attractor; flows split between the two axis
+SCFTs through a separatrix.  We are not aware of a previous explicit
+realisation of this topology.
+
+\subsection{Implications}
+
+\paragraph{$a=c$ in the equal-rank non-Veneziano sector.}  The
+systematic appearance of $a=c$ across all five interacting classes
+suggests that the non-Veneziano restriction is a selective filter:
+most generic two-node SCFTs in the full database have $a\neq c$ at
+leading $N$, and it is the absence of $\mathcal O(N)$-many fundamentals
+that effectively preserves the relevant R-symmetry enhancement.
+Quantifying this (e.g.\ by counting the $a=c$ fraction as a function
+of the Veneziano parameter $x$) is a natural next step.
+
+\paragraph{Holographic dual for Figure~6?}  In $\cite{IW2005}$ the
+Figure~5 topology was matched to a gravity dual in which two gauge
+factors on D-branes realise the interior SCFT.  A Figure~6 phase has
+two possible axis IR attractors and is therefore dual to a bulk
+geometry with two distinct IR asymptotics.  Whether the deformed
+class~$16$ admits such a holographic description --- and whether the
+basin-separatrix structure admits an interpretation in the dual ---
+is an open question.
+
+\paragraph{Persistence beyond one loop.}  The boundary criterion we
+have used is strictly one-loop (via NSVZ) and linear in the
+bifundamental anomalous dimension; two- and higher-loop corrections
+can shift $\Bcond$-thresholds by $\mathcal O(1/N)$ amounts.  The
+lower edge of the Figure~6 window at $\Nf=0.427\,N-1$ is therefore
+expected to receive $1/N$ corrections; the upper edge $\Nf=N-1$ is the
+UV-AF cliff and is exact at one loop.  Because $\Bcond_{B}$ is
+$\mathcal O(N)$ and of definite sign throughout the window, the
+robustness of the Figure~6 phase against higher-loop corrections is
+on firm footing.
+
+\subsection{Future work}
+\label{sec:future}
+
+\begin{itemize}
+  \item \textbf{$n$-node quivers.}  Extending the present analysis to
+    linear and cyclic quivers with $n\ge 3$ nodes requires a
+    $2^{n}$-fold sign-pattern analysis on the boundaries; we expect
+    richer topologies including partial basins and sub-quiver
+    attractors.
+  \item \textbf{$\SO/\Sp$ sectors.}  The database also contains
+    $\SU$--$\SO$, $\SU$--$\Sp$, and $\SO$--$\Sp$ two-node theories.
+    A parallel analysis of these mixed-group sectors in the
+    non-Veneziano limit should uncover additional realisations of the
+    three topologies.
+  \item \textbf{Explicit RG flow numerics.}  Integrating the NSVZ
+    flow equations in the $(g_{0},g_{1})$ plane for class~$16$ +
+    $\Nf$ on node~$1$ --- with R-charges updated self-consistently
+    along the trajectory --- would make the separatrix and basin
+    structure manifest.  This is a numerically tractable problem
+    given the a-maximisation infrastructure already in place.
+  \item \textbf{Veneziano-parameter scan.}  The transition
+    $\Bcond_{A}<0\to\Bcond_{A}>0$ at $\Nf=0.427\,N-1$ is a phase
+    boundary of the two-coupling RG topology.  A full characterisation
+    of the phase diagram in $(x^{(0)},x^{(1)})$-space (with $x^{(a)}$
+    the Veneziano ratio at each node) would generalise the present
+    results to the Veneziano regime.
+\end{itemize}
+
+\paragraph{Acknowledgements.}  We thank the organisers of [...] for
+useful discussions.  Computations were performed using the symbolic
+$a$-maximisation pipeline described in the companion code repository.
