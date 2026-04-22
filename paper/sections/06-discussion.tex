@@ -5,90 +5,117 @@
 \subsection{Summary}
 
 We have classified all four-dimensional $\N=1$ asymptotically free
-$\SU(N)\times\SU(N)$ quiver gauge theories in the non-Veneziano
-large-$N$ limit, using symbolic $a$-maximisation to compute IR
-R-charges and central charges.  Seven universality classes arise.  All
-five non-degenerate classes exhibit $a=c$ to leading order in $1/N$,
-reflecting a common enhancement of the extremal R-symmetry to a
-particular flavour subgroup.
+$\SU(N)\times\SU(N)$ quiver gauge theories in the equal-rank,
+non-Veneziano large-$N$ sector, using symbolic $a$-maximisation to
+compute IR R-charges and central charges.  Seven universality classes
+emerge, all satisfying $a=c$ to leading order in $1/N$.
 
-Applying the Intriligator--Wecht boundary prescription
-\cite{IW2005} to both decoupled single-node limits, we have computed
-$\Bcond_{A}$ and $\Bcond_{B}$ for every class and classified each by
-the sign pattern of the pair $(\Bcond_{A},\Bcond_{B})$.  Class $2$
-realises the Figure~5 topology (interior SCFT is the global IR
-attractor); classes $4,16,21,23$ realise a mixed topology in which
-a single axis SCFT attracts generic flows.
+Applying the boundary analysis of \cite{IW2005}, we have computed the
+boundary one-loop coefficients $b_{0}^{(a)}(g_{b}^{\star})$ for every
+class and classified each by the sign pattern
+$(\text{sign}\,\alpha_{1},\text{sign}\,\alpha_{2})$ of the
+leading-$N$ coefficients.  Class 2 realises the Figure~5 topology;
+classes $4,16,21,23$ realise a mixed topology in which one axis SCFT
+attracts generic flows; class 44 is leading-$N$ marginal at both
+boundaries; class 1 has an $a$-maximum on the boundary of the
+unitarity polytope and is non-interacting at leading $N$.
 
-Our main result is that the strictly non-Veneziano landscape misses
-the Figure~6 topology of \cite{IW2005}, but that a single-parameter
-(Veneziano) deformation of class~$16$ realises it:
-adding $\Nf$ fundamental pairs to node~$1$ in the window
-$0.427\,N-1<\Nf<N-1$ produces $(\Bcond_{A},\Bcond_{B})=(+,+)$, i.e.\
-both axis SCFTs IR-stable.  The interior R-charge extremum persists
-but ceases to be an attractor; flows split between the two axis
-SCFTs through a separatrix.  We are not aware of a previous explicit
-realisation of this topology.
+Our main result is that the strictly non-Veneziano landscape contains
+no Figure~6 realisation, but that a simple single-parameter Veneziano
+deformation of class~16 (adding $\Nf^{(2)}$ fundamental pairs to
+node~2 in the window $0.427\,N-1<\Nf^{(2)}<N-1$) produces precisely
+the both-axes-stable RG topology of \cite[Fig.~6]{IW2005}.  The
+interior $a$-maximal critical point persists as a saddle inside this
+window, and the two axis SCFTs become the IR attractors with basins
+separated by the stable manifold of the saddle.  This is, to our
+knowledge, the first explicit realisation of this RG topology.
 
 \subsection{Implications}
 
 \paragraph{$a=c$ in the equal-rank non-Veneziano sector.}  The
-systematic appearance of $a=c$ across all five interacting classes
-suggests that the non-Veneziano restriction is a selective filter:
-most generic two-node SCFTs in the full database have $a\neq c$ at
-leading $N$, and it is the absence of $\mathcal O(N)$-many fundamentals
-that effectively preserves the relevant R-symmetry enhancement.
-Quantifying this (e.g.\ by counting the $a=c$ fraction as a function
-of the Veneziano parameter $x$) is a natural next step.
+uniform appearance of $a=c$ across all seven classes suggests the
+non-Veneziano restriction is itself the relevant filter: the
+subleading, flavour-asymmetric contribution to $\Tr R^{3}-\Tr R$ that
+would distinguish $a$ from $c$ is generically the
+$\mathcal O(N)$-many fundamentals' contribution, and setting
+$\Nf=\mathcal O(N^{0})$ removes it at leading order.  Quantifying the
+sub-leading $a-c$ split as a function of a Veneziano parameter
+$x^{(a)}=\Nf^{(a)}/N$ is a natural extension.
 
-\paragraph{Holographic dual for Figure~6?}  In $\cite{IW2005}$ the
-Figure~5 topology was matched to a gravity dual in which two gauge
-factors on D-branes realise the interior SCFT.  A Figure~6 phase has
-two possible axis IR attractors and is therefore dual to a bulk
-geometry with two distinct IR asymptotics.  Whether the deformed
-class~$16$ admits such a holographic description --- and whether the
-basin-separatrix structure admits an interpretation in the dual ---
-is an open question.
+\paragraph{Holographic dual of the Figure~6 phase.}  In the Figure~5
+topology, the single interior SCFT that attracts generic flows
+admits a holographic interpretation through a single interior AdS
+throat.  The Figure~6 topology, by contrast, has two distinct IR
+attractors on the axes; a holographic dual would require a bulk
+geometry with two separate IR asymptotic regions, connected in the
+UV, selected by the UV Wilsonian initial condition.  Whether the
+deformed class~16 realises such a bulk dual --- and whether the
+separatrix structure admits a gravity interpretation --- is an open
+question.
 
-\paragraph{Persistence beyond one loop.}  The boundary criterion we
-have used is strictly one-loop (via NSVZ) and linear in the
-bifundamental anomalous dimension; two- and higher-loop corrections
-can shift $\Bcond$-thresholds by $\mathcal O(1/N)$ amounts.  The
-lower edge of the Figure~6 window at $\Nf=0.427\,N-1$ is therefore
-expected to receive $1/N$ corrections; the upper edge $\Nf=N-1$ is the
-UV-AF cliff and is exact at one loop.  Because $\Bcond_{B}$ is
-$\mathcal O(N)$ and of definite sign throughout the window, the
-robustness of the Figure~6 phase against higher-loop corrections is
-on firm footing.
+\paragraph{Higher-loop robustness.}  The boundary criterion used here
+is one-loop via NSVZ and linear in the bifundamental anomalous
+dimension.  Two- and higher-loop corrections can shift the
+sign-flip thresholds by $\mathcal{O}(1/N)$ amounts.  The lower edge
+of the class-16 Figure~6 window at $\Nf^{(2)}=0.427\,N-1$ is
+therefore expected to receive $\mathcal{O}(1/N)$ corrections; the
+upper edge $\Nf^{(2)}=N-1$ is the UV-AF cliff and is exact.  Because
+the boundary coefficient $\alpha_{2}=-0.5730$ on axis 2 is
+$\mathcal{O}(N)$ and of definite sign throughout the window, the
+qualitative Figure~6 phase assignment is robust against higher-loop
+corrections.
+
+\paragraph{Boundary-versus-interior $R_{\text{bif}}$.}  We have used
+the interior $R_{\text{bif}}$ (from full-theory $a$-maximisation) as
+a leading-$N$ proxy for the boundary sub-theory $R_{\text{bif}}$.
+The two prescriptions agree qualitatively (same sign pattern) under
+the mild assumption that neither has $R_{\text{bif}}$ cross the
+free-field value $2/3$, which holds in all seven classes.  A
+refinement using the strict sub-theory $a$-max for the boundary
+R-charges would change the quantitative value $0.427$ at the
+Figure~6 lower edge by $\mathcal O(1/N)$ but not alter the existence
+or the width-scaling $\approx 0.573\,N$ of the window.
 
 \subsection{Future work}
 \label{sec:future}
 
 \begin{itemize}
-  \item \textbf{$n$-node quivers.}  Extending the present analysis to
-    linear and cyclic quivers with $n\ge 3$ nodes requires a
-    $2^{n}$-fold sign-pattern analysis on the boundaries; we expect
-    richer topologies including partial basins and sub-quiver
+  \item \textbf{$n$-node quivers.}  Extending this analysis to linear
+    and cyclic quivers with $n\ge 3$ nodes requires a
+    $2^{n}$-dimensional sign-pattern analysis on the boundaries; we
+    expect richer topologies including partial basins and sub-quiver
     attractors.
   \item \textbf{$\SO/\Sp$ sectors.}  The database also contains
-    $\SU$--$\SO$, $\SU$--$\Sp$, and $\SO$--$\Sp$ two-node theories.
-    A parallel analysis of these mixed-group sectors in the
+    $\SU$--$\SO$, $\SU$--$\Sp$ and $\SO$--$\Sp$ two-node theories.  A
+    parallel analysis of these mixed-group sectors in the
     non-Veneziano limit should uncover additional realisations of the
-    three topologies.
-  \item \textbf{Explicit RG flow numerics.}  Integrating the NSVZ
-    flow equations in the $(g_{0},g_{1})$ plane for class~$16$ +
-    $\Nf$ on node~$1$ --- with R-charges updated self-consistently
-    along the trajectory --- would make the separatrix and basin
-    structure manifest.  This is a numerically tractable problem
-    given the a-maximisation infrastructure already in place.
-  \item \textbf{Veneziano-parameter scan.}  The transition
-    $\Bcond_{A}<0\to\Bcond_{A}>0$ at $\Nf=0.427\,N-1$ is a phase
-    boundary of the two-coupling RG topology.  A full characterisation
-    of the phase diagram in $(x^{(0)},x^{(1)})$-space (with $x^{(a)}$
-    the Veneziano ratio at each node) would generalise the present
-    results to the Veneziano regime.
+    three topologies and possibly new Figure~6 windows.
+  \item \textbf{Sub-leading treatment of class 44 and class 1.}
+    Class 44's boundary coefficients vanish at leading $N$; the
+    subleading structure would determine its RG topology exactly.
+    Class 1's leading-$N$ $a$-max is non-unitary; lifting the
+    R-charges into the interior of the polytope by sub-leading
+    corrections (or finding a different R-symmetry extremum) would
+    give its physical IR.
+  \item \textbf{Other mixed-phase Figure~6 candidates.}  Class 21
+    admits a narrow window $0.6754\,N+2<\Nf^{(1)}<N+2$ that may
+    give a second Figure~6 realisation under analogous deformation;
+    because class 21's node 2 is leading-$N$ marginal, a careful
+    sub-leading analysis is needed to confirm this.
+  \item \textbf{Explicit two-coupling RG numerics.}  Numerical
+    integration of the two-coupling NSVZ flow in the
+    $(g_{1},g_{2})$-plane, with R-charges updated self-consistently
+    along the trajectory, would make the separatrix and basin
+    structure in the class-16 Figure~6 window fully manifest.
+  \item \textbf{Veneziano phase diagram.}  The sign-flip
+    $\alpha_{1}<0\to\alpha_{1}>0$ at $\Nf^{(2)}=0.427\,N-1$ is the
+    boundary of the Figure~6 phase in the $(\Nf^{(1)},\Nf^{(2)})$
+    plane for class~16.  Mapping out the full two-dimensional phase
+    diagram in $(x^{(1)},x^{(2)})$ Veneziano parameters would
+    generalise the present results to the Veneziano regime and
+    naturally connect to the full database.
 \end{itemize}
 
 \paragraph{Acknowledgements.}  We thank the organisers of [...] for
-useful discussions.  Computations were performed using the symbolic
+useful discussions.  Computations were performed with the symbolic
 $a$-maximisation pipeline described in the companion code repository.

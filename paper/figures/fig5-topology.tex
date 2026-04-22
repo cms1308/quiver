@@ -12,13 +12,13 @@
     fpUV/.style={circle, draw=blue!70!black, fill=blue!70!black, inner sep=2pt},
   ]
     % axes
-    \draw[->, thick] (-0.3,0) -- (5.2,0) node[right] {$g_{0}$};
-    \draw[->, thick] (0,-0.3) -- (0,4.5) node[above] {$g_{1}$};
+    \draw[->, thick] (-0.3,0) -- (5.2,0) node[right] {$g_{1}$};
+    \draw[->, thick] (0,-0.3) -- (0,4.5) node[above] {$g_{2}$};
     % fixed points
     \node[fpUV, label={below left:UV: $(0,0)$}] (UV) at (0,0) {};
-    \node[fp,   label={left:$(0,\,g_{1}^{\star})$}]      (A1) at (0,3.2) {};
-    \node[fp,   label={below:$(g_{0}^{\star},\,0)$}]     (A0) at (4.0,0) {};
-    \node[fpIR, label={[align=left]above right:{\textbf{IR SCFT $C$}\\$(g_{0}^{\star\star},g_{1}^{\star\star})$}}]
+    \node[fp,   label={left:$(0,\,g_{2}^{\star})$}]      (A1) at (0,3.2) {};
+    \node[fp,   label={below:$(g_{1}^{\star},\,0)$}]     (A0) at (4.0,0) {};
+    \node[fpIR, label={[align=left]above right:{\textbf{IR SCFT $C$}\\$(g_{1}^{\star\star},g_{2}^{\star\star})$}}]
           (IR) at (2.8,2.2) {};
     % flows from UV
     \draw[flow, blue!60!black] (UV) -- (A1);
@@ -34,12 +34,13 @@
     \draw[flow, gray!70, dashed] (1.2,0.1) to[out=80, in=240] (IR);
     \draw[flow, gray!70, dashed] (0.1,1.2) to[out=10, in=175] (IR);
     % labels
-    \node[red!70!black]  at (0.95, 3.40) {\small $\Bcond_{A}<0$};
-    \node[red!70!black]  at (4.05, 0.48) {\small $\Bcond_{B}<0$};
+    \node[red!70!black]  at (0.95, 3.40) {\small $\alpha_{1}>0$};
+    \node[red!70!black]  at (4.05, 0.48) {\small $\alpha_{2}>0$};
   \end{tikzpicture}
-  \caption{Topology (i): $\Bcond_{A},\Bcond_{B}<0$.  Both axes release
-    the flow into the interior, and the two-coupling SCFT $C$ at
-    $(g_{0}^{\star\star},g_{1}^{\star\star})$ is the global IR
+  \caption{Figure~5 topology: $(\alpha_{1},\alpha_{2})=(+,+)$, both
+    axis SCFTs are IR-unstable and release the flow into the
+    interior; the two-coupling SCFT $C$ at
+    $(g_{1}^{\star\star},g_{2}^{\star\star})$ is the global IR
     attractor.  Realised by class~$2$ in the $\SU(N)\times\SU(N)$
     non-Veneziano landscape.}
   \label{fig:fig5}

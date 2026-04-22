@@ -2,169 +2,178 @@
 % § 4   Boundary analysis
 % ══════════════════════════════════════════════════════════════════════
 
-\subsection{The corrected AF budget at each boundary}
-\label{sec:boundary-corrected}
+\subsection{The boundary one-loop coefficient
+  \texorpdfstring{$b_{0}^{(b)}(g_{a}^{\star})$}{b0(b)(ga*)}}
+\label{sec:boundary-b0}
 
-Let $\alpha^{(a)}_{0}$ denote the leading-$N$ coefficient of the
-one-loop beta function at node~$a$, $b_{0}^{(a)}(N)=\alpha^{(a)}_{0}\,N
-+\gamma^{(a)}_{0}$.  In the UV the AF condition is $b_{0}^{(a)}>0$.
-At the boundary where the opposite node is interacting at its own IR
-fixed point, the bifundamental fields acquire anomalous dimensions that
-shift the effective budget.  Explicitly, evaluating $\Bcond_{a}$ from
-\eqref{eq:Bcond-def} using the a-maximised bifundamental R-charges,
-one finds that it can be written in the same linear form
+Recall from Section~\ref{sec:setup-boundary} that the stability of
+the axis-$a$ SCFT at
+$(g_{1},g_{2})=(\delta_{a1}\,g_{a}^{\star},\delta_{a2}\,g_{a}^{\star})$
+against turning on the orthogonal coupling is determined by the
+effective one-loop coefficient of the decoupled node $b\ne a$:
 \begin{equation}
-  \Bcond_{a}\bigl(\Nf^{(a)}\bigr)\;=\;\alpha^{(a)}_{\Bcond}\,N
-  +\gamma^{(a)}_{\Bcond}\;-\;\tfrac{1}{2}\,\Nf^{(a)}\,,
-  \label{eq:Bcond-linear}
+  b_{0}^{(b)}(g_{a}^{\star})\;=\;T(\adj_{b})\;+\;\sum_{i\text{ at node }b}
+    T_{G_{b}}(r_{i})\,\bigl(R_{i}^{(a\star)}-1\bigr)\,.
+  \label{eq:b0-boundary-rep}
 \end{equation}
-with the correction to the AF slope equal to
+At leading $N$ this has the linear form
 \begin{equation}
-  \boxed{\;\Delta\alpha^{(a)}\;=\;\alpha^{(a)}_{\Bcond}-\alpha^{(a)}_{0}
-  \;=\;N_{\text{bif}}\,
-        T_{\text{fund}}(G_{a}^{\text{free}})
-        \,\dim_{\text{lead}}(G_{a}^{\text{active}})
-        \,m_{\text{active}}
-        \,\bigl(3R_{\text{bif}}^{(a)}-2\bigr)\;}
-  \label{eq:delta-alpha}
+  b_{0}^{(b)}(g_{a}^{\star})\;=\;\alpha_{b}^{(a\star)}\,N
+  +\gamma_{b}^{(a\star)}\;-\;\tfrac{1}{2}\,\Nf^{(b)}\,,
+  \label{eq:b0-linear}
 \end{equation}
-where $N_{\text{bif}}$ is the number of bifundamental edges,
-$m_{\text{active}}$ is the rank multiplier of the active node, and
-$R_{\text{bif}}^{(a)}$ is the a-maximised R-charge of the bifundamental
-at boundary~$a$.  The sign of $\Delta\alpha^{(a)}$ thus tracks the sign
-of $3R_{\text{bif}}-2$, i.e.\ the sign of the bifundamental
-anomalous dimension.
+where the $-\Nf^{(b)}/2$ term arises because the fundamentals on
+the decoupled node $b$ retain their free R-charge $R=2/3$ and
+contribute $T_{G_{b}}(\fund)\cdot(2/3-1)=-1/4$ per pair to the
+leading-$N$ sum --- precisely the UV value.  Absorbing the Veneziano
+shift, the condition ``axis $a$ is marginally IR-unstable'' reads
+$b_{0}^{(b)}(g_{a}^{\star})=0$, i.e.
+\begin{equation}
+  \Nf^{(b)}\;\le\;\alpha_{b}^{(a\star)}\,N
+  +2\gamma_{b}^{(a\star)}\,,
+  \label{eq:boundary-inequality}
+\end{equation}
+in direct analogy with the UV AF bound
+$\Nf^{(b)}\le 2\alpha^{(b)}N+2\gamma^{(b)}$ obtained by setting the
+bifundamental anomalous dimension to zero.
 
-The stored quantity in our classification database is the
-\emph{corrected UV-AF bound}
+The leading-$N$ coefficient $\alpha_{b}^{(a\star)}$ is the central
+datum of boundary analysis: its \emph{sign} determines, in the
+non-Veneziano limit $\Nf^{(b)}=0$, whether axis $a$ is IR-unstable:
 \begin{equation}
-  \Nf^{(a)}\;\le\;\alpha^{(a)}_{\Bcond}\,N
-  +2\gamma^{(a)}_{\Bcond}\,,
-  \label{eq:Bcond-ineq}
+  \boxed{\;
+  \alpha_{b}^{(a\star)}>0\;\Longleftrightarrow\;b_{0}^{(b)}(g_{a}^{\star})>0
+  \;\Longleftrightarrow\;\text{axis $a$ is IR-unstable}
+  \;\Longleftrightarrow\;\text{flow released into interior.}
+  }
 \end{equation}
-the equation $\Nf^{(a)}=\alpha^{(a)}_{\Bcond}N+2\gamma^{(a)}_{\Bcond}$
-being precisely $\Bcond_{a}=0$.  The $\alpha^{(a)}_{\Bcond}$-coefficient
-is, up to a positive constant, the NSVZ numerator at the opposite
-boundary; in particular \textbf{$\alpha_{\Bcond}^{(a)}>0\Leftrightarrow
-\Tr[R^{(a)}G_{a}^{2}]>0\Leftrightarrow\Bcond_{a}<0\Leftrightarrow$
-axis $a$ is IR-unstable}.
 
 \subsection{The seven equal-rank classes}
 \label{sec:boundary-table}
 
-Table~\ref{tab:Bcond} collects the UV and boundary-corrected AF bounds
-for the seven non-Veneziano equal-rank classes.  Only a representative
-theory is shown per class; the $\Bcond$ coefficients are
-class-invariant within a universality class.
+Table~\ref{tab:b0-boundary} collects the UV and boundary one-loop
+bounds for all seven non-Veneziano equal-rank classes.  The
+$\alpha$-coefficients are class-invariants (independent of the choice
+of representative within a class, as we have verified for each
+class in Table~\ref{tab:class-reps}).
 
 \begin{table}[h]
   \centering
   \small
   \renewcommand{\arraystretch}{1.18}
+  \setlength{\tabcolsep}{4pt}
   \begin{tabular}{clllll}
     \toprule
-    Class & UV bound node 0
-          & UV bound node 1
-          & $\Bcond_{A}\!=\!0$ at
-          & $\Bcond_{B}\!=\!0$ at
+    Class & UV bound node 1
+          & UV bound node 2
+          & Boundary-1 bound on $\Nf^{(2)}$
+          & Boundary-2 bound on $\Nf^{(1)}$
           & Phase \\
     \midrule
-    $1$   & $\Nf^{(0)}\!\le 2N-1$    & $\Nf^{(1)}\!\le 2N-1$
-          & $\Nf^{(1)}\!\le N-1$     & $\Nf^{(0)}\!\le N-1$
-          & (deg.) \\
-    $2$   & $\Nf^{(0)}\!\le 2N-1$    & $\Nf^{(1)}\!\le N-5$
-          & $\Nf^{(1)}\!\le 0.2188\,N-5$ & $\Nf^{(0)}\!\le 1.2188\,N-1$
+    $1$   & $\Nf^{(1)}\!\le 2N{-}1$    & $\Nf^{(2)}\!\le 2N{-}1$
+          & $\Nf^{(2)}\!\le N{-}1$     & $\Nf^{(1)}\!\le N{-}1$
+          & Fig.~5$^{\ast}$ \\
+    $2$   & $\Nf^{(1)}\!\le 2N{-}1$    & $\Nf^{(2)}\!\le N{-}5$
+          & $\Nf^{(2)}\!\le 0.2188\,N{-}5$ & $\Nf^{(1)}\!\le 1.2188\,N{-}1$
           & Fig.~5 \\
-    $4$   & $\Nf^{(0)}\!\le 3$       & $\Nf^{(1)}\!\le 2N-1$
-          & $\Nf^{(1)}\!\le 1.2431\,N-1$ & $\Nf^{(0)}\!\le -0.7569\,N+3$
+    $4$   & $\Nf^{(1)}\!\le 3$         & $\Nf^{(2)}\!\le 2N{-}1$
+          & $\Nf^{(2)}\!\le 1.2431\,N{-}1$ & $\Nf^{(1)}\!\le -0.7569\,N{+}3$
           & mixed \\
-    $16$  & $\Nf^{(0)}\!\le 1$       & $\Nf^{(1)}\!\le N-1$
-          & $\Nf^{(1)}\!\le 0.4270\,N-1$ & $\Nf^{(0)}\!\le -0.5730\,N+1$
+    $16$  & $\Nf^{(1)}\!\le 1$         & $\Nf^{(2)}\!\le N{-}1$
+          & $\Nf^{(2)}\!\le 0.4270\,N{-}1$ & $\Nf^{(1)}\!\le -0.5730\,N{+}1$
           & mixed \\
-    $21$  & $\Nf^{(0)}\!\le N+2$     & $\Nf^{(1)}=0$ (conformal)
-          & $\Nf^{(1)}\!\le -0.3246\,N$  & $\Nf^{(0)}\!\le 0.6754\,N+2$
+    $21$  & $\Nf^{(1)}\!\le N{+}2$     & $\Nf^{(2)}=0$ (marg.)
+          & $\Nf^{(2)}\!\le -0.3246\,N$    & $\Nf^{(1)}\!\le 0.6754\,N{+}2$
+          & mixed$^{\dagger}$ \\
+    $23$  & $\Nf^{(1)}\!\le N{+}1$     & $\Nf^{(2)}\!\le 3$
+          & $\Nf^{(2)}\!\le -0.1468\,N{+}3$ & $\Nf^{(1)}\!\le 0.8532\,N{+}1$
           & mixed \\
-    $23$  & $\Nf^{(0)}\!\le N+1$     & $\Nf^{(1)}\!\le 3$
-          & $\Nf^{(1)}\!\le -0.1468\,N+3$ & $\Nf^{(0)}\!\le 0.8532\,N+1$
-          & mixed \\
-    $44$  & $\Nf^{(0)}\!\le 3$       & $\Nf^{(1)}\!\le 3$
-          & $\Nf^{(1)}\!\le 3$       & $\Nf^{(0)}\!\le 3$
-          & (free) \\
+    $44$  & $\Nf^{(1)}\!\le 3$         & $\Nf^{(2)}\!\le 3$
+          & $\Nf^{(2)}\!\le 3$         & $\Nf^{(1)}\!\le 3$
+          & marginal \\
     \bottomrule
   \end{tabular}
-  \caption{UV and boundary AF bounds for the seven non-Veneziano
-    $\SU(N)\times\SU(N)$ classes.  The ``Phase'' column anticipates
-    the RG topology classification of Section~\ref{sec:phases}: Fig.~5
-    means both boundaries IR-unstable; ``mixed'' means one IR-unstable
-    and one IR-stable axis.  Class $1$ and $44$ are marked
-    ``degenerate/free'' because their a-max is at the free-field
-    value and no genuine interior SCFT exists.}
-  \label{tab:Bcond}
+  \caption{UV and boundary one-loop bounds for the seven equal-rank
+    non-Veneziano classes.  ``Phase'' anticipates the classification
+    of Section~\ref{sec:phases}: \emph{Fig.~5} means
+    $\alpha_{1}^{(2\star)},\alpha_{2}^{(1\star)}>0$ (both axes
+    IR-unstable, interior SCFT attracts); \emph{mixed} means one
+    $\alpha$ positive, one negative.  $^{\ast}$Class 1 is formally
+    in the Fig.~5 sign pattern at leading $N$ but its IR R-charges
+    are non-physical (Section~\ref{sec:class-special}); the Fig.~5
+    phase for class 1 should be understood as reflecting the
+    leading-$N$ sign pattern only.  $^{\dagger}$Class 21 has
+    $\alpha^{(2)}=0$ at the UV — node 2 is marginal at leading $N$;
+    the boundary $\alpha$ on axis 2 is negative and well-defined.
+    $^{44}$Class 44 is leading-$N$ marginal at both boundaries:
+    $\alpha$ vanishes on both sides.}
+  \label{tab:b0-boundary}
 \end{table}
 
 \paragraph{Reading the table.}
-The $\alpha^{(a)}_{\Bcond}$-coefficient of the B-condition is the
-leading-$N$ slope of $\Bcond_{a}$ as a function of $\Nf^{(a)}$ added to
-the \emph{free} node~$a$.  At $\Nf^{(a)}=0$ (non-Veneziano limit),
-the sign of $\alpha^{(a)}_{\Bcond}$ alone determines whether boundary
-$a$ is IR-unstable ($\alpha_{\Bcond}>0$) or IR-stable
-($\alpha_{\Bcond}<0$) in the large-$N$ limit.
+At $\Nf^{(a)}=0$ (non-Veneziano limit), the sign of the boundary
+coefficient $\alpha_{b}^{(a\star)}$ alone determines whether axis $a$
+is IR-unstable ($>0$) or IR-stable ($<0$) in the large-$N$ limit.
+The values $\alpha_{b}^{(a\star)}$ are obtained from the symbolic
+$a$-maximisation of each class by substituting the bifundamental
+R-charge $R_{\text{bif}}^{(a\star)}$ into the general formula
+\eqref{eq:b0-boundary-rep}; for equal-rank classes the result is
+equivalently expressible in the form \eqref{eq:boundary-inequality}
+with $\alpha,\gamma$ rational functions of $R_{\text{bif}}^{(a\star)}$.
 
-\subsection{The three RG topologies and their incidence}
+\subsection{RG-topology classification of the seven classes}
 \label{sec:boundary-phases}
 
-Across the five interacting classes the sign pattern of
-$(\alpha_{\Bcond,A},\alpha_{\Bcond,B})$ splits into exactly two
-topologies:
-
+Each pair $(\alpha_{1}^{(2\star)},\alpha_{2}^{(1\star)})$ of
+boundary coefficients determines the RG topology of the class at
+$\Nf=0$.  The three possible sign patterns, with names following
+\cite{IW2005}, are:
 \begin{center}
-  \begin{tabular}{lc}
+  \begin{tabular}{lll}
     \toprule
-    Phase & Classes \\
+    Phase & Sign pattern & Classes \\
     \midrule
-    Fig.~5 (both axes IR-unstable; interior SCFT is global attractor) &
-    $\{2\}$\\
-    Mixed (one axis IR-unstable, one IR-stable) &
-    $\{4,16,21,23\}$\\
-    Fig.~6 (both axes IR-stable; interior SCFT is not an attractor) &
-    \emph{none at $\Nf=0$}\\
+    Fig.~5: both axes IR-unstable, interior SCFT attracts
+          & $(+,+)$      & $\{1,2\}$ \\
+    Mixed: one axis IR-unstable, one IR-stable
+          & $(+,-)$ or $(-,+)$ & $\{4,16,21,23\}$ \\
+    Fig.~6: both axes IR-stable, axis SCFTs attract
+          & $(-,-)$      & \emph{none at $\Nf=0$} \\
+    Marginal: $\alpha=0$ at both boundaries
+          & $(0,0)$      & $\{44\}$ \\
     \bottomrule
   \end{tabular}
 \end{center}
 
 Thus, in the strict non-Veneziano limit, the classified
-$\SU(N)\times\SU(N)$ landscape contains both the
-$\cite[\text{Fig.~5}]{IW2005}$ case and the mixed topology, but
-\emph{none} of the $\cite[\text{Fig.~6}]{IW2005}$ case.  This agrees
-qualitatively with the remark of \cite{IW2005} that Figure~6
-topologies were not found in their examples.
+$\SU(N)\times\SU(N)$ landscape contains both the Figure~5 phase of
+\cite{IW2005} and the mixed topology, but \emph{no} realisation of
+the Figure~6 phase.  This matches the remark of \cite{IW2005} that
+Figure~6 topologies were not found in the examples they studied.
+Section~\ref{sec:phases} gives the phase portrait of each class in
+detail and shows, as our main result, that a single-parameter
+Veneziano deformation of class $16$ produces the first explicit
+Figure~6 realisation in this landscape.
 
-Section~\ref{sec:phases} will show, however, that a small-parameter
-deformation of class~$16$ --- adding $\Nf$ fundamentals on node~$1$
-in the window \eqref{eq:main-window} --- flips the sign of
-$\alpha_{\Bcond,A}$ while preserving the sign of $\alpha_{\Bcond,B}$,
-realising the Figure~6 topology explicitly.
-
-\subsection{A caveat on the bifundamental R-charge}
+\subsection{Approximation: interior vs.\ boundary
+  \texorpdfstring{$R_{\text{bif}}$}{R\_bif}}
 \label{sec:boundary-caveat}
 
-A point of care: the strictly proper boundary prescription of
-\cite{IW2005} computes the bifundamental R-charges by
-$a$-maximising the \emph{sub-quiver} at each boundary (with the
-bifundamentals promoted to flavour fields of the single active node),
-rather than using the interior fixed-point R-charge.  The two
-prescriptions generally disagree because the sub-quiver is a
-different CFT from the full two-node one.  In Table~\ref{tab:Bcond}
-we have reported the $\alpha_{\Bcond}$ coefficients as obtained from
-the pipeline of our classification database, which uses the interior
-$R_{\text{bif}}$ value as a proxy for the boundary R-charge;
-equivalently, the $\alpha_{\Bcond}$ we report is the sign of the
-NSVZ numerator at the \emph{interior} IR fixed point evaluated at
-$g_{\text{free}}=0$.  Both quantities share the sign of $3R_{\text{bif}}-2$
-under the mild assumption that neither prescription has $R_{\text{bif}}$
-cross the free-field value $2/3$.  We adopt this assumption throughout
-and note that the ordering of the non-Veneziano classes in
-Table~\ref{tab:Bcond} is robust against the approximation; the
-quantitative threshold $\Nf=0.427\,N-1$ in the class-$16$
-Figure~6 window is however subject to $\mathcal O(1/N)$ corrections
-when the proper boundary sub-quiver $a$-maximisation is used.
+A technical point of prescription: the strict \cite{IW2005} recipe
+computes $R_{\text{bif}}^{(a\star)}$ by $a$-maximising the
+\emph{sub-quiver} on axis $a$ — node $a$ active with bifundamentals
+promoted to $\Nf$-type flavours, node $b$ decoupled — rather than
+using the interior fixed-point R-charge of the full two-node theory.
+The two prescriptions in general differ because the sub-quiver is a
+different CFT from the full two-node one.  In the tables of this
+paper we use the interior $R_{\text{bif}}$ (from full-theory
+$a$-maximisation) as a leading-$N$ proxy for the boundary
+$R_{\text{bif}}^{(a\star)}$; both quantities share the sign of
+$3R_{\text{bif}}-2$ under the mild assumption that neither
+prescription has $R_{\text{bif}}$ cross the free-field value $2/3$,
+and both yield the same qualitative phase assignment in
+Table~\ref{tab:b0-boundary}.  The quantitative coefficient
+$\alpha_{2}^{(1\star)}=-0.5730$ in class~16 is subject to
+$\mathcal{O}(1/N)$ corrections under the strict boundary
+prescription; this will be relevant for the Figure~6-window lower
+edge discussed in Section~\ref{sec:phases}.

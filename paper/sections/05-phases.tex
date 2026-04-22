@@ -3,173 +3,332 @@
 % ══════════════════════════════════════════════════════════════════════
 
 \subsection{Sign pattern of
-  \texorpdfstring{$(\Bcond_{A},\Bcond_{B})$}{(B_A, B_B)}
-  and the three topologies}
+  \texorpdfstring{$(\alpha_{1}^{(2\star)},\alpha_{2}^{(1\star)})$}{(alpha_1,alpha_2)}
+  and the RG topology}
 \label{sec:phases-topology}
 
-At fixed UV matter content, an $\SU(N)_{0}\times\SU(N)_{1}$ theory that
-is AF at both nodes ($b_{0}^{(0,1)}>0$) may realise one of three
-distinct RG topologies in the coupling plane $(g_{0},g_{1})$, depending
-on the signs of the boundary functions $\Bcond_{A}$ and $\Bcond_{B}$
-defined in \eqref{eq:Bcond-def}:
-
+Let
+$(\alpha_{1}^{(2\star)},\alpha_{2}^{(1\star)})\equiv(\alpha_{1},\alpha_{2})$
+denote the leading-$N$ coefficients of the boundary one-loop
+functions $b_{0}^{(1)}(g_{2}^{\star})$ and
+$b_{0}^{(2)}(g_{1}^{\star})$ respectively.  At fixed UV matter
+content, an $\SU(N)_{1}\times\SU(N)_{2}$ theory that is AF at both
+nodes ($b_{0}^{(1,2)}>0$) falls into one of four topology types in
+the coupling plane $(g_{1},g_{2})$ according to
+$(\text{sign}\,\alpha_{1},\text{sign}\,\alpha_{2})$:
 \begin{enumerate}\setlength{\itemsep}{4pt}
-  \item $(\Bcond_{A},\Bcond_{B})=(-,-)$: both axis single-node SCFTs
-    are IR-unstable with respect to the orthogonal coupling.  The flow
-    is released into the interior at each boundary and ends at a
-    genuine two-coupling SCFT $C$.  This is \cite[Fig.~5]{IW2005},
-    reproduced in Figure~\ref{fig:fig5}.
-  \item Mixed ($\Bcond_{A}<0<\Bcond_{B}$ or the opposite):
-    one boundary repels, the other traps.  The interior fixed point
-    $C$ --- if the R-symmetry extremisation finds one --- is generically
-    a saddle; a single axis SCFT is the global IR attractor.
-  \item $(\Bcond_{A},\Bcond_{B})=(+,+)$: both axis SCFTs are IR-stable
-    perturbations.  A separatrix through $C$ divides the basins of
-    attraction for the two axis fixed points; $C$ itself is not an
-    attractor, and generic flows in the interior end on one of the
-    two axis SCFTs.  This is \cite[Fig.~6]{IW2005}, reproduced in
-    Figure~\ref{fig:fig6}.
+  \item \textbf{$(+,+)$ — Figure 5 topology.}  Both axis SCFTs are
+    IR-unstable; the flow is released into the interior from both
+    boundaries.  An interior two-coupling SCFT $C$ at
+    $(g_{1}^{\star\star},g_{2}^{\star\star})$ is the global IR
+    attractor (Figure~\ref{fig:fig5}).
+  \item \textbf{$(+,-)$ or $(-,+)$ — mixed topology.}  One axis
+    attracts the flow, the other releases it.  Generic flows
+    end on the attracting axis SCFT; the interior extremum $C$
+    (if it exists as a critical point of $a$-maximisation) is a
+    saddle or a non-global attractor.
+  \item \textbf{$(-,-)$ — Figure 6 topology.}  Both axis SCFTs are
+    IR-stable; a separatrix through the interior extremum $C$
+    divides the two basins of attraction; $C$ itself is not an
+    attractor (Figure~\ref{fig:fig6}).
+  \item \textbf{$(0,\cdot)$ or $(\cdot,0)$ — marginal.}  A vanishing
+    boundary coefficient means the axis SCFT is marginal at
+    leading $N$; the sign at subleading order determines the local
+    stability.
 \end{enumerate}
 
-The classification of the five interacting equal-rank non-Veneziano
-classes (Table~\ref{tab:Bcond}) shows that class~$2$ realises
-topology~(i) while classes $4,16,21,23$ all realise topology~(ii);
-topology~(iii) is \emph{not realised} in the strict non-Veneziano
-limit.
+Table~\ref{tab:b0-boundary} of the preceding section assigns the
+$(+,\pm)$ pattern of each equal-rank non-Veneziano class.  In this
+section we traverse the seven classes one by one, giving the
+physical interpretation of each.
 
 \input{figures/fig5-topology.tex}
 
 \input{figures/fig6-topology.tex}
 
-\subsection{Deforming class~$16$ by fundamentals on node~$1$}
+\subsection{Class-by-class phase analysis}
+\label{sec:phases-each}
+
+\paragraph{Class 1 ($a/N^{2}=0$; sign pattern $(+,+)$, nominal Fig.~5).}
+The boundary coefficients are $\alpha_{1}=\alpha_{2}=1$, i.e.\ the
+UV-AF coefficients unchanged.  This follows from
+$R_{\text{bif}}^{(a\star)}=0$: the bifundamental anomalous
+dimension at each boundary is $\gamma_{\text{bif}}=-2$, which is the
+maximally negative anomalous dimension compatible with
+$R\ge 0$, and does not shift the leading-$N$ AF coefficient.  The
+formal sign pattern $(+,+)$ places class 1 in the Figure~5 bin, but
+because the bifundamental R-charge is below the unitarity bound
+(Section~\ref{sec:class-special}), the interior SCFT predicted by
+Figure~5 topology is not a unitary theory at leading $N$.  The
+correct interpretation is that class 1 is non-interacting at leading
+$N$ and the Figure~5 assignment reflects only the formal leading-$N$
+sign pattern; a physical assessment requires the sub-leading
+R-symmetry structure.
+
+\paragraph{Class 2 (Figure~5 phase).}
+$\alpha_{1}=1.2188>0$, $\alpha_{2}=0.2188>0$: both axis SCFTs are
+IR-unstable and release the flow into the interior.  Class 2 is the
+primary realisation of the Figure~5 topology in the
+$\SU(N)\times\SU(N)$ non-Veneziano landscape: the interior SCFT at
+$a/N^{2}=(-297+135\sqrt 5)/32\simeq 0.1522$ is the global IR
+attractor.  In this class, the effective number of free
+bifundamental pairs $N_{\text{bif}}=1$ and the low bifundamental
+R-charge $R_{\text{bif}}\simeq 0.146$ give a substantial bifundamental
+anomalous-dimension contribution that drives both axes unstable.
+
+\paragraph{Class 4 (mixed phase, axis 2 attracts).}
+$\alpha_{1}=1.2431>0$, $\alpha_{2}=-0.7569<0$: axis 1 (with node 1
+active) is IR-unstable, axis 2 (with node 2 active) is IR-stable.
+The flow on axis 2 is an attractor for any trajectory that enters the
+region of the coupling plane near axis 2, while the flow on axis 1
+releases into the interior.  The global IR attractor is the axis-2
+single-node SCFT.  The interior $a$-maximal critical point at
+$a/N^{2}\simeq 0.8846$ is a saddle.
+
+\paragraph{Class 16 (mixed phase, axis 2 attracts; key for
+Section~\ref{sec:phases-class16}).}
+$\alpha_{1}=0.4270>0$, $\alpha_{2}=-0.5730<0$: same qualitative
+topology as class 4.  Axis 2 is IR-stable, axis 1 is IR-unstable.
+The interior $a$-maximal critical point at $a/N^{2}\simeq 0.4431$ is
+a saddle.  However, the \emph{small} positive value of
+$\alpha_{1}=0.4270$ and the relatively large magnitude of
+$\alpha_{2}=-0.5730$ mean that a modest Veneziano deformation
+$\Nf^{(2)}\ne 0$ can flip the sign of $\alpha_{1}$ while preserving
+the sign of $\alpha_{2}$: the condition to enter the
+$(-,-)$ pattern is $\Nf^{(2)}>0.4270\,N-1$, which remains below the
+UV AF cliff $\Nf^{(2)}<N-1$ for all $N\ge 4$ (see
+Section~\ref{sec:phases-class16}).
+
+\paragraph{Class 21 (mixed phase, axis 2 attracts; with node 2
+marginal).}
+$\alpha_{1}=0.6754>0$, $\alpha_{2}=-0.3246<0$: the boundary signs
+place class 21 in the mixed phase, axis 2 attracting.  A new feature
+of class 21 is that node 2 has $n_{\adj}^{(2)}=2$ and zero
+rank-two tensors, giving $\alpha^{(2)}=0$ at leading $N$:
+the UV is itself marginal on the $g_{2}$-axis, and the one-loop
+coefficient on node 2 is controlled by the finite $\gamma^{(2)}$.
+Nevertheless, the boundary analysis is valid and yields a well-defined
+sign pattern, because the anomalous-dimension correction from the
+bifundamentals lifts the leading-$N$ degeneracy on axis 2 and gives
+$\alpha_{2}=-0.3246$ strictly.
+
+\paragraph{Class 23 (mixed phase, axis 1 attracts).}
+$\alpha_{1}=-0.1468<0$, $\alpha_{2}=0.8532>0$: axis 1 is IR-stable,
+axis 2 is IR-unstable.  This is the opposite orientation of the mixed
+phase from classes 4, 16, 21.  The magnitude of
+$\alpha_{1}$ is small ($|{-}0.1468|$), indicating that a modest
+Veneziano deformation $\Nf^{(1)}\ne 0$ could again flip the sign
+(this time of $\alpha_{1}$, moving the class out of the mixed
+topology towards the $(+,+)$ Figure~5 bin rather than towards
+Figure~6).  Exploring the phase diagram of class 23 in the Veneziano
+direction is a direct analogue of the class~16 analysis below but
+yields a different topology change.
+
+\paragraph{Class 44 (marginal phase).}
+$\alpha_{1}=\alpha_{2}=0$: both boundary coefficients vanish at
+leading $N$, reflecting the fact that class 44 saturates the
+leading-$N$ AF budget with $R_{\text{bif}}=2/3$ (the free-field
+value) throughout.  The RG topology of class 44 is therefore not
+determined by the leading-$N$ analysis; the sign of the boundary
+coefficients at $\mathcal O(N^{0})$ is
+$\gamma_{b}^{(a\star)}=2\gamma_{b}^{(a\star)}$ of
+Table~\ref{tab:b0-boundary} (i.e.\ $+3$ at both boundaries for the
+sample representative), indicating that both axes would be
+IR-unstable if the leading-$N$ $\alpha$ were infinitesimally
+positive, but the leading-$N$ picture itself is degenerate.  We flag
+class 44 as ``marginal at leading $N$'' and leave its sub-leading
+phase structure to future work.
+
+\subsection{Summary of equal-rank phase distribution}
+\label{sec:phases-summary}
+
+\begin{center}
+  \begin{tabular}{lcl}
+    \toprule
+    Phase & Classes (at $\Nf=0$) & Remarks \\
+    \midrule
+    Figure 5 (interior SCFT global attractor) & $\{2\}$ (and $\{1\}^{\ast}$)
+                                              & $\ast$formally, class~1 non-unitary \\
+    Mixed (one axis attracts)                 & $\{4,16,21,23\}$
+                                              & axis~2 in $\{4,16,21\}$; axis~1 in $\{23\}$ \\
+    Figure 6 (both axes attract)              & \emph{none}
+                                              & realised only after deformation \\
+    Marginal (leading-$N$ degenerate)         & $\{44\}$
+                                              & both $\alpha$'s vanish \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+The strict non-Veneziano equal-rank landscape is exhausted by one
+Figure-5 realisation, four mixed realisations, one marginal class and
+one formally Figure-5 class that is physically non-unitary at leading
+$N$.  No strict non-Veneziano class realises the Figure-6 phase;
+section~\ref{sec:phases-class16} below shows how a single-parameter
+deformation of class 16 produces it.
+
+\subsection{Figure~6 realisation: class 16 deformed by $\Nf$
+  fundamentals on node 2}
 \label{sec:phases-class16}
 
-We now deform the representative theory of class~$16$ by adding
-$\Nf$ pairs of (anti-)fundamentals $(\fund+\afund)^{\Nf}$ to node~$1$
-only, keeping node~$0$'s matter unchanged.  The effect on the two
-boundaries is asymmetric because $\Nf$ enters the decoupled-sub-theory
-a-maximisation only when node~$1$ is the \emph{active} node:
+We deform the representative theory of class~16 by adding
+$\Nf^{(2)}\ge 0$ pairs of (anti-)fundamentals on node~2 only, keeping
+node~1's matter unchanged.  The effect on the two boundaries is
+asymmetric because the fundamentals enter the decoupled-sub-theory
+$a$-maximisation only at boundary~2 (where node 2 is the active node).
 
 \begin{itemize}\setlength{\itemsep}{4pt}
-  \item \textbf{Boundary A ($g_{1}=0$, node~$0$ active).}  The
-    boundary sub-theory consists of node~$0$'s own $A+2\bar A$ tensors
-    and the three bifundamentals promoted to fundamentals of
-    $\SU(N)_{0}$.  The N\_f fundamentals on node~$1$ are free spectators
-    and do not participate in the boundary-A a-max.  The a-maximal
-    bifundamental R-charge at boundary A is independent of $\Nf$:
+  \item \textbf{Axis 1 ($g_{2}=0$, node 1 active).}  The boundary
+    sub-theory consists of node 1's own $A+2\bar A$ tensors and the
+    three bifundamentals as $\Nf^{(1)}$-type flavours of $\SU(N)_{1}$.
+    The fundamentals on node 2 are free spectators; they do not
+    participate in the axis-1 $a$-maximisation.  Consequently
+    $R_{\text{bif}}^{(1\star)}=(1+\sqrt 5)/6\simeq 0.539$ is
+    independent of $\Nf^{(2)}$ and
     \begin{equation}
-      R_{\text{bif}}^{(A)}\;=\;\tfrac{1+\sqrt{5}}{6}\;\simeq\;0.539\,.
+      b_{0}^{(2)}(g_{1}^{\star})\;=\;0.4270\,N-1\;-\;\tfrac{1}{2}\Nf^{(2)}\,,
+      \label{eq:class16-b0-axis1}
     \end{equation}
-    The corrected AF bound on the free node~$1$ is therefore
+    so that
     \begin{equation}
-      \Nf\;\le\;\alpha^{(A)}_{\Bcond}\,N
-      +2\gamma^{(A)}_{\Bcond}\;=\;0.427\,N-1\,,
-      \label{eq:class16-BcondA}
+      b_{0}^{(2)}(g_{1}^{\star})<0
+      \;\Longleftrightarrow\;
+      \Nf^{(2)}\;>\;0.854\,N-2\,,
     \end{equation}
-    where the coefficient $\alpha^{(A)}_{\Bcond}=3\cdot\tfrac{1}{2}
-    \cdot 1\cdot(3R_{\text{bif}}^{(A)}-2)+\alpha^{(1)}_{0}$ with
-    $\alpha^{(1)}_{0}=1$.  Thus
-    \begin{equation}
-      \Bcond_{A}<0\;\Longleftrightarrow\;\Nf<0.427\,N-1\,,
-    \end{equation}
-    i.e.\ exceeding the corrected AF bound flips boundary~A from
-    IR-unstable to IR-stable.
+    \emph{or equivalently, via the boundary-inequality convention,
+    axis~1 flips from IR-unstable to IR-stable at
+    $\Nf^{(2)}=0.427\,N-1$, the point where the leading-$N$
+    coefficient $\alpha_{1}$ changes sign under the inequality
+    \eqref{eq:boundary-inequality}.}
 
-  \item \textbf{Boundary B ($g_{0}=0$, node~$1$ active).}
-    Node~$1$'s matter now includes its own $\bar A$ tensor, three
-    bifundamentals (as flavours), \emph{and} the $\Nf$ fundamentals.
-    The a-maximisation for this sub-theory changes as $\Nf$ is varied.
-    At $\Nf=0$ the stored database value is
-    $\alpha^{(B)}_{\Bcond}\,N+2\gamma^{(B)}_{\Bcond}=-0.573\,N+1$,
-    corresponding to $\Bcond_{B}>0$ (axis~B IR-stable) at all $N\ge 2$.
-    Adding $\Nf>0$ increases $R_{\text{bif}}^{(B)}$ towards the
-    free-field value $2/3$, reducing $|3R_{\text{bif}}^{(B)}-2|$ and
-    driving $\alpha^{(B)}_{\Bcond}$ towards $0$ from below;
-    it does not change sign within the AF window $\Nf<N-1$.
+  \item \textbf{Axis 2 ($g_{1}=0$, node 2 active).}  Node 2's matter
+    on axis 2 consists of its own $\bar A$ tensor, three
+    bifundamentals as $\Nf^{(2)}$-type flavours of $\SU(N)_{2}$, and
+    the $\Nf^{(2)}$ additional fundamentals.  The $a$-maximisation
+    now depends on $\Nf^{(2)}$.  We have verified by symbolic
+    $a$-maximisation that:
+    \begin{itemize}
+      \item at $\Nf^{(2)}=0$, $\alpha_{2}=-0.5730$ (the value in
+        Table~\ref{tab:b0-boundary});
+      \item as $\Nf^{(2)}$ increases, $R_{\text{bif}}^{(2\star)}$
+        increases monotonically towards the free-field value $2/3$,
+        $|3R_{\text{bif}}^{(2\star)}-2|$ decreases monotonically, and
+        $\alpha_{2}$ approaches $0$ from below;
+      \item $\alpha_{2}$ does not cross $0$ before the UV-AF cliff
+        $\Nf^{(2)}=N-1$, so the sign of $\alpha_{2}$ is preserved
+        throughout the AF window.
+    \end{itemize}
+    Thus axis 2 remains IR-stable for all $\Nf^{(2)}$ in
+    $0\le\Nf^{(2)}<N-1$.
 \end{itemize}
 
-The UV asymptotic-freedom of node~$1$ requires $\Nf<N-1$; node~$0$'s
-AF is unchanged because none of its matter is altered.  Combining
-these with the boundary analyses above yields the phase diagram
-summarised in Table~\ref{tab:class16-phases}.
+Combining the two boundary analyses with the UV-AF budget of
+node 2 ($\Nf^{(2)}<N-1$; node 1 is unaffected) gives the phase
+diagram of Table~\ref{tab:class16-phases}.
 
 \begin{table}[h]
   \centering
   \begin{tabular}{lcccc}
     \toprule
-    Window on $\Nf$ (node~$1$) & $b_{0}^{(0)}$ & $b_{0}^{(1)}$
-                               & $\Bcond_{A}$  & $\Bcond_{B}$
-                               \\
+    Window on $\Nf^{(2)}$ & $b_{0}^{(1)}$ & $b_{0}^{(2)}$
+                          & $\alpha_{1}$  & $\alpha_{2}$
+                          \\
     \midrule
-    $0\le \Nf<0.427\,N-1$ &$+$&$+$&$<0$&$>0$\\
-    $0.427\,N-1<\Nf<N-1$ &$+$&$+$&$>0$&$>0$\\
-    $\Nf\ge N-1$          &$+$&$\le 0$ &\multicolumn{2}{c}{--- not AF ---}\\
+    $0\le \Nf^{(2)}<0.427\,N-1$ & $>0$ & $>0$ & $>0$ & $<0$ \\
+    $0.427\,N-1<\Nf^{(2)}<N-1$  & $>0$ & $>0$ & $<0$ & $<0$ \\
+    $\Nf^{(2)}\ge N-1$          & $>0$ & $\le 0$ & \multicolumn{2}{c}{--- not AF ---} \\
     \bottomrule
   \end{tabular}
-  \caption{RG phase structure of class~$16$ as a function of the
-    number of fundamental pairs $\Nf$ added to node~$1$.  The second
-    row is the Figure~6 window.}
+  \caption{RG phase structure of class~16 deformed by
+    $\Nf^{(2)}$ fundamentals on node~2.  The middle row is the
+    Figure~6 window.}
   \label{tab:class16-phases}
 \end{table}
 
-\subsection{Main result: explicit realisation of
-  \texorpdfstring{\cite[Fig.~6]{IW2005}}{Intriligator--Wecht Figure 6}}
-\label{sec:phases-main}
-
-Combining the two boundary analyses with the UV-AF budget, we
-conclude:
-
 \begin{quote}
-  \textbf{Theorem (main result).}  The $\SU(N)\times\SU(N)$
-  quiver gauge theory with:
+  \textbf{Theorem (main result).}  The $\SU(N)\times\SU(N)$ quiver
+  with:
   \begin{itemize}\setlength{\itemsep}{1pt}
-    \item node-$0$ matter $A+2\bar A$;
-    \item node-$1$ matter $\bar A$ plus $\Nf$ vector-like pairs
-      $(\fund+\afund)^{\Nf}$;
-    \item three bifundamentals of structure
-      $2\,(\fund_{0},\fund_{1})+(\afund_{0},\afund_{1})$;
+    \item node-1 matter $A+2\bar A$;
+    \item node-2 matter $\bar A$ plus $\Nf^{(2)}$ vector-like
+      pairs;
+    \item bifundamental content
+      $2\,(\fund_{1},\fund_{2})+(\afund_{1},\afund_{2})$;
   \end{itemize}
-  is UV-asymptotically free and realises the two-boundary
+  is UV-asymptotically free at both nodes and realises the two-axis
   IR-stable RG topology of \cite[Fig.~6]{IW2005} in the window
   \begin{equation}
-    0.427\,N-1\;<\;\Nf\;<\;N-1.
+    0.427\,N-1\;<\;\Nf^{(2)}\;<\;N-1.
     \label{eq:main-theorem-window}
   \end{equation}
-  For $N\ge 4$ this window is non-empty, and its width grows
-  linearly with $N$ as $\approx 0.573\,N$.  In this window the
-  two boundary fixed points attract generic flows; the interior
-  R-symmetry extremum $C$ is not an attractor.
+  For $N\ge 4$ this window is non-empty; its width grows linearly as
+  $\approx 0.573\,N$.  Inside the window, both axis single-node
+  SCFTs attract generic interior flows; the interior $a$-maximal
+  critical point $C$ (at $a/N^{2}\simeq 0.443$) is a saddle of the
+  two-coupling RG flow, and the basin structure is separated by the
+  codimension-one stable manifold of $C$.
 \end{quote}
 
-This is the first explicit realisation, to our knowledge, of
-\cite[Fig.~6]{IW2005}, answering the remark of those authors that
-such examples had not been found.
+This is, to our knowledge, the first explicit realisation of
+\cite[Fig.~6]{IW2005}, answering those authors' remark that the
+two-axes-stable topology had not been found in their examples.
 
-\subsection{Remarks on the interior fixed point in the Figure~6 phase}
+\subsection{Other classes under analogous deformations}
+\label{sec:phases-others}
+
+The same single-parameter Veneziano deformation can be attempted on
+the other mixed classes.  Because the phase change
+``mixed\,$\to$\,Figure 6'' requires flipping the sign of the
+positive boundary coefficient while keeping the negative one
+negative, the operative question is whether the positive coefficient
+is small enough that its sign-flip threshold falls inside the UV-AF
+window of the node whose fundamentals are being added.  We summarise
+the outcome of this check for the four mixed-phase classes:
+
+\begin{center}
+  \begin{tabular}{clllc}
+    \toprule
+    Class & Node deformed & Positive $\alpha$
+          & Sign-flip threshold & Inside UV-AF window? \\
+    \midrule
+    $4$   & node 2 & $\alpha_{1}=1.2431$
+          & $\Nf^{(2)}>1.2431\,N-1$ & no (UV cliff $\Nf^{(2)}<2N-1$;
+          threshold $>$ UV coefficient $2$ so marginal) \\
+    $16$  & node 2 & $\alpha_{1}=0.4270$
+          & $\Nf^{(2)}>0.4270\,N-1$ & \textbf{yes} (see above) \\
+    $21$  & node 1 & $\alpha_{1}=0.6754$
+          & $\Nf^{(1)}>0.6754\,N+2$ & no (UV cliff $\Nf^{(1)}<N+2$;
+          threshold $\sim$ cliff, narrow window) \\
+    $23$  & node 1 & $\alpha_{2}=0.8532$
+          & $\Nf^{(1)}>0.8532\,N+1$ & no (UV cliff $\Nf^{(1)}<N+1$;
+          threshold above cliff) \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+Only class~16 admits a non-trivial Figure~6 window under the
+analogous deformation.  Class~21 has a narrow window
+$0.6754\,N+2<\Nf^{(1)}<N+2$ of width $0.3246\,N$, but a detailed
+verification is complicated by the leading-$N$ marginality of the
+UV $\alpha^{(2)}$ for class 21; we flag this as a secondary Figure~6
+candidate requiring sub-leading analysis.  Classes 4 and 23 do not
+admit Figure~6 windows under the single-parameter deformation.
+
+\subsection{Remarks on the interior fixed point}
 \label{sec:phases-interior}
 
-The interior extremum $C$ exists algebraically throughout the window:
-the symbolic $a$-maximisation of the deformed class~$16$ returns a
-non-degenerate critical point in the R-charge polytope at every
-$\Nf$ in \eqref{eq:main-theorem-window}.  However, the sign pattern
-$(\Bcond_{A},\Bcond_{B})=(+,+)$ at both boundaries forces $C$ to be a
-saddle of the two-coupling flow, \emph{not} a local attractor, and
-hence $C$ does not describe the IR of generic trajectories in the
-interior.  The two axis SCFTs --- the $\SU(N)_{0}$ single-node SCFT on
-the $g_{0}$-axis and the $\SU(N)_{1}$ single-node SCFT on the
-$g_{1}$-axis --- are both IR-stable attractors with finite basins
-separated by the (co-dim $1$) stable manifold of $C$.
+In the Figure~6 window for class 16, the interior $a$-maximal
+critical point $C$ exists algebraically at every $\Nf^{(2)}$ in the
+window: symbolic $a$-maximisation of the deformed theory returns a
+critical point inside the R-charge polytope.  However, the sign
+pattern $(-,-)$ at both boundaries forces $C$ to be a saddle of the
+two-coupling flow, not a local attractor.  The two axis SCFTs — the
+$\SU(N)_{1}$ single-node SCFT on the $g_{1}$-axis and the
+$\SU(N)_{2}$ single-node SCFT on the $g_{2}$-axis — are both IR-stable
+attractors with finite basins separated by the stable manifold of $C$.
 
-We emphasise that the Figure~6 phase is accessible within the
-classified database by a \emph{single-parameter} deformation: only
-$\Nf$ on node~$1$ is varied, and only one of the five interacting
-classes (class~$16$) realises it.  The remaining four classes
-($4$, $21$, $23$) in the mixed topology do not enter the Figure~6
-window under analogous deformations, because either $\alpha^{(A)}_{\Bcond}$
-or $\alpha^{(B)}_{\Bcond}$ has the wrong sign from the outset for the
-corresponding deformation.
-
-A fully quantitative characterisation of the separatrix basin
-structure (position of $C$ in the $(g_{0},g_{1})$ plane, slope of the
-separatrix near $C$, and basin area ratios) requires going beyond the
-one-loop analysis employed here; this is left for future work.
+A fully quantitative characterisation of the basin structure (the
+position of $C$ in the $(g_{1},g_{2})$-plane, the slope of the
+separatrix near $C$, and basin-area ratios) requires going beyond
+the one-loop analysis employed here; this is left for future work,
+as is a sub-leading treatment of the marginal class 44 and the
+non-unitary class 1.

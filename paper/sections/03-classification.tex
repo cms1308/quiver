@@ -5,137 +5,238 @@
 \subsection{Enumeration pipeline}
 \label{sec:class-enumeration}
 
-The two-node equal-rank sector is enumerated as follows.  We fix the
+We enumerate the equal-rank non-Veneziano sector as follows.  Fix the
 bifundamental multiplicity vector
-\mbox{$k=(k_{++},k_{--},k_{+-},k_{-+})$} with total
-$k_{\text{tot}}\le 4$ and, for each choice, scan over the allowed
-tensor multiplicity tuples
+$k=(k_{++},k_{--},k_{+-},k_{-+})$ with total
+$k_{\text{tot}}\le 4$ (cf.~Section~\ref{sec:setup-largeN}) and, for
+each such $k$, scan the allowed tensor multiplicity tuples
 $(n_{\adj}^{(a)},n_{S}^{(a)},n_{\bar S}^{(a)},n_{A}^{(a)},n_{\bar A}^{(a)})$
-at each node~$a$ subject to
+at each node subject to:
 \begin{enumerate}\setlength{\itemsep}{2pt}
   \item the leading-$N$ asymptotic-freedom condition
     \eqref{eq:AF-lead};
   \item the cubic-anomaly cancellation
-    \eqref{eq:anomaly} at leading order in~$N$, with
-    $\Nf^{(a),\pm}=0$ (non-Veneziano limit); and
-  \item discrete symmetries interchanging the two nodes, node-0/1
-    reflections, and (anti-)bifundamental flips, whose quotient
-    defines the universality class.
+    \eqref{eq:anomaly} at leading order in $N$, with
+    $\Nf^{(a),\pm}=0$ (non-Veneziano);
+  \item discrete symmetries exchanging the two nodes, reflecting
+    bifundamentals $(\fund\leftrightarrow\afund)$ at each end
+    independently, and orienting the bifundamental edges.
 \end{enumerate}
-Each resulting representative is then subjected to symbolic
-$a$-maximisation: the R-charge manifold is parameterised subject to the
-gauge-anomaly-free constraints~\eqref{eq:anomaly-free}, the $a$-function
-\eqref{eq:a-trial} is extremised symbolically, and only critical points
-with a negative-definite Hessian are retained.  Theories sharing the
-same $a/N^{2}$ to high precision are grouped into a universality
-class.\footnote{Classes are labelled by their position in the global
-$135$-class table of the full database; we inherit the original
-indexing without relabelling.}
+Each surviving theory is then subjected to symbolic
+$a$-maximisation: the R-charge manifold is parameterised by
+\eqref{eq:anomaly-free}, $a(R)$ of \eqref{eq:a-trial} is extremised
+symbolically, and only critical points inside the allowed polytope
+with negative-definite Hessian are retained.  Theories sharing the
+same value of $a/N^{2}$ (to $10^{-10}$ numerical precision after
+algebraic simplification) are grouped into a universality
+class.\footnote{We use the class labels of the global $135$-class
+table of the full database without relabelling.}  A universality class
+may contain theories with genuinely distinct matter and/or edge
+structure, as illustrated below.
 
 \subsection{The seven non-Veneziano equal-rank classes}
 \label{sec:class-seven}
 
+Seven universality classes satisfy the enumeration constraints above.
+Their $a$-charges and representative counts are collected in
+Table~\ref{tab:seven-classes}.
+
 \begin{table}[h]
   \centering
   \small
-  \setlength{\tabcolsep}{5pt}
-  \begin{tabular}{cllllcr}
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{clr}
     \toprule
-    Class & Matter at node 0 & Matter at node 1 &
-    Bifundamentals & $a/N^{2}$ & $a=c$? & $\#$\,theories\\
+    Class & $a/N^{2}$ & $\#$\,theories \\
     \midrule
-    $1$  & $\bar A$          & $\bar A$         & $1\times(\fund,\fund)$                & $0$                         & deg. & $6$ \\
-    $2$  & $\bar A$          & $S+2\bar A$      & $1\times(\fund,\fund)$                & $-\tfrac{297}{32}+\tfrac{135\sqrt 5}{32}$        & yes & $32$ \\
-    $4$  & $2A+3\bar A$      & $\bar A$         & $1\times(\fund,\fund)$                & $-\tfrac{229}{32}+\tfrac{65\sqrt{13}}{32}$       & yes & $12$ \\
-    $16$ & $A+2\bar A$       & $\bar A$         & $2\times(\fund,\fund)+(\afund,\afund)$   & $\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}$             & yes & $8$ \\
-    $21$ & $A+\bar A$        & $2\,\adj$        & $(\fund,\fund)+(\afund,\afund)$          & $-\tfrac{7}{2}+\tfrac{5\sqrt{10}}{4}$            & yes & $77$ \\
-    $23$ & $A+2\bar A$       & $2A+3\bar A$     & $1\times(\fund,\fund)$                & $\tfrac{30159}{86528}+\tfrac{2295\sqrt{17}}{86528}$ & yes & $48$ \\
-    $44$ & $2A+3\bar A$      & $2A+3\bar A$     & $1\times(\fund,\fund)$                & $\tfrac{1}{2}$                                    & free & $81$ \\
+    $1$   & $0$                                             & $6$  \\
+    $2$   & $-\tfrac{297}{32}+\tfrac{135\sqrt 5}{32}$          & $32$ \\
+    $4$   & $-\tfrac{229}{32}+\tfrac{65\sqrt{13}}{32}$         & $12$ \\
+    $16$  & $\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}$               & $8$  \\
+    $21$  & $-\tfrac{7}{2}+\tfrac{5\sqrt{10}}{4}$              & $77$ \\
+    $23$  & $\tfrac{30159}{86528}+\tfrac{2295\sqrt{17}}{86528}$& $48$ \\
+    $44$  & $\tfrac{1}{2}$                                  & $81$ \\
     \bottomrule
   \end{tabular}
   \caption{The seven non-Veneziano $\SU(N)\times\SU(N)$ universality
-    classes.  Matter columns list the node content in the notation of
-    Table~\ref{tab:SU-reps}.  The number of equivalent theories in
-    each class is shown in the rightmost column.  Classes
-    $1$ and $44$ are degenerate: their a-maximum is at the free
-    field value $R=2/3$ for all bifundamentals, corresponding to
-    non-interacting fixed points.}
+    classes.  $a/N^{2}$ is the exact leading-$N$ central charge;
+    $\#$\,theories is the number of distinct quivers the enumeration
+    finds in the class.  For all seven classes $a=c$ to leading order
+    in $1/N$.}
   \label{tab:seven-classes}
 \end{table}
 
-The five interacting classes in Table~\ref{tab:seven-classes} share
-three salient features:
+\paragraph{Remark on $a=c$.}
+Every class in Table~\ref{tab:seven-classes} satisfies $a/c=1$ at
+leading order in $1/N$ (i.e.\ $\Tr R^{\star}=\Tr R^{\star 3}$ modulo
+$\mathcal O(N^{0})$ terms).  This is a direct consequence of the
+absence of Veneziano fundamentals: it is the $\mathcal O(N)$-many
+fundamentals that would contribute the asymmetric term breaking
+$a=c$ at leading $N$.
 
-\begin{itemize}
-  \item \textbf{$a=c$ to leading order.}  In each case the central
-    charges coincide to leading order in $1/N$, $a/c=1$.  This is a
-    strong signature: in general two-coupling SCFTs allow $a\neq c$
-    at $\mathcal O(1)$ in $1/N$, but the extremal R-symmetry of these
-    seven classes lies in a subgroup of the flavour symmetry that
-    enforces $\Tr R^{3}=\Tr R$ at leading $N$.
-  \item \textbf{Exact R-charges with square-root irrationals.}  The
-    extremisation problem at each node reduces to a low-dimensional
-    polynomial system in the node R-charges, whose solutions involve
-    square roots of small integers ($\sqrt 5,\sqrt{10},\sqrt{13},
-    \sqrt{17}$).
-  \item \textbf{Positivity of all gauge-invariant operator
-    dimensions.}  We verify that the a-maximising R-charges satisfy
-    the unitarity bound $\Delta(\mathcal O)\ge 1$ for every
-    gauge-invariant operator built from the matter content.  No
-    accidental symmetries are required.
-\end{itemize}
+\subsection{Multiple representatives per class}
+\label{sec:class-representatives}
 
-\paragraph{Degenerate classes.}  Class $1$ has $a/N^{2}=0$ with all
-bifundamental R-charges vanishing; the a-maximum is at the corner of
-the allowed region and the theory is free in the $1/N$ expansion (and
-not unitary as an SCFT).  Class $44$ returns $R=2/3$ for every
-bifundamental, giving the free-field value of $a/N^{2}=1/2$.  Both
-degenerate classes are included in our tables for completeness but are
-excluded from the RG-phase analysis below.
-
-\subsection{Representative matter and R-charges}
-\label{sec:class-representative}
+To demonstrate that each class contains genuinely distinct quivers
+--- not just the same theory under trivial relabellings --- we list
+in Table~\ref{tab:class-reps} several concrete representatives for
+each class with their matter and bifundamental edge structures.
+Each row is a separate entry of the database with the same
+$a/N^{2}$.  Notation $(i\to j,\epsilon_{i}\epsilon_{j})$ denotes a
+bifundamental with orientation from node $i$ to node $j$ and $\pm$
+signs on each end indicating fundamental~$(+)$ vs
+anti-fundamental~$(-)$; a prefactor denotes multiplicity.
 
 \begin{table}[h]
   \centering
   \small
-  \begin{tabular}{cl}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{cllll}
     \toprule
-    Class & R-charges of the representative \\
+    Class & Node 1 matter & Node 2 matter & Bifundamental edges \\
     \midrule
-    $2$  & $R_{\bar A}^{(0)}=-\tfrac{7}{2}+\tfrac{3\sqrt 5}{2},\;
-            R_{S}^{(1)}=R_{\bar A}^{(1)}=-\tfrac{1}{2}+\tfrac{\sqrt 5}{2},\;
-            R_{\text{bif}}=\tfrac{7}{2}-\tfrac{3\sqrt 5}{2}$\\[2pt]
-    $4$  & $R_{A}^{(0)}=R_{\bar A}^{(0)}=\tfrac{1}{6}+\tfrac{\sqrt{13}}{6},\;
-            R_{\bar A}^{(1)}=-\tfrac{19}{6}+\tfrac{5\sqrt{13}}{6},\;
-            R_{\text{bif}}=\tfrac{19}{6}-\tfrac{5\sqrt{13}}{6}$\\[2pt]
-    $16$ & $R_{A}^{(0)}=R_{\bar A}^{(0)}=\tfrac{7}{6}-\tfrac{\sqrt 5}{6},\;
-            R_{\bar A}^{(1)}=\tfrac{3}{2}-\tfrac{\sqrt 5}{2},\;
-            R_{\text{bif}}=\tfrac{1}{6}+\tfrac{\sqrt 5}{6}$\\[2pt]
-    $21$ & $R_{\adj}^{(0)}=-\tfrac{5}{3}+\tfrac{2\sqrt{10}}{3},\;
-            R_{\adj}^{(1)}=-\tfrac{1}{3}+\tfrac{\sqrt{10}}{3},\;
-            R_{\text{bif}}=\tfrac{8}{3}-\tfrac{2\sqrt{10}}{3}$\\[2pt]
-    $23$ & $R_{A}^{(0)}=R_{\bar A}^{(0)}=\tfrac{29}{104}+\tfrac{5\sqrt{17}}{104},\;
-            R_{A}^{(1)}=R_{\bar A}^{(1)}=\tfrac{59}{104}+\tfrac{3\sqrt{17}}{104},\;
-            R_{\text{bif}}=\tfrac{121}{104}-\tfrac{15\sqrt{17}}{104}$\\
+    $1$  & $\bar A$                    & $\bar A$                  & $(1\!\to\!2,++)$ \\
+         & $\bar A$                    & $\bar S$                  & $(1\!\to\!2,++)$ \\
+         & $\bar A$                    & $A$                       & $(1\!\to\!2,+-)$ \\
+    \midrule
+    $2$  & $\bar A$                    & $S+2\bar A$               & $(1\!\to\!2,++)$ \\
+         & $A+2\bar A$                 & $\bar A$                  & $(1\!\to\!2,++)$ \\
+         & $\bar S + A+\bar A$         & $\bar A$                  & $(1\!\to\!2,++)$ \\
+         & $\bar S$                    & $\adj+\bar S$             & $(1\!\to\!2,++)$ \\
+         & $\bar A$                    & $\adj+A$                  & $(1\!\to\!2,+-)$ \\
+    \midrule
+    $4$  & $2A+3\bar A$                & $\bar A$                  & $(1\!\to\!2,++)$ \\
+         & $\bar S+2A+2\bar A$         & $\bar A$                  & $(1\!\to\!2,++)$ \\
+         & $\adj+A+2\bar A$            & $\bar S$                  & $(1\!\to\!2,++)$ \\
+         & $2A+3\bar A$                & $S$                       & $(1\!\to\!2,+-)$ \\
+    \midrule
+    $16$ & $A+2\bar A$                 & $\bar A$                  & $2\!\times\!(1\!\to\!2,++),(1\!\to\!2,--)$ \\
+         & $A+2\bar A$                 & $A$                       & $(1\!\to\!2,++),(1\!\to\!2,+-),(1\!\to\!2,--)$ \\
+         & $A+2\bar A$                 & $\bar A$                  & $(1\!\to\!2,++),(1\!\to\!2,+-),(2\!\to\!1,+-)$ \\
+         & $A+2\bar A$                 & $A$                       & $2\!\times\!(1\!\to\!2,+-),(2\!\to\!1,+-)$ \\
+    \midrule
+    $21$ & $A+\bar A$                  & $2\adj$                   & $(1\!\to\!2,++),(1\!\to\!2,--)$ \\
+         & $\adj$                      & $2\adj$                   & $(1\!\to\!2,++),(1\!\to\!2,--)$ \\
+         & $A+3\bar A$                 & $2\bar A$                 & $2\!\times\!(1\!\to\!2,++)$ \\
+         & $2\bar A$                   & $2A+2\bar A$              & $(1\!\to\!2,++),(1\!\to\!2,+-)$ \\
+         & $S+\bar S+A+\bar A$         & $\adj$                    & $(1\!\to\!2,++),(1\!\to\!2,--)$ \\
+    \midrule
+    $23$ & $A+2\bar A$                 & $2A+3\bar A$              & $(1\!\to\!2,++)$ \\
+         & $A+2\bar A$                 & $\adj+A+2\bar A$          & $(1\!\to\!2,++)$ \\
+         & $2A+3\bar A$                & $\adj+\bar S$             & $(1\!\to\!2,++)$ \\
+         & $A+2\bar A$                 & $3A+2\bar A$              & $(1\!\to\!2,+-)$ \\
+    \midrule
+    $44$ & $2A+3\bar A$                & $2A+3\bar A$              & $(1\!\to\!2,++)$ \\
+         & $\adj+A+2\bar A$            & $\adj+A+2\bar A$          & $(1\!\to\!2,++)$ \\
+         & $2\adj$                     & $2\adj$                   & $(1\!\to\!2,++),(1\!\to\!2,--)$ \\
+         & $A+\bar A$                  & $\adj$                    & $2\!\times\!(1\!\to\!2,++),2\!\times\!(1\!\to\!2,--)$ \\
+         & ---                         & ---                       & $3\!\times\!(1\!\to\!2,++),3\!\times\!(1\!\to\!2,--)$ \\
     \bottomrule
   \end{tabular}
-  \caption{Exact R-charges of a representative theory in each of the
-    five interacting non-Veneziano equal-rank classes.  For classes
-    with multiple bifundamentals the R-charges are all equal at the
-    symmetric critical point.}
+  \caption{Selected distinct representatives per class, drawn
+    directly from the enumeration database.  Each class contains
+    additional representatives not listed here; the full enumeration
+    is available in the accompanying database.  The rows within a
+    class have genuinely different matter content and/or edge
+    structure but identical $a/N^{2}$, demonstrating that each class
+    is a non-trivial universality class rather than a relabelling.}
+  \label{tab:class-reps}
+\end{table}
+
+\subsection{Representative R-charges}
+\label{sec:class-rcharges}
+
+The symmetric critical point of $a$-maximisation in each class has
+all bifundamentals carrying equal R-charge (in each class we have
+verified by symbolic extremisation that the symmetric critical point
+is the unique interior critical point with negative-definite Hessian
+and satisfies the unitarity bound $\Delta\ge 1$ on gauge-invariant
+composites, \emph{except} for class~1, which lands on the boundary
+$R_{\text{bif}}=0$ of the polytope).  The exact R-charges are
+collected in Table~\ref{tab:R-charges}.
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{clc}
+    \toprule
+    Class & R-charges of the representative & $R_{\text{bif}}$ numeric \\
+    \midrule
+    $1$  & $R_{\bar A}^{(1,2)}=0,\;R_{\text{bif}}=0$                                                      & $0.0000$ \\[2pt]
+    $2$  & $R_{\bar A}^{(1)}=-\tfrac{7}{2}+\tfrac{3\sqrt 5}{2},\;
+            R_{S}^{(2)}\!=R_{\bar A}^{(2)}=-\tfrac{1}{2}+\tfrac{\sqrt 5}{2},\;
+            R_{\text{bif}}=\tfrac{7}{2}-\tfrac{3\sqrt 5}{2}$              & $0.1459$ \\[2pt]
+    $4$  & $R_{A}^{(1)}\!=R_{\bar A}^{(1)}=\tfrac{1}{6}+\tfrac{\sqrt{13}}{6},\;
+            R_{\bar A}^{(2)}=-\tfrac{19}{6}+\tfrac{5\sqrt{13}}{6},\;
+            R_{\text{bif}}=\tfrac{19}{6}-\tfrac{5\sqrt{13}}{6}$            & $0.1620$ \\[2pt]
+    $16$ & $R_{A}^{(1)}\!=R_{\bar A}^{(1)}=\tfrac{7-\sqrt 5}{6},\;
+            R_{\bar A}^{(2)}=\tfrac{3-\sqrt 5}{2},\;
+            R_{\text{bif}}=\tfrac{1+\sqrt 5}{6}$                           & $0.5393$ \\[2pt]
+    $21$ & $R_{\adj}^{(1)}=-\tfrac{5}{3}+\tfrac{2\sqrt{10}}{3},\;
+            R_{\adj}^{(2)}=-\tfrac{1}{3}+\tfrac{\sqrt{10}}{3},\;
+            R_{\text{bif}}=\tfrac{8}{3}-\tfrac{2\sqrt{10}}{3}$             & $0.5585$ \\[2pt]
+    $23$ & $R_{A}^{(1)}\!=R_{\bar A}^{(1)}=\tfrac{29+5\sqrt{17}}{104},\;
+            R_{A}^{(2)}\!=R_{\bar A}^{(2)}=\tfrac{59+3\sqrt{17}}{104},\;
+            R_{\text{bif}}=\tfrac{121-15\sqrt{17}}{104}$                   & $0.5688$ \\[2pt]
+    $44$ & $R_{\text{tensor/adj}}=R_{\text{bif}}=\tfrac{2}{3}$                                           & $0.6667$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{Exact R-charges at the $a$-maximal critical point.  Class
+    1's critical point has all R-charges vanishing and lies on the
+    boundary of the allowed polytope (see
+    Section~\ref{sec:class-special}); class 44's R-charges coincide
+    with the free-field value $2/3$ at leading $N$ (ditto).  For
+    classes with multiple bifundamentals the R-charges at the
+    symmetric critical point are equal.}
   \label{tab:R-charges}
 \end{table}
 
-For instance, class $16$ has the bifundamental structure
-$2\,(\fund,\fund)+(\afund,\afund)$ with tensors $A+2\bar A$ on node $0$
-and $\bar A$ on node $1$.  Its a-maximum is
-\begin{equation}
-  a/N^{2}\bigl|_{16}\;=\;\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}
-  \;\simeq\;0.4431\,,
-  \qquad
-  R_{\text{bif}}\bigl|_{16}\;=\;\tfrac{1+\sqrt 5}{6}\;\simeq\;0.539\,,
-\end{equation}
-with the tensor and anti-tensor R-charges at node~$0$ degenerate,
-$R_{A}^{(0)}=R_{\bar A}^{(0)}=(7-\sqrt 5)/6\simeq 0.794$.  This class
-will play a central role in Section~\ref{sec:phases}.
+\subsection{The two special classes: 1 and 44}
+\label{sec:class-special}
+
+Two classes deserve separate comment because their R-charge
+assignment sits on the boundary of the physically allowed polytope.
+
+\paragraph{Class 1 ($a/N^{2}=0$, $R_{\text{bif}}=0$).}
+Symbolic $a$-maximisation on class 1 returns an extremum at the
+corner $R_{\bar A}^{(1)}=R_{\bar A}^{(2)}=R_{\text{bif}}=0$, which
+yields $a/N^{2}=0$.  Because the scalar chiral primary of the
+gauge-invariant operator $\Phi_{\text{bif}}\Phi_{\text{bif}}^{\dagger}$
+has $\Delta=3R_{\text{bif}}/2=0$, well below the unitarity bound
+$\Delta\ge 1$ (and in fact below the bound $\Delta\ge 1/2$ for
+scalars), the leading-$N$ $a$-maximum does not describe a unitary
+interacting SCFT.  In practice, the true IR of a theory in this class
+is either a free theory in the far infra-red, or a non-trivial fixed
+point outside the leading-$N$ R-symmetry parameter space used by
+$a$-max; either way, the leading-$N$ analysis of the decoupled
+sub-theory and the resulting boundary coefficient
+$b_{0}^{(a)}(g_{b}^{\star})$ are still \emph{well-defined} quantities
+and are included in the phase analysis of
+Section~\ref{sec:boundary}.  We flag class 1 as non-interacting at
+leading $N$ and treat it on the same footing as the other classes
+for the RG-topology discussion.
+
+\paragraph{Class 44 ($a/N^{2}=1/2$, $R_{\text{bif}}=2/3$).}
+The $a$-maximal R-charges of class 44 equal the free-field value
+$2/3$, giving $a/N^{2}=\dim(\adj)/N^{2}\cdot\tfrac{2}{3}\cdot\tfrac{3}{2}/\ldots = 1/2$.
+Equivalently: on each node the matter content exactly saturates the
+leading-$N$ AF bound,
+$\alpha^{(a)}=3-n_{\adj}^{(a)}-\tfrac{1}{2}(n_{S}+n_{\bar S}+n_{A}+n_{\bar A})
+-\tfrac{k_{\text{tot}}}{2}=0$, so that at leading $N$ the one-loop
+beta function vanishes and the anomalous dimensions that would
+normally drive the theory to a non-trivial R-charge are absent.  This
+class is therefore leading-$N$ \emph{marginal}: $b_{0}^{(a)}=0$ at
+both nodes to leading order, with subleading $\gamma^{(a)}$-corrections
+that may be positive or negative depending on the representative.  As
+a result the boundary coefficients $b_{0}^{(a)}(g_{b}^{\star})$ also
+vanish at leading $N$, and the RG topology of the class is determined
+by the sub-leading structure.  We include class 44 in
+Section~\ref{sec:boundary} with this leading-order marginality made
+explicit.
+
+\paragraph{Summary.}
+Classes $2,4,16,21,23$ have interior R-charge extrema within the
+unitarity polytope; classes $1$ and $44$ have their extrema on the
+polytope boundary (unitarity boundary and free-field boundary
+respectively).  All seven classes are retained in the RG-flow
+topology analysis of Sections~\ref{sec:boundary}--\ref{sec:phases}.

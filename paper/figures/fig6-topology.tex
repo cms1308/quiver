@@ -12,13 +12,13 @@
     fpUV/.style={circle, draw=blue!70!black, fill=blue!70!black, inner sep=2pt},
   ]
     % axes
-    \draw[->, thick] (-0.3,0) -- (5.4,0) node[right] {$g_{0}$};
-    \draw[->, thick] (0,-0.3) -- (0,4.7) node[above] {$g_{1}$};
+    \draw[->, thick] (-0.3,0) -- (5.4,0) node[right] {$g_{1}$};
+    \draw[->, thick] (0,-0.3) -- (0,4.7) node[above] {$g_{2}$};
     % fixed points
     \node[fpUV, label={below left:UV: $(0,0)$}] (UV) at (0,0) {};
-    \node[fpIR, label={[align=right]left:{\textbf{axis SCFT $A$}\\$(0,\,g_{1}^{\star})$}}]
+    \node[fpIR, label={[align=right]left:{\textbf{axis SCFT 2}\\$(0,\,g_{2}^{\star})$}}]
           (A1) at (0,3.4) {};
-    \node[fpIR, label={[align=center]below:{\textbf{axis SCFT $B$}\\$(g_{0}^{\star},\,0)$}}]
+    \node[fpIR, label={[align=center]below:{\textbf{axis SCFT 1}\\$(g_{1}^{\star},\,0)$}}]
           (A0) at (4.2,0) {};
     \node[fp,   label={[align=left]above right:{\textbf{saddle $C$}\\(interior)}}]
           (C)  at (2.6,2.1) {};
@@ -43,15 +43,15 @@
     \draw[flow, gray!70] (1.5,0.1) to[out=80, in=105] (A0);
     \draw[flow, gray!70] (2.2,0.3) to[out=40, in=130] (A0);
     \draw[flow, gray!70] (2.9,0.8) to[out=20, in=160] (A0);
-    % B label
-    \node[red!70!black]  at (1.1, 3.60) {\small $\Bcond_{A}>0$};
-    \node[red!70!black]  at (4.20, 0.50) {\small $\Bcond_{B}>0$};
+    % labels
+    \node[red!70!black]  at (1.1, 3.60) {\small $\alpha_{2}<0$};
+    \node[red!70!black]  at (4.20, 0.50) {\small $\alpha_{1}<0$};
   \end{tikzpicture}
-  \caption{Topology (iii): $\Bcond_{A},\Bcond_{B}>0$.  Both boundary
-    single-node SCFTs (filled red circles) are IR-stable; a separatrix
-    (dashed violet) through the interior saddle $C$ divides the basins
-    of attraction.  Realised by class~$16$ deformed by $\Nf$
-    fundamentals on node~$1$ in the window
+  \caption{Figure~6 topology: $(\alpha_{1},\alpha_{2})=(-,-)$.  Both
+    axis SCFTs (filled red circles) are IR-stable; a separatrix
+    (dashed violet) through the interior saddle $C$ divides the
+    basins of attraction.  Realised by class~$16$ deformed by $\Nf$
+    fundamentals on node~$2$ in the window
     $0.427\,N-1<\Nf<N-1$.}
   \label{fig:fig6}
 \end{figure}
