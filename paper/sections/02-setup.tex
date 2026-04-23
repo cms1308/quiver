@@ -167,41 +167,40 @@ At leading order in $1/N$, the AF conditions become
   \label{eq:AF-lead}
 \end{equation}
 
-\paragraph{Why $k_{\text{tot}}\le 4$.}
-The leading-$N$ bound \eqref{eq:AF-lead} with
+\paragraph{The range of $k_{\text{tot}}$.}
+The leading-$N$ AF bound \eqref{eq:AF-lead} with
 $n_{\adj}^{(a)}=n_{S}^{(a)}=n_{\bar S}^{(a)}=n_{A}^{(a)}=n_{\bar A}^{(a)}=0$
-forces
+(pure bifundamental quiver, no intra-node matter) admits
 \begin{equation}
   k_{\text{tot}}\;\le\;6\,,
   \label{eq:k-strict}
 \end{equation}
-saturating at $k_{\text{tot}}=6$ only with no node matter at all, which
-yields the trivial class in which both nodes are at the strict
-boundary of asymptotic freedom and no rank-two tensor or adjoint may
-be added.  In the physically interesting enumeration we require
-$b_{0}^{(a)}>0$ \emph{strictly} at leading $N$ in order to have a
-non-degenerate RG flow and to admit \emph{some} rank-two tensor or
-adjoint matter at either node (otherwise the two nodes are decoupled
-pure Yang--Mills with bifundamental matter only, and the universality
-class contains no internal structure).  The bound \eqref{eq:AF-lead}
-then becomes
+saturating at $k_{\text{tot}}=6$ with $b_{0}^{(a)}=0$
+\emph{exactly} (marginal at one loop for all $N$).  The enumeration
+in \texttt{quiver\_generation.py:\_enumerate\_edges} uses
+\texttt{max\_multiedge=2} per edge type and loops over all four
+$\SU$--$\SU$ edge types $\{++,--,+-_{\text{fwd}},+-_{\text{bwd}}\}$,
+so in principle up to $k_{\text{tot}}=8$; the exact-anomaly
+condition \eqref{eq:anomaly-N-nonVen}, together with the leading-$N$
+AF inequality \eqref{eq:AF-lead}, restricts the physically
+realised values in the non-Veneziano equal-rank sector to
 \begin{equation}
-  k_{\text{tot}}\;\le\;5\,;
+  k_{\text{tot}}\;\in\;\{1,2,3,4,6\}\,.
+  \label{eq:k-values}
 \end{equation}
-and for the classification presented here we impose the slightly
-stronger pragmatic cap
-\begin{equation}
-  k_{\text{tot}}\;\le\;4\,,
-\end{equation}
-under which every equal-rank non-Veneziano universality class admits at
-least one representative with \emph{both} $n_{\text{tensors}}^{(a)}\ge
-1$ and $\Nf^{(a)}=0$.  We have verified by enumeration that the
-$k_{\text{tot}}=5$ sector contains no additional equal-rank
-non-Veneziano universality classes beyond those captured at
-$k_{\text{tot}}\le 4$: the strict saturation
-$b_{0}^{(a)}\big|_{\text{leading}}=0$ forces all matter to be
-subleading, producing only further instances of the marginal class
-already present at $k_{\text{tot}}=4$ (class 44 below).
+The absence of $k_{\text{tot}}=5$ is a consequence of the anomaly
+identity together with the tensor content: with no tensors at all
+(no $S,\bar S,A,\bar A,\adj$), the $N$-coefficient
+condition~\eqref{eq:anomaly-N-nonVen} reduces to $\deg^{+}_{a}
+-\deg^{-}_{a}=0$ at each node, which requires $k_{\text{tot}}$ to be
+even; the only odd $k_{\text{tot}}$ values realised by the enumeration
+are $\{1,3\}$, both relying on a non-zero tensor asymmetry
+$(n_{S}-n_{\bar S})+(n_{A}-n_{\bar A})\ne 0$ to close the anomaly,
+and at $k_{\text{tot}}=5$ the tensor content demanded by the AF bound
+\eqref{eq:AF-lead} is incompatible with this asymmetry.  The
+unique class supporting $k_{\text{tot}}=6$ is the purely
+bifundamental class 44 (no tensor matter), which is leading-$N$
+marginal.
 
 \subsection{IR fixed points and \texorpdfstring{$a$}{a}-maximisation}
 \label{sec:setup-amax}
@@ -280,7 +279,7 @@ All numerical data used throughout this paper come from a symbolic
 large-$N$ $a$-maximisation pipeline, producing a database of $4{,}560$
 two-node theories grouped into $135$ universality classes by their
 $a$-maxima.  We focus on the $\SU(N)\times\SU(N)$ equal-rank sector in
-the non-Veneziano limit, where \emph{seven} universality classes arise
+the non-Veneziano limit, where \emph{nine} universality classes arise
 (Section~\ref{sec:classification}); their boundary coefficients
 $b_{0}^{(a)}(g_{b}^{\star})$ are tabulated in
 Section~\ref{sec:boundary}, and the resulting RG-flow topology of each

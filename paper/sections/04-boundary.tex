@@ -48,11 +48,15 @@ non-Veneziano limit $\Nf^{(b)}=0$, whether axis $a$ is IR-unstable:
   }
 \end{equation}
 
-\subsection{The seven equal-rank classes}
+\subsection{The nine equal-rank classes}
 \label{sec:boundary-table}
 
 Table~\ref{tab:b0-boundary} collects the UV and boundary one-loop
-bounds for all seven non-Veneziano equal-rank classes.  The
+bounds for the eight non-Veneziano equal-rank classes with a
+well-defined leading-$N$ $a$-maximum.  Class~877 is omitted because
+its leading-$N$ $a$-maximisation does not return an interior critical
+point (Section~\ref{sec:class-special}); the boundary coefficients
+$\alpha_{b}^{(a\star)}$ are not defined there.  The
 $\alpha$-coefficients are class-invariants (independent of the choice
 of representative within a class, as we have verified for each
 class in Table~\ref{tab:class-reps}).
@@ -79,6 +83,9 @@ class in Table~\ref{tab:class-reps}).
     $4$   & $\Nf^{(1)}\!\le 3$         & $\Nf^{(2)}\!\le 2N{-}1$
           & $\Nf^{(2)}\!\le 1.2431\,N{-}1$ & $\Nf^{(1)}\!\le -0.7569\,N{+}3$
           & mixed \\
+    $9$   & $\Nf^{(1)}\!\le \tfrac34 N{+}c_{1}$ & $\Nf^{(2)}\!\le \tfrac34 N{+}c_{2}$
+          & $\Nf^{(2)}\!\le \tfrac34 N{+}c_{2}$ & $\Nf^{(1)}\!\le \tfrac34 N{+}c_{1}$
+          & Fig.~5$^{\ast}$ \\
     $16$  & $\Nf^{(1)}\!\le 1$         & $\Nf^{(2)}\!\le N{-}1$
           & $\Nf^{(2)}\!\le 0.4270\,N{-}1$ & $\Nf^{(1)}\!\le -0.5730\,N{+}1$
           & mixed \\
@@ -93,16 +100,24 @@ class in Table~\ref{tab:class-reps}).
           & marginal \\
     \bottomrule
   \end{tabular}
-  \caption{UV and boundary one-loop bounds for the seven equal-rank
-    non-Veneziano classes.  ``Phase'' anticipates the classification
-    of Section~\ref{sec:phases}: \emph{Fig.~5} means
+  \caption{UV and boundary one-loop bounds for the eight equal-rank
+    non-Veneziano classes with defined leading-$N$ $a$-maximum
+    (class~877 omitted; see Section~\ref{sec:class-special}).
+    ``Phase'' anticipates the classification of
+    Section~\ref{sec:phases}: \emph{Fig.~5} means
     $\alpha_{1}^{(2\star)},\alpha_{2}^{(1\star)}>0$ (both axes
     IR-unstable, interior SCFT attracts); \emph{mixed} means one
-    $\alpha$ positive, one negative.  $^{\ast}$Class 1 is formally
-    in the Fig.~5 sign pattern at leading $N$ but its IR R-charges
-    are non-physical (Section~\ref{sec:class-special}); the Fig.~5
-    phase for class 1 should be understood as reflecting the
-    leading-$N$ sign pattern only.  $^{\dagger}$Class 21 has
+    $\alpha$ positive, one negative.  $^{\ast}$Classes 1 and 9 are
+    formally in the Fig.~5 sign pattern at leading $N$ but their
+    interior R-charges are below the unitarity bound
+    (Section~\ref{sec:class-special}); the Fig.~5 phase assignment
+    for both should be understood as reflecting the leading-$N$ sign
+    pattern only.  For class 9 the UV and boundary bounds coincide
+    ($\alpha_{b}^{(a\star)}=\alpha^{(b)}=3/4$) because every matter
+    field sits at $R=1/2$ — the $R$-independent and
+    $R$-shift contributions to $\alpha$ cancel by design.  The
+    intercepts $c_{1},c_{2}$ depend on the representative; all
+    representatives share $\alpha=3/4$.  $^{\dagger}$Class 21 has
     $\alpha^{(2)}=0$ at the UV — node 2 is marginal at leading $N$;
     the boundary $\alpha$ on axis 2 is negative and well-defined.
     $^{44}$Class 44 is leading-$N$ marginal at both boundaries:
@@ -121,12 +136,12 @@ R-charge $R_{\text{bif}}^{(a\star)}$ into the general formula
 equivalently expressible in the form \eqref{eq:boundary-inequality}
 with $\alpha,\gamma$ rational functions of $R_{\text{bif}}^{(a\star)}$.
 
-\subsection{RG-topology classification of the seven classes}
+\subsection{RG-topology classification of the nine classes}
 \label{sec:boundary-phases}
 
 Each pair $(\alpha_{1}^{(2\star)},\alpha_{2}^{(1\star)})$ of
 boundary coefficients determines the RG topology of the class at
-$\Nf=0$.  The three possible sign patterns, with names following
+$\Nf=0$.  The possible sign patterns, with names following
 \cite{IW2005}, are:
 \begin{center}
   \begin{tabular}{lll}
@@ -134,13 +149,15 @@ $\Nf=0$.  The three possible sign patterns, with names following
     Phase & Sign pattern & Classes \\
     \midrule
     Fig.~5: both axes IR-unstable, interior SCFT attracts
-          & $(+,+)$      & $\{1,2\}$ \\
+          & $(+,+)$      & $\{2\}$, and $\{1,9\}^{\ast}$ (non-unitary) \\
     Mixed: one axis IR-unstable, one IR-stable
           & $(+,-)$ or $(-,+)$ & $\{4,16,21,23\}$ \\
     Fig.~6: both axes IR-stable, axis SCFTs attract
           & $(-,-)$      & \emph{none at $\Nf=0$} \\
     Marginal: $\alpha=0$ at both boundaries
           & $(0,0)$      & $\{44\}$ \\
+    Degenerate: leading-$N$ $a$-max undefined
+          & ---          & $\{877\}$ \\
     \bottomrule
   \end{tabular}
 \end{center}

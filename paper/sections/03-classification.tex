@@ -48,12 +48,12 @@ table of the full database without relabelling.}  A universality class
 may contain theories with genuinely distinct matter and/or edge
 structure, as illustrated below.
 
-\subsection{The seven non-Veneziano equal-rank classes}
-\label{sec:class-seven}
+\subsection{The nine non-Veneziano equal-rank classes}
+\label{sec:class-nine}
 
-Seven universality classes satisfy the enumeration constraints above.
+Nine universality classes satisfy the enumeration constraints above.
 Their $a$-charges and representative counts are collected in
-Table~\ref{tab:seven-classes}.
+Table~\ref{tab:nine-classes}.
 
 \begin{table}[h]
   \centering
@@ -63,30 +63,36 @@ Table~\ref{tab:seven-classes}.
     \toprule
     Class & $a/N^{2}$ & $\#$\,theories \\
     \midrule
-    $1$   & $0$                                             & $6$  \\
-    $2$   & $-\tfrac{297}{32}+\tfrac{135\sqrt 5}{32}$          & $32$ \\
-    $4$   & $-\tfrac{229}{32}+\tfrac{65\sqrt{13}}{32}$         & $12$ \\
-    $16$  & $\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}$               & $8$  \\
-    $21$  & $-\tfrac{7}{2}+\tfrac{5\sqrt{10}}{4}$              & $77$ \\
-    $23$  & $\tfrac{30159}{86528}+\tfrac{2295\sqrt{17}}{86528}$& $48$ \\
-    $44$  & $\tfrac{1}{2}$                                  & $81$ \\
+    $1$   & $0$                                             & $6$   \\
+    $2$   & $-\tfrac{297}{32}+\tfrac{135\sqrt 5}{32}$          & $32$  \\
+    $4$   & $-\tfrac{229}{32}+\tfrac{65\sqrt{13}}{32}$         & $12$  \\
+    $9$   & $\tfrac{27}{64}$                                   & $144$ \\
+    $16$  & $\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}$               & $8$   \\
+    $21$  & $-\tfrac{7}{2}+\tfrac{5\sqrt{10}}{4}$              & $77$  \\
+    $23$  & $\tfrac{30159}{86528}+\tfrac{2295\sqrt{17}}{86528}$& $48$  \\
+    $44$  & $\tfrac{1}{2}$                                  & $81$  \\
+    $877$ & undefined (see text)                            & $24$  \\
     \bottomrule
   \end{tabular}
-  \caption{The seven non-Veneziano $\SU(N)\times\SU(N)$ universality
+  \caption{The nine non-Veneziano $\SU(N)\times\SU(N)$ universality
     classes.  $a/N^{2}$ is the exact leading-$N$ central charge;
-    $\#$\,theories is the number of distinct quivers the enumeration
-    finds in the class.  For all seven classes $a=c$ to leading order
-    in $1/N$.}
-  \label{tab:seven-classes}
+    $\#$\,theories is the number of distinct non-Veneziano quivers the
+    enumeration finds in the class.  For all eight classes with a
+    defined $a/N^{2}$ the leading-$N$ $a=c$ relation holds.  Class~877
+    has one node with empty intrinsic matter content, so that
+    $a$-maximisation of the full two-node theory has no interior
+    critical point and $a/N^{2}$ is not defined at leading $N$
+    (Section~\ref{sec:class-special}).}
+  \label{tab:nine-classes}
 \end{table}
 
 \paragraph{Remark on $a=c$.}
-Every class in Table~\ref{tab:seven-classes} satisfies $a/c=1$ at
-leading order in $1/N$ (i.e.\ $\Tr R^{\star}=\Tr R^{\star 3}$ modulo
-$\mathcal O(N^{0})$ terms).  This is a direct consequence of the
-absence of Veneziano fundamentals: it is the $\mathcal O(N)$-many
-fundamentals that would contribute the asymmetric term breaking
-$a=c$ at leading $N$.
+Every class in Table~\ref{tab:nine-classes} with a defined leading-$N$
+central charge satisfies $a/c=1$ at leading order in $1/N$ (i.e.\
+$\Tr R^{\star}=\Tr R^{\star 3}$ modulo $\mathcal O(N^{0})$ terms).
+This is a direct consequence of the absence of Veneziano fundamentals:
+it is the $\mathcal O(N)$-many fundamentals that would contribute the
+asymmetric term breaking $a=c$ at leading $N$.
 
 \subsection{Multiple representatives per class}
 \label{sec:class-representatives}
@@ -124,6 +130,11 @@ anti-fundamental~$(-)$; a prefactor denotes multiplicity.
          & $\adj+A+2\bar A$            & $\bar S$                  & $(1\!\to\!2,++)$ \\
          & $2A+3\bar A$                & $S$                       & $(1\!\to\!2,+-)$ \\
     \midrule
+    $9$  & $A+2\bar A$                 & $A+2\bar A$               & $(1\!\to\!2,++)$ \\
+         & $A+2\bar A$                 & $S+2\bar A$               & $(1\!\to\!2,++)$ \\
+         & $A+2\bar A$                 & $\adj+\bar A$             & $(1\!\to\!2,++)$ \\
+         & $\bar S+A+\bar A$           & $\bar S+A+\bar A$         & $(1\!\to\!2,++)$ \\
+    \midrule
     $16$ & $A+2\bar A$                 & $\bar A$                  & $2\!\times\!(1\!\to\!2,++),(1\!\to\!2,--)$ \\
          & $A+2\bar A$                 & $A$                       & $(1\!\to\!2,++),(1\!\to\!2,+-),(1\!\to\!2,--)$ \\
          & $A+2\bar A$                 & $\bar A$                  & $(1\!\to\!2,++),(1\!\to\!2,+-),(2\!\to\!1,+-)$ \\
@@ -145,6 +156,11 @@ anti-fundamental~$(-)$; a prefactor denotes multiplicity.
          & $2\adj$                     & $2\adj$                   & $(1\!\to\!2,++),(1\!\to\!2,--)$ \\
          & $A+\bar A$                  & $\adj$                    & $2\!\times\!(1\!\to\!2,++),2\!\times\!(1\!\to\!2,--)$ \\
          & ---                         & ---                       & $3\!\times\!(1\!\to\!2,++),3\!\times\!(1\!\to\!2,--)$ \\
+    \midrule
+    $877$& ---                         & $A+\bar A$                & $(1\!\to\!2,++),(1\!\to\!2,--)$ \\
+         & ---                         & $2A+2\bar A$              & $(1\!\to\!2,++),(1\!\to\!2,--)$ \\
+         & $A+3\bar A$                 & ---                       & $(1\!\to\!2,++),(1\!\to\!2,+-)$ \\
+         & $\adj+\bar S+\bar A$        & ---                       & $(1\!\to\!2,++),(1\!\to\!2,+-)$ \\
     \bottomrule
   \end{tabular}
   \caption{Selected distinct representatives per class, drawn
@@ -183,6 +199,7 @@ collected in Table~\ref{tab:R-charges}.
     $4$  & $R_{A}^{(1)}\!=R_{\bar A}^{(1)}=\tfrac{1}{6}+\tfrac{\sqrt{13}}{6},\;
             R_{\bar A}^{(2)}=-\tfrac{19}{6}+\tfrac{5\sqrt{13}}{6},\;
             R_{\text{bif}}=\tfrac{19}{6}-\tfrac{5\sqrt{13}}{6}$            & $0.1620$ \\[2pt]
+    $9$  & $R_{\text{tensor}}^{(1,2)}=R_{\text{bif}}=\tfrac{1}{2}$                                              & $0.5000$ \\[2pt]
     $16$ & $R_{A}^{(1)}\!=R_{\bar A}^{(1)}=\tfrac{7-\sqrt 5}{6},\;
             R_{\bar A}^{(2)}=\tfrac{3-\sqrt 5}{2},\;
             R_{\text{bif}}=\tfrac{1+\sqrt 5}{6}$                           & $0.5393$ \\[2pt]
@@ -192,24 +209,31 @@ collected in Table~\ref{tab:R-charges}.
     $23$ & $R_{A}^{(1)}\!=R_{\bar A}^{(1)}=\tfrac{29+5\sqrt{17}}{104},\;
             R_{A}^{(2)}\!=R_{\bar A}^{(2)}=\tfrac{59+3\sqrt{17}}{104},\;
             R_{\text{bif}}=\tfrac{121-15\sqrt{17}}{104}$                   & $0.5688$ \\[2pt]
-    $44$ & $R_{\text{tensor/adj}}=R_{\text{bif}}=\tfrac{2}{3}$                                           & $0.6667$ \\
+    $44$ & $R_{\text{tensor/adj}}=R_{\text{bif}}=\tfrac{2}{3}$                                           & $0.6667$ \\[2pt]
+    $877$& not defined ($a$-maximum diverges; see Section~\ref{sec:class-special})                           & --- \\
     \bottomrule
   \end{tabular}
   \caption{Exact R-charges at the $a$-maximal critical point.  Class
     1's critical point has all R-charges vanishing and lies on the
     boundary of the allowed polytope (see
-    Section~\ref{sec:class-special}); class 44's R-charges coincide
-    with the free-field value $2/3$ at leading $N$ (ditto).  For
+    Section~\ref{sec:class-special}); class 9's R-charges are all
+    $R=1/2$, corresponding to the symmetric corner with anomalous
+    dimension $\gamma=-1/2$ for every matter field; class 44's
+    R-charges coincide with the free-field value $2/3$ at leading $N$
+    (ditto).  Class~877 has one node with empty intrinsic matter and
+    no interior $a$-maximum (Section~\ref{sec:class-special}).  For
     classes with multiple bifundamentals the R-charges at the
     symmetric critical point are equal.}
   \label{tab:R-charges}
 \end{table}
 
-\subsection{The two special classes: 1 and 44}
+\subsection{Four special classes: 1, 9, 44, and 877}
 \label{sec:class-special}
 
-Two classes deserve separate comment because their R-charge
-assignment sits on the boundary of the physically allowed polytope.
+Four classes deserve separate comment because their R-charge
+assignment sits on the boundary of the physically allowed polytope,
+or because the $a$-maximisation does not return a finite interior
+critical point.
 
 \paragraph{Class 1 ($a/N^{2}=0$, $R_{\text{bif}}=0$).}
 Symbolic $a$-maximisation on class 1 returns an extremum at the
@@ -230,6 +254,24 @@ Section~\ref{sec:boundary}.  We flag class 1 as non-interacting at
 leading $N$ and treat it on the same footing as the other classes
 for the RG-topology discussion.
 
+\paragraph{Class 9 ($a/N^{2}=27/64$, $R_{\text{bif}}=1/2$).}
+Symbolic $a$-maximisation on class 9 returns the symmetric critical
+point $R_{\text{bif}}=R_{\text{tensor}}^{(1,2)}=1/2$, giving
+$a/N^{2}=27/64$.  Every matter field has anomalous dimension
+$\gamma=3R-2=-1/2$ at this point.  As with class~1, the resulting
+R-charge falls below the unitarity bound $R\ge 2/3$ required for a
+gauge-invariant chiral composite to satisfy $\Delta\ge 1$: the scalar
+chiral primary $\Phi_{\text{bif}}\Phi_{\text{bif}}^{\dagger}$ has
+$\Delta=3R_{\text{bif}}/2=3/4<1$, violating unitarity.  Class 9 is
+therefore the \emph{second} non-unitary corner class (alongside
+class 1) of the leading-$N$ enumeration, lying at the intermediate
+value $R_{\text{bif}}=1/2$ rather than at the extreme corner $R=0$.
+The boundary coefficients $b_{0}^{(a)}(g_{b}^{\star})$ remain
+well-defined leading-$N$ quantities and are reported in
+Section~\ref{sec:boundary}; as with class 1, the Figure-5 phase
+assignment that emerges should be interpreted as a leading-$N$ formal
+sign pattern rather than as a claim about the physical IR.
+
 \paragraph{Class 44 ($a/N^{2}=1/2$, $R_{\text{bif}}=2/3$).}
 The $a$-maximal R-charges of class 44 equal the free-field value
 $2/3$, giving $a/N^{2}=\dim(\adj)/N^{2}\cdot\tfrac{2}{3}\cdot\tfrac{3}{2}/\ldots = 1/2$.
@@ -248,9 +290,32 @@ by the sub-leading structure.  We include class 44 in
 Section~\ref{sec:boundary} with this leading-order marginality made
 explicit.
 
+\paragraph{Class 877 ($a/N^{2}$ undefined; empty-node class).}
+Class 877 collects quivers in which one of the two nodes has no
+intrinsic matter ($n_{\adj}^{(a)}=n_{S}^{(a)}=n_{\bar S}^{(a)}=
+n_{A}^{(a)}=n_{\bar A}^{(a)}=0$ for $a=1$ or $a=2$), so the entire
+matter content of that node consists of bifundamentals to the other
+node.  The $a$-maximisation of the full two-node theory then has a
+flat direction: the R-charge of the empty node's gauginos is
+unconstrained except by the anomaly-free condition at the other
+node, and the symbolic trial $a$-function does not admit a finite
+interior critical point with negative-definite Hessian.  The leading
+$N$ central charge $a/N^{2}$ is therefore not defined for class 877,
+and the boundary coefficients $b_{0}^{(a)}(g_{b}^{\star})$ cannot be
+computed from the leading-$N$ prescription used for the other
+classes.  We retain class 877 in the classification for completeness
+— it is a legitimate solution of the enumeration constraints
+(\ref{eq:AF-lead}), (\ref{eq:anomaly-N}),
+(\ref{eq:anomaly-const}) — but flag it as a degenerate case whose
+RG topology requires an analysis beyond the scope of this paper.
+
 \paragraph{Summary.}
 Classes $2,4,16,21,23$ have interior R-charge extrema within the
-unitarity polytope; classes $1$ and $44$ have their extrema on the
-polytope boundary (unitarity boundary and free-field boundary
-respectively).  All seven classes are retained in the RG-flow
-topology analysis of Sections~\ref{sec:boundary}--\ref{sec:phases}.
+unitarity polytope; classes $1$ and $9$ have their extrema on (or
+below) the unitarity boundary; class $44$ saturates the free-field
+boundary at leading $N$; class $877$ has a degenerate
+$a$-maximisation with no interior critical point.  The eight classes
+with a defined leading-$N$ sign pattern $(1,2,4,9,16,21,23,44)$ are
+retained in the RG-flow topology analysis of
+Sections~\ref{sec:boundary}--\ref{sec:phases}; class~877 is omitted
+from the boundary-coefficient tables.
