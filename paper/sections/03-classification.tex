@@ -48,6 +48,26 @@ table of the full database without relabelling.}  A universality class
 may contain theories with genuinely distinct matter and/or edge
 structure, as illustrated below.
 
+\paragraph{Flat-direction exclusion.}
+A small number of quivers admit a \emph{flat direction} at the
+critical point of the $a$-trial: the Hessian has a zero eigenvalue,
+so the critical point is not a genuine local maximum and the IR
+R-charges are not uniquely determined.  These theories correspond to
+moduli spaces of near-IR R-symmetries rather than to isolated SCFT
+fixed points, and the leading-$N$ value of $a$ along the flat
+direction is not a well-defined invariant of the class.  Concretely,
+20 non-Veneziano theories in the enumeration exhibit such a flat
+direction at leading~$N$ — all of them are empty-node quivers in
+which one gauge node carries only bifundamental matter and the other
+carries a pair of distinct rank-2 tensors with equal multiplicity
+(e.g.\ $S+\bar S$ or $A+\bar A$); the leading-$N$ anomaly-free
+conditions then conspire to pin $R_{\text{tensor}_1}+R_{\text{tensor}_2}=2$,
+making the $a$-trial independent of the difference
+$R_{\text{tensor}_1}-R_{\text{tensor}_2}$.  We exclude these 20
+degenerate theories from all class counts below; the remaining
+$432-20=412$ non-Veneziano theories distribute among the nine classes
+summarised in Table~\ref{tab:nine-classes}.
+
 \subsection{The nine non-Veneziano equal-rank classes}
 \label{sec:class-nine}
 
@@ -66,22 +86,22 @@ Table~\ref{tab:nine-classes}.
     $1$   & $0$                                             & $6$   \\
     $2$   & $-\tfrac{297}{32}+\tfrac{135\sqrt 5}{32}$          & $32$  \\
     $4$   & $-\tfrac{229}{32}+\tfrac{65\sqrt{13}}{32}$         & $12$  \\
-    $9$   & $\tfrac{27}{64}$                                   & $144$ \\
+    $9$   & $\tfrac{27}{64}$                                   & $139$ \\
     $16$  & $\tfrac{3}{32}+\tfrac{5\sqrt 5}{32}$               & $8$   \\
     $21$  & $-\tfrac{7}{2}+\tfrac{5\sqrt{10}}{4}$              & $77$  \\
     $23$  & $\tfrac{30159}{86528}+\tfrac{2295\sqrt{17}}{86528}$& $48$  \\
     $44$  & $\tfrac{1}{2}$                                  & $81$  \\
-    $877$ & undefined (see text)                            & $24$  \\
+    $877$ & $0$                                             & $9$   \\
     \bottomrule
   \end{tabular}
   \caption{The nine non-Veneziano $\SU(N)\times\SU(N)$ universality
     classes.  $a/N^{2}$ is the exact leading-$N$ central charge;
     $\#$\,theories is the number of distinct non-Veneziano quivers the
-    enumeration finds in the class.  For all eight classes with a
-    defined $a/N^{2}$ the leading-$N$ $a=c$ relation holds.  Class~877
-    has one node with empty intrinsic matter content, so that
-    $a$-maximisation of the full two-node theory has no interior
-    critical point and $a/N^{2}$ is not defined at leading $N$
+    enumeration finds in the class after excluding those with an
+    $a$-trial flat direction at leading~$N$ (see text).  All nine
+    classes satisfy the leading-$N$ $a=c$ relation.  Class~877
+    collects the empty-node representatives with a unique leading-$N$
+    $a$-maximum at $a/N^{2}=0$
     (Section~\ref{sec:class-special}).}
   \label{tab:nine-classes}
 \end{table}
@@ -210,7 +230,7 @@ collected in Table~\ref{tab:R-charges}.
             R_{A}^{(2)}\!=R_{\bar A}^{(2)}=\tfrac{59+3\sqrt{17}}{104},\;
             R_{\text{bif}}=\tfrac{121-15\sqrt{17}}{104}$                   & $0.5688$ \\[2pt]
     $44$ & $R_{\text{tensor/adj}}=R_{\text{bif}}=\tfrac{2}{3}$                                           & $0.6667$ \\[2pt]
-    $877$& not defined ($a$-maximum diverges; see Section~\ref{sec:class-special})                           & --- \\
+    $877$& empty node; $R_{\text{bif}}=0$ on remaining matter (see Section~\ref{sec:class-special})           & $0.0000$ \\
     \bottomrule
   \end{tabular}
   \caption{Exact R-charges at the $a$-maximal critical point.  Class
@@ -220,10 +240,12 @@ collected in Table~\ref{tab:R-charges}.
     $R=1/2$, corresponding to the symmetric corner with anomalous
     dimension $\gamma=-1/2$ for every matter field; class 44's
     R-charges coincide with the free-field value $2/3$ at leading $N$
-    (ditto).  Class~877 has one node with empty intrinsic matter and
-    no interior $a$-maximum (Section~\ref{sec:class-special}).  For
-    classes with multiple bifundamentals the R-charges at the
-    symmetric critical point are equal.}
+    (ditto).  Class~877 retains the 9 empty-node representatives with
+    a unique interior critical point at $a/N^{2}=0$; all surviving
+    matter R-charges vanish, as in class~1
+    (Section~\ref{sec:class-special}).  For classes with multiple
+    bifundamentals the R-charges at the symmetric critical point are
+    equal.}
   \label{tab:R-charges}
 \end{table}
 
@@ -290,32 +312,37 @@ by the sub-leading structure.  We include class 44 in
 Section~\ref{sec:boundary} with this leading-order marginality made
 explicit.
 
-\paragraph{Class 877 ($a/N^{2}$ undefined; empty-node class).}
+\paragraph{Class 877 ($a/N^{2}=0$; empty-node class).}
 Class 877 collects quivers in which one of the two nodes has no
 intrinsic matter ($n_{\adj}^{(a)}=n_{S}^{(a)}=n_{\bar S}^{(a)}=
 n_{A}^{(a)}=n_{\bar A}^{(a)}=0$ for $a=1$ or $a=2$), so the entire
 matter content of that node consists of bifundamentals to the other
-node.  The $a$-maximisation of the full two-node theory then has a
-flat direction: the R-charge of the empty node's gauginos is
-unconstrained except by the anomaly-free condition at the other
-node, and the symbolic trial $a$-function does not admit a finite
-interior critical point with negative-definite Hessian.  The leading
-$N$ central charge $a/N^{2}$ is therefore not defined for class 877,
-and the boundary coefficients $b_{0}^{(a)}(g_{b}^{\star})$ cannot be
-computed from the leading-$N$ prescription used for the other
-classes.  We retain class 877 in the classification for completeness
-— it is a legitimate solution of the enumeration constraints
-(\ref{eq:AF-lead}), (\ref{eq:anomaly-N}),
-(\ref{eq:anomaly-const}) — but flag it as a degenerate case whose
-RG topology requires an analysis beyond the scope of this paper.
+node.  Of the 24 non-Veneziano empty-node enumerants, 15 have a flat
+direction at the leading-$N$ $a$-maximisation and are excluded under
+the criterion of Section~\ref{sec:class-enumeration}; the remaining 9
+admit a unique interior critical point at $a/N^{2}=0$, with all
+matter R-charges on the unitarity corner of the polytope.  These 9
+representatives share the qualitative features of class 1 — vanishing
+leading-$N$ central charge, R-charges on the boundary of the
+unitarity polytope — but are morphologically distinct (one empty
+node).  As in class~1 the leading-$N$ $a$-maximum does not describe a
+unitary interacting SCFT; the boundary coefficients
+$b_{0}^{(a)}(g_{b}^{\star})$ nevertheless remain well-defined
+leading-$N$ quantities and are included in the phase analysis of
+Section~\ref{sec:boundary}.
 
 \paragraph{Summary.}
 Classes $2,4,16,21,23$ have interior R-charge extrema within the
 unitarity polytope; classes $1$ and $9$ have their extrema on (or
 below) the unitarity boundary; class $44$ saturates the free-field
-boundary at leading $N$; class $877$ has a degenerate
-$a$-maximisation with no interior critical point.  The eight classes
-with a defined leading-$N$ sign pattern $(1,2,4,9,16,21,23,44)$ are
-retained in the RG-flow topology analysis of
+boundary at leading $N$; class $877$ collects the 9 empty-node
+representatives with a unique leading-$N$ $a$-maximum at $a/N^{2}=0$
+and all surviving R-charges vanishing, qualitatively matching class~1
+but morphologically distinct.  The eight classes with a defined
+leading-$N$ sign pattern $(1,2,4,9,16,21,23,44)$ are retained in the
+RG-flow topology analysis of
 Sections~\ref{sec:boundary}--\ref{sec:phases}; class~877 is omitted
-from the boundary-coefficient tables.
+from the boundary-coefficient tables because its morphology (one
+empty node) places the entire matter sector on bifundamental
+operators, for which the sub-quiver decoupling limit requires a
+separate analysis.
