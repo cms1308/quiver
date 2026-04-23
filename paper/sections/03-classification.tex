@@ -14,14 +14,28 @@ $(n_{\adj}^{(a)},n_{S}^{(a)},n_{\bar S}^{(a)},n_{A}^{(a)},n_{\bar A}^{(a)})$
 at each node subject to:
 \begin{enumerate}\setlength{\itemsep}{2pt}
   \item the leading-$N$ asymptotic-freedom condition
-    \eqref{eq:AF-lead};
-  \item the cubic-anomaly cancellation
-    \eqref{eq:anomaly} at leading order in $N$, with
-    $\Nf^{(a),\pm}=0$ (non-Veneziano);
+    \eqref{eq:AF-lead} at each node;
+  \item the cubic-anomaly cancellation \eqref{eq:anomaly}
+    \emph{exactly} (i.e.\ identically in $N$), enforced as the two
+    separate equations \eqref{eq:anomaly-N}
+    and~\eqref{eq:anomaly-const}.  In the non-Veneziano sector
+    \eqref{eq:anomaly-N-nonVen} fixes an integer linear relation
+    between the bifundamental chiral excess and the tensor
+    multiplicities at each node, and the remaining
+    $\mathcal O(N^{0})$ discrepancy in~\eqref{eq:anomaly-const} is
+    absorbed by a finite chiral excess of fundamentals
+    $\Nf^{(a),+}-\Nf^{(a),-}\in\mathbb Z$;
   \item discrete symmetries exchanging the two nodes, reflecting
     bifundamentals $(\fund\leftrightarrow\afund)$ at each end
     independently, and orienting the bifundamental edges.
 \end{enumerate}
+The enumeration is implemented in \texttt{quiver\_generation.py}, in
+which the function \texttt{chiral\_excess\_coeffs(\ldots)} returns
+the coefficients $(a_{N},a_{0})$ such that the required chiral
+excess is $\Nf^{(a),+}-\Nf^{(a),-}=a_{N}\,N+a_{0}$; in the
+non-Veneziano sector the scan is restricted to quivers with
+$a_{N}=0$, so the excess is $\mathcal O(N^{0})$ as demanded by the
+non-Veneziano definition.
 Each surviving theory is then subjected to symbolic
 $a$-maximisation: the R-charge manifold is parameterised by
 \eqref{eq:anomaly-free}, $a(R)$ of \eqref{eq:a-trial} is extremised

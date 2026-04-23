@@ -70,17 +70,38 @@ limit defined below $\Nf^{(a)}$ is of order $N^{0}$.
 \subsection{Anomaly cancellation and the one-loop beta function}
 \label{sec:setup-beta}
 
-Absence of the $\SU(N)^{3}_{a}$ cubic gauge anomaly at node $a$
-imposes the linear constraint
+Absence of the $\SU(N)^{3}_{a}$ cubic gauge anomaly at node $a$ is a
+\emph{gauge-invariance requirement that must hold identically in
+$N$}: it is a polynomial equation in $N$ whose $N^{1}$ and $N^{0}$
+coefficients must vanish \emph{separately and exactly}.  The full
+anomaly equation at node $a$ reads
 \begin{equation}
   N\,(\deg^{+}_{a}-\deg^{-}_{a})
   +\bigl(n_{S}^{(a)}-n_{\bar S}^{(a)}\bigr)(N+4)
   +\bigl(n_{A}^{(a)}-n_{\bar A}^{(a)}\bigr)(N-4)
-  +\bigl(\Nf^{(a),+}-\Nf^{(a),-}\bigr)\;=\;0\,,
+  +\bigl(\Nf^{(a),+}-\Nf^{(a),-}\bigr)\;\equiv\;0\,,
   \label{eq:anomaly}
 \end{equation}
 where $\deg^{\pm}_{a}$ counts outgoing/incoming bifundamentals at
-node $a$.
+node $a$.  The identity~\eqref{eq:anomaly} in $N$ is equivalent to
+the two independent conditions
+\begin{align}
+  \text{$N$-coefficient:} \quad
+  &\bigl(\deg^{+}_{a}-\deg^{-}_{a}\bigr)
+   +\bigl(n_{S}^{(a)}-n_{\bar S}^{(a)}\bigr)
+   +\bigl(n_{A}^{(a)}-n_{\bar A}^{(a)}\bigr)\;=\;0\,,
+   \label{eq:anomaly-N}\\[2pt]
+  \text{constant:} \quad
+  &4\bigl(n_{S}^{(a)}-n_{\bar S}^{(a)}\bigr)
+   -4\bigl(n_{A}^{(a)}-n_{\bar A}^{(a)}\bigr)
+   +\bigl(\Nf^{(a),+}-\Nf^{(a),-}\bigr)\;=\;0\,,
+   \label{eq:anomaly-const}
+\end{align}
+both of which are imposed exactly.  In particular, the chiral excess
+of fundamentals $\Nf^{(a),+}-\Nf^{(a),-}$ is fixed by
+\eqref{eq:anomaly-const} once the tensor multiplicities are chosen,
+and may be non-zero even when $\Nf^{(a),+}+\Nf^{(a),-}$ is
+$\mathcal O(N^{0})$ (see Section~\ref{sec:setup-largeN} below).
 
 The one-loop coefficient in
 $\beta(g_{a})=-\,g_{a}^{3}\,b_{0}^{(a)}/(16\pi^{2})+\mathcal O(g_{a}^{5})$ is
@@ -119,6 +140,24 @@ complementary limit.
   adjoints, rank-two tensors and bifundamentals in \eqref{eq:b0-SU},
   with no $\mathcal O(N)$ contribution from fundamentals.
 \end{quote}
+
+The non-Veneziano condition, combined with the \emph{exact}
+anomaly-cancellation identity~\eqref{eq:anomaly}, imposes a
+non-trivial constraint on the tensor and bifundamental content of
+each node: the chiral excess
+$\Nf^{(a),+}-\Nf^{(a),-}$ is $\mathcal O(N^{0})$ and hence cannot
+absorb any $\mathcal O(N)$ imbalance in~\eqref{eq:anomaly-N}.  In
+consequence, \eqref{eq:anomaly-N} must hold \emph{from the tensor
+and bifundamental content alone}:
+\begin{equation}
+  \bigl(\deg^{+}_{a}-\deg^{-}_{a}\bigr)
+   +\bigl(n_{S}^{(a)}-n_{\bar S}^{(a)}\bigr)
+   +\bigl(n_{A}^{(a)}-n_{\bar A}^{(a)}\bigr)\;=\;0\,,
+  \qquad a=1,2,\ \text{(non-Veneziano).}
+  \label{eq:anomaly-N-nonVen}
+\end{equation}
+The constant condition~\eqref{eq:anomaly-const} is then absorbed by
+a finite, $\mathcal O(N^{0})$ chiral excess of fundamentals.
 
 At leading order in $1/N$, the AF conditions become
 \begin{equation}
