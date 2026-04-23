@@ -65,11 +65,11 @@ conditions then conspire to pin $R_{\text{tensor}_1}+R_{\text{tensor}_2}=2$,
 making the $a$-trial independent of the difference
 $R_{\text{tensor}_1}-R_{\text{tensor}_2}$.  These 20 theories are
 assigned to the \emph{nonSCFT} umbrella introduced below (together
-with classes~$1$, $9$, and~$877$, all of which likewise fail to
-describe a unitary interacting SCFT at leading~$N$) and are excluded
-from the nine-class tabulation; the remaining $432-20=412$
-non-Veneziano theories distribute among the nine classes summarised
-in Table~\ref{tab:nine-classes}.
+with class~$877$, whose representatives lie below the SQCD conformal
+window and therefore do not flow to a unitary interacting SCFT at
+leading~$N$) and are excluded from the nine-class tabulation; the
+remaining $432-20=412$ non-Veneziano theories distribute among the
+nine classes summarised in Table~\ref{tab:nine-classes}.
 
 \subsection{The nine non-Veneziano equal-rank classes}
 \label{sec:class-nine}
@@ -102,13 +102,15 @@ Table~\ref{tab:nine-classes}.
     $\#$\,theories is the number of distinct non-Veneziano quivers the
     enumeration finds in the class after excluding those with an
     $a$-trial flat direction at leading~$N$ (see text).  All nine
-    classes satisfy the leading-$N$ $a=c$ relation.  Classes~$1$,
-    $9$, and $877$ are collected in the \emph{nonSCFT umbrella} of
-    Section~\ref{sec:class-special} (together with 20 flat-direction
-    theories not listed here) because their leading-$N$
-    $a$-maximisation does not identify a unitary interacting SCFT;
-    class~$877$ specifically collects empty-node representatives with
-    a unique leading-$N$ $a$-maximum at $a/N^{2}=0$.}
+    classes satisfy the leading-$N$ $a=c$ relation.  Classes~$1$
+    and~$9$ have defined leading-$N$ $a$-maxima but with R-charges
+    below the unitarity threshold $R=2/3$; they are retained in the
+    table but carry this caveat (Section~\ref{sec:class-special}).
+    Class~$877$ collects empty-node representatives with a unique
+    leading-$N$ $a$-maximum at $a/N^{2}=0$ and all lie below the SQCD
+    conformal window; together with 20 flat-direction theories
+    (Section~\ref{sec:class-enumeration}), it is grouped under the
+    \emph{nonSCFT umbrella} of Section~\ref{sec:class-special}.}
   \label{tab:nine-classes}
 \end{table}
 
@@ -255,74 +257,98 @@ collected in Table~\ref{tab:R-charges}.
   \label{tab:R-charges}
 \end{table}
 
-\subsection{The nonSCFT umbrella and the marginal class 44}
+\subsection{Special classes: 1, 9, 44, and the nonSCFT umbrella (877 + flat-direction)}
 \label{sec:class-special}
 
-We group classes $1$, $9$, $877$ and the 20 flat-direction theories
-of Section~\ref{sec:class-enumeration} into a single \emph{nonSCFT}
-umbrella: in each case the leading-$N$ $a$-maximisation fails to
-identify a unitary interacting SCFT, either because the critical
-point is not a genuine local maximum (flat direction) or because
-the R-charges it returns lie below the unitarity bound.  Class $44$
-is kept separate as the leading-$N$ \emph{marginal} class.
+Five classes deserve separate comment: the below-unitarity classes
+$1$ and $9$, the leading-$N$ marginal class $44$, and the
+\emph{nonSCFT} umbrella grouping class $877$ with the 20 flat-direction
+theories of Section~\ref{sec:class-enumeration}.  The nonSCFT umbrella
+collects those representatives that do not flow to a unitary
+interacting IR SCFT at leading~$N$ because either (i)~the
+leading-$N$ $a$-maximisation does not identify a genuine local
+maximum (flat-direction theories), or (ii)~at least one gauge node
+has no rank-2 tensor matter and carries too few effective flavours to
+sit inside the SQCD conformal window, following the criterion
+$x^{(a)}=N_{\text{bif}}\,T_{\text{lead}}^{(a,b)}\,m_{b}/m_{a}<3/2$
+implemented in \texttt{two\_node\_db.py}; in the equal-rank
+non-Veneziano scope this latter criterion is satisfied exactly by
+the 9 surviving representatives of class $877$.
 
-\paragraph{nonSCFT, part (i): classes 1, 9, 877 (below the unitarity bound).}
-Symbolic $a$-maximisation on class~$1$ returns the corner
-$R_{\bar A}^{(1)}=R_{\bar A}^{(2)}=R_{\text{bif}}=0$ ($a/N^{2}=0$);
-on class~$9$ it returns the symmetric point
-$R_{\text{bif}}=R_{\text{tensor}}^{(1,2)}=1/2$ ($a/N^{2}=27/64$);
-on class~$877$ (empty-node class: one node has no intrinsic matter,
-the other has only bifundamental matter) it returns
-$a/N^{2}=0$ with all surviving matter R-charges vanishing on the 9
-representatives that survive the flat-direction exclusion of
-Section~\ref{sec:class-enumeration}.  In all three cases the
-gauge-invariant chiral composite
-$\Phi_{\text{bif}}\Phi_{\text{bif}}^{\dagger}$ has
-$\Delta=3R_{\text{bif}}/2\in\{0,3/4,0\}<1$, violating the unitarity
-bound $\Delta\ge 1$, so the leading-$N$ $a$-maximum does not describe
-a unitary interacting SCFT.  The boundary coefficients
-$b_{0}^{(a)}(g_{b}^{\star})$ for classes~$1$ and~$9$ are nevertheless
-well-defined leading-$N$ quantities and are tabulated in
-Section~\ref{sec:boundary}, with the Figure-5 phase assignment that
-emerges interpreted as a formal leading-$N$ sign pattern rather than
-a physical IR claim.  Class~$877$ is omitted from those tables because
-its morphology (all matter on one node is bifundamental) places the
-entire matter sector on bifundamental operators, for which the
-sub-quiver decoupling limit requires a separate analysis.
+\paragraph{Class 1 ($a/N^{2}=0$, $R_{\text{bif}}=0$; below unitarity).}
+Symbolic $a$-maximisation on class 1 returns an extremum at the
+corner $R_{\bar A}^{(1)}=R_{\bar A}^{(2)}=R_{\text{bif}}=0$, which
+yields $a/N^{2}=0$.  Because a chiral primary with $R=0$ would have
+$\Delta=3R/2=0$, well below the unitarity bound $\Delta\ge 1$ for
+gauge-invariant chiral composites in an interacting SCFT, the
+leading-$N$ $a$-maximum does not describe a unitary interacting SCFT.
+In practice the true IR of a theory in this class is either a free
+theory, or a non-trivial fixed point outside the leading-$N$
+R-symmetry parameter space (for instance through Kutasov–Schwimmer
+decoupling of the offending operators); either way, the
+leading-$N$ analysis of the decoupled sub-theory and the resulting
+boundary coefficient $b_{0}^{(a)}(g_{b}^{\star})$ remain
+\emph{well-defined} quantities and are included in the phase analysis
+of Section~\ref{sec:boundary}.  We flag class~1 as non-interacting at
+leading~$N$ and treat it on the same footing as the other classes for
+the RG-topology discussion, with the caveat that the Figure-5
+assignment it receives is a formal leading-$N$ sign pattern.
 
-\paragraph{nonSCFT, part (ii): flat-direction theories.}
-The 20 non-Veneziano theories with a leading-$N$ flat direction at
-the $a$-trial extremum (Section~\ref{sec:class-enumeration}) are
-included in the nonSCFT umbrella on the same footing: the R-charges
-at the IR are not uniquely determined, so no isolated SCFT fixed
-point can be associated with the leading-$N$ analysis.  These 20
-theories carry no class label in the database (\texttt{class\_id}
-is NULL) and are excluded from all class counts; they share
-the qualitative feature of classes~$1,9,877$ that no unitary
-interacting SCFT emerges at leading~$N$.
+\paragraph{Class 9 ($a/N^{2}=27/64$, $R_{\text{bif}}=1/2$; below unitarity).}
+Symbolic $a$-maximisation on class 9 returns the symmetric critical
+point $R_{\text{bif}}=R_{\text{tensor}}^{(1,2)}=1/2$, giving
+$a/N^{2}=27/64$.  Every matter field has anomalous dimension
+$\gamma=3R-2=-1/2$ at this point.  As with class~1, the resulting
+R-charge falls below the unitarity threshold $R\ge 2/3$ required for
+a gauge-invariant chiral composite to satisfy $\Delta\ge 1$, so the
+leading-$N$ $a$-max does not describe a unitary interacting SCFT.
+Class~9 is therefore the second below-unitarity class (alongside
+class~1), lying at the intermediate value $R_{\text{bif}}=1/2$ rather
+than at the extreme corner $R=0$.  The boundary coefficients
+$b_{0}^{(a)}(g_{b}^{\star})$ remain well-defined and are reported in
+Section~\ref{sec:boundary}; as with class~1, the Figure-5 phase
+assignment that emerges is a formal leading-$N$ sign pattern rather
+than a physical IR claim.
 
 \paragraph{Class 44 ($a/N^{2}=1/2$, $R_{\text{bif}}=2/3$; leading-$N$ marginal).}
-The $a$-maximal R-charges of class 44 equal the free-field value
+The $a$-maximal R-charges of class~44 equal the free-field value
 $2/3$, giving $a/N^{2}=1/2$.  On each node the matter content exactly
 saturates the leading-$N$ AF bound,
 $\alpha^{(a)}=3-n_{\adj}^{(a)}-\tfrac{1}{2}(n_{S}+n_{\bar S}+n_{A}+n_{\bar A})
 -\tfrac{k_{\text{tot}}}{2}=0$, so the one-loop beta function vanishes
 at leading $N$.  As a result the boundary coefficients
 $b_{0}^{(a)}(g_{b}^{\star})$ also vanish at leading $N$, and the RG
-topology is determined by the sub-leading structure.  Unlike the
-nonSCFT cases above, class~44 is not below unitarity — its R-charges
-coincide with the free-field value — but its leading-$N$ marginality
-places it outside the Figure-5/mixed/Figure-6 trichotomy at leading
-order.
+topology is determined by the sub-leading structure.  Class~$44$ is
+not below unitarity and not nonSCFT; it is merely marginal at
+leading~$N$.
+
+\paragraph{nonSCFT umbrella: class 877 + 20 flat-direction theories.}
+Class~$877$ collects quivers in which one of the two nodes has no
+intrinsic matter ($n_{\adj}^{(a)}=n_{S}^{(a)}=n_{\bar S}^{(a)}=
+n_{A}^{(a)}=n_{\bar A}^{(a)}=0$ for $a=1$ or $a=2$), so the entire
+matter content of that node consists of bifundamentals to the other
+node.  Of the 24 non-Veneziano empty-node enumerants, 15 have a flat
+direction at the leading-$N$ $a$-maximisation and are excluded from
+class counts; the remaining 9 admit a unique interior critical point
+at $a/N^{2}=0$.  All 9 surviving representatives lie below the SQCD
+conformal window at the empty node ($x^{(a)}<3/2$), so the gauge
+dynamics on that node is confining/IR-free rather than
+superconformal.  We therefore place the 9 class-$877$ representatives
+in the \emph{nonSCFT} umbrella together with the 20 flat-direction
+theories, and omit them from the phase-sign classification of
+Section~\ref{sec:boundary}.  The 20 flat-direction theories carry no
+class label in the database (\texttt{class\_id} is NULL) and are
+included here on the same footing: their IR R-charges are not
+uniquely determined, so no isolated SCFT fixed point can be
+associated with the leading-$N$ analysis.
 
 \paragraph{Summary.}
-Classes $2,4,16,21,23$ have interior R-charge extrema strictly inside
-the unitarity polytope and drive the Figure-5/mixed phase
-classification of Sections~\ref{sec:boundary}--\ref{sec:phases}.
-Class~$44$ is leading-$N$ marginal.  Classes~$1,9,877$ together with
-the 20 flat-direction theories form the nonSCFT umbrella and do not
-describe unitary interacting SCFTs at leading~$N$; classes~$1$ and~$9$
-are retained in the boundary-coefficient tables for completeness
-(with the caveat just noted), while class~$877$ and the
-flat-direction theories are omitted from those tables for the
-morphological and definitional reasons above.
+Classes $2,4,16,21,23$ have interior R-charge extrema within the
+unitarity polytope.  Classes~$1$ and~$9$ have extrema on or below the
+unitarity boundary but are retained in the boundary-coefficient
+tables with a formal-Figure-5 caveat.  Class~$44$ is leading-$N$
+marginal.  The nonSCFT umbrella — class~$877$ and the 20
+flat-direction theories — is excluded from the boundary tables:
+class~$877$ because it sits below the SQCD conformal window at its
+empty node, and the flat-direction theories because their leading-$N$
+$a$-max is not a unique local maximum.
