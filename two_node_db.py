@@ -22,6 +22,7 @@ import sys
 import time
 from datetime import datetime
 from fractions import Fraction
+from math import gcd
 
 from quiver_generation import (
     Quiver, enumerate_quivers, enumerate_quivers_mixed_rank,
@@ -179,6 +180,18 @@ def _gauge_pair_label(g0: str, g1: str, m0: int = 1, m1: int = 1) -> str:
 
 def _gauge_pair_key(g0: str, g1: str) -> str:
     return f"{g0}-{g1}"
+
+
+_CANONICAL_GROUP = {"SU": "SU", "SO": "SO", "SP": "Sp"}
+
+
+def _normalize_pair(pair: str) -> str:
+    """Normalize user-supplied pair like 'su-sp', 'SU×Sp', 'SUxSP' to canonical 'SU-Sp'."""
+    s = pair.replace("×", "-").replace("x", "-").replace("X", "-")
+    parts = s.split("-")
+    if len(parts) != 2:
+        return pair
+    return "-".join(_CANONICAL_GROUP.get(p.upper(), p) for p in parts)
 
 
 def _delta_for_node(q: Quiver, node: int) -> tuple[str | None, int | None, int | None]:
@@ -394,21 +407,33 @@ def cmd_build(args: argparse.Namespace) -> None:
     equal_rank = enumerate_quivers(
         n_nodes=2, max_multiedge=4, min_multiedge=1, require_connected=True,
     )
-    # Mixed-rank quivers: [2,1] and [1,2]
-    mixed_21 = enumerate_quivers_mixed_rank(
-        n_nodes=2, rank_multipliers=[2, 1],
-        max_multiedge=4, min_multiedge=1, require_connected=True,
-    )
-    mixed_12 = enumerate_quivers_mixed_rank(
-        n_nodes=2, rank_multipliers=[1, 2],
-        max_multiedge=4, min_multiedge=1, require_connected=True,
-    )
-    # Cross-set dedup: [2,1] and [1,2] quivers may be node-swaps of each other
-    all_qb = equal_rank + mixed_21 + mixed_12
+    # Mixed-rank quivers: all coprime (m0, m1) pairs with max ≤ MAX_RANK_MULT,
+    # excluding (1,1) (= equal_rank) and non-coprime pairs (physically identical
+    # to (1,1) under N → kN relabeling).
+    MAX_RANK_MULT = 4
+    mixed_pairs = [
+        (m0, m1)
+        for m0 in range(1, MAX_RANK_MULT + 1)
+        for m1 in range(1, MAX_RANK_MULT + 1)
+        if (m0, m1) != (1, 1) and gcd(m0, m1) == 1
+    ]
+    mixed_sets: list[tuple[tuple[int, int], list]] = []
+    for m0, m1 in mixed_pairs:
+        qs = enumerate_quivers_mixed_rank(
+            n_nodes=2, rank_multipliers=[m0, m1],
+            max_multiedge=4, min_multiedge=1, require_connected=True,
+        )
+        mixed_sets.append(((m0, m1), qs))
+
+    all_qb = equal_rank + [q for _, s in mixed_sets for q in s]
     all_qb = _dedup_symmetries(all_qb)
     total = len(all_qb)
-    print(f"  {len(equal_rank)} equal-rank + {len(mixed_21)} [2,1] + {len(mixed_12)} [1,2] "
-          f"→ {total} after cross-set dedup  ({time.time()-t0:.1f}s)", flush=True)
+    counts_str = " + ".join(
+        [f"{len(equal_rank)} (1,1)"] +
+        [f"{len(s)} {pair}" for pair, s in mixed_sets]
+    )
+    print(f"  {counts_str} → {total} after cross-set dedup  "
+          f"({time.time()-t0:.1f}s)", flush=True)
 
     print("Phase 1: Mathematica NSolve batch scan...", flush=True)
     t1 = time.time()
@@ -496,21 +521,15 @@ def cmd_build(args: argparse.Namespace) -> None:
 
     n_stored = sum(len(v) for v in buckets.values())
 
-    below_window_rows: list[dict] = []
-    truly_diverged: list[dict] = []
+    n_below = 0
     for r in diverged_rows:
         mv = r["morph_vec"]
         if _is_below_conformal_window(r["gauge_pair"], r["rank0_mult"], r["rank1_mult"],
                                       mv[0], mv[1], mv[2]):
-            below_window_rows.append(r)
-        else:
-            truly_diverged.append(r)
-    diverged_rows = truly_diverged
-    n_below = len(below_window_rows)
-    n_truly_diverged = len(diverged_rows)
+            n_below += 1
+    n_nonSCFT = len(diverged_rows)
 
-    print(f"  {n_below} below conformal window, "
-          f"{n_truly_diverged} diverged (class NULL), "
+    print(f"  {n_nonSCFT} nonSCFT (class NULL; {n_below} below-conformal-window), "
           f"{n_stored} clusterable.", flush=True)
 
     # ── Phase 2: cluster into classes ─────────────────────────────────────────
@@ -534,28 +553,8 @@ def cmd_build(args: argparse.Namespace) -> None:
                 "a_over_c": rows[rep_local].get("a_over_c"),
             })
 
-    # Group below-window theories into classes by (gauge_pair, m0, m1)
-    bw_buckets: dict[tuple, list[dict]] = defaultdict(list)
-    for r in below_window_rows:
-        bw_buckets[(r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])].append(r)
-
-    bw_class_list: list[dict] = []
-    for (pair, m0, m1), bw_rows in bw_buckets.items():
-        flags = [r["veneziano"] for r in bw_rows]
-        bw_class_list.append({
-            "pair": pair, "m0": m0, "m1": m1,
-            "centroid": None,
-            "rows": bw_rows,
-            "members": list(range(len(bw_rows))),
-            "veneziano_any": int(any(flags)),
-            "veneziano_all": int(all(flags)),
-            "a_over_c": None,
-            "below_window": True,
-        })
-
     total_classes = len(class_list)
-    print(f"  {total_classes} universality classes + "
-          f"{len(bw_class_list)} below-window classes.", flush=True)
+    print(f"  {total_classes} universality classes.", flush=True)
 
     # ── Phase 3: exact symbolic a-maximization per class ──────────────────────
     print(f"Phase 3: exact a-maximization ({total_classes} classes, "
@@ -659,59 +658,7 @@ def cmd_build(args: argparse.Namespace) -> None:
             )
             total_theories += len(members)
 
-    # Insert below-window classes
-    n_bw_classes = len(bw_class_list)
-    for bwi, bwc in enumerate(bw_class_list):
-        bw_cid = total_classes + bwi + 1
-        rows = bwc["rows"]
-        members = bwc["members"]
-        m0, m1 = bwc["m0"], bwc["m1"]
-
-        with con:
-            con.execute(
-                "INSERT INTO universality_class "
-                "(class_id, gauge_pair, rank0_mult, rank1_mult, "
-                " a_over_N2, n_theories, a_exact, c_exact, R_exact, "
-                " a_over_c, veneziano_any, veneziano_all) "
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-                (bw_cid, bwc["pair"], m0, m1, None, len(members),
-                 None, None, None, None,
-                 bwc["veneziano_any"], bwc["veneziano_all"]),
-            )
-
-            theory_ids = []
-            for idx in members:
-                r = rows[idx]
-                mv = r["morph_vec"]
-                mid = _get_or_create_morph_id(con, mv, r["gauge_pair"], r["rank0_mult"], r["rank1_mult"])
-                cur = con.execute(
-                    "INSERT INTO theory "
-                    "(class_id, gauge_pair, gauge0, gauge1, rank0_mult, rank1_mult, "
-                    " matter0, matter1, edges, delta0, delta1, "
-                    " delta0_a, delta0_b, delta1_a, delta1_b, "
-                    " nf_bound0, nf_bound1, a_over_N2, c_over_N2, R_numerical, "
-                    " a_over_c, veneziano, "
-                    " N_rank2_0, N_rank2_1, N_bif, N_fund_0, N_fund_1, morph_id) "
-                    "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                    (bw_cid, r["gauge_pair"], r["gauge0"], r["gauge1"],
-                     r["rank0_mult"], r["rank1_mult"],
-                     r["matter0"], r["matter1"], r["edges"],
-                     r["delta0"], r["delta1"],
-                     r["delta0_a"], r["delta0_b"],
-                     r["delta1_a"], r["delta1_b"],
-                     r["nf_bound0"], r["nf_bound1"],
-                     None, None, None, None, r["veneziano"],
-                     mv[0], mv[1], mv[2], mv[3], mv[4], mid),
-                )
-                theory_ids.append(cur.lastrowid)
-
-            con.execute(
-                "UPDATE universality_class SET rep_theory_id=? WHERE class_id=?",
-                (theory_ids[0], bw_cid),
-            )
-            total_theories += len(members)
-
-    # Insert diverged theories (class_id = NULL)
+    # Insert nonSCFT theories (class_id = NULL): BCW + truly diverged merged
     with con:
         for r in diverged_rows:
             mv = r["morph_vec"]
@@ -732,26 +679,25 @@ def cmd_build(args: argparse.Namespace) -> None:
                  r["delta0_a"], r["delta0_b"],
                  r["delta1_a"], r["delta1_b"],
                  r["nf_bound0"], r["nf_bound1"],
-                 r["a_over_N2"], r["c_over_N2"], r["R_numerical"],
-                 r["a_over_c"], r["veneziano"],
+                 None, None, None,
+                 None, r["veneziano"],
                  mv[0], mv[1], mv[2], mv[3], mv[4], mid),
             )
 
-    all_classes = total_classes + n_bw_classes
     with con:
         con.executemany(
             "INSERT OR REPLACE INTO build_info (key, value) VALUES (?,?)",
             [
                 ("built_at",      datetime.now().isoformat(timespec="seconds")),
                 ("n_theories",    str(total_theories)),
-                ("n_diverged",    str(n_truly_diverged)),
+                ("n_nonSCFT",     str(n_nonSCFT)),
                 ("n_below_window", str(n_below)),
-                ("n_classes",     str(all_classes)),
-                ("n_bw_classes",  str(n_bw_classes)),
+                ("n_classes",     str(total_classes)),
                 ("n_exact",       str(n_exact_ok)),
                 ("n_exact_fail",  str(n_exact_fail)),
                 ("tolerance",     str(TOL)),
                 ("max_multiedge", "4"),
+                ("max_rank_mult", str(MAX_RANK_MULT)),
                 ("exact_timeout", str(exact_timeout)),
             ],
         )
@@ -772,10 +718,9 @@ def cmd_build(args: argparse.Namespace) -> None:
 
     con.close()
     print(f"\nDatabase written to '{db_path}'.")
-    print(f"  {total_theories} theories in {all_classes} classes "
-          f"({total_classes} SCFT + {n_bw_classes} below-window); "
+    print(f"  {total_theories} theories in {total_classes} SCFT classes "
           f"({n_exact_ok} exact, {n_exact_fail} numerical); "
-          f"{n_truly_diverged} diverged (class_id NULL).")
+          f"{n_nonSCFT} nonSCFT (class_id NULL; {n_below} below-conformal-window).")
 
 
 # ── Classes ───────────────────────────────────────────────────────────────────
@@ -784,7 +729,7 @@ def cmd_classes(args: argparse.Namespace) -> None:
     con = sqlite3.connect(args.db)
     con.row_factory = sqlite3.Row
 
-    pair_filter = args.pair.upper().replace("X", "-") if args.pair else None
+    pair_filter = _normalize_pair(args.pair) if args.pair else None
     rank_filter = args.rank if hasattr(args, "rank") and args.rank else None
     veneziano_filter = getattr(args, "veneziano", None)
 
@@ -799,7 +744,8 @@ def cmd_classes(args: argparse.Namespace) -> None:
                uc.a_over_N2, uc.n_theories,
                uc.a_exact, uc.R_exact, uc.a_over_c,
                uc.veneziano_any, uc.veneziano_all,
-               t.matter0, t.matter1, t.edges
+               t.matter0, t.matter1, t.edges,
+               t.N_rank2_0, t.N_rank2_1, t.N_bif
         FROM universality_class uc
         LEFT JOIN theory t ON t.theory_id = uc.rep_theory_id
         WHERE (:pair IS NULL OR uc.gauge_pair = :pair)
@@ -839,6 +785,18 @@ def cmd_classes(args: argparse.Namespace) -> None:
     )
     a_exact_w = max(min(a_exact_w, 40), 10)
 
+    def _type_pair(r) -> tuple[str, str]:
+        if r["N_rank2_0"] is None or r["N_rank2_1"] is None or r["N_bif"] is None:
+            return "—", "—"
+        t0, t1 = _node_types(r["gauge_pair"], r["rank0_mult"], r["rank1_mult"],
+                             r["N_rank2_0"], r["N_rank2_1"], r["N_bif"])
+        return str(t0), str(t1)
+
+    type_pairs = {r["class_id"]: _type_pair(r) for r in rows}
+    t0w = max((len(p[0]) for p in type_pairs.values()), default=4)
+    t1w = max((len(p[1]) for p in type_pairs.values()), default=4)
+    t0w = max(t0w, 6); t1w = max(t1w, 6)
+
     current_group = None
     total = 0
     for r in rows:
@@ -854,7 +812,9 @@ def cmd_classes(args: argparse.Namespace) -> None:
             print(f"\n  {label}")
             print(f"  {'─'*100}")
             print(f"  {'#':>5}  {'a/N² (exact)':<{a_exact_w}}  {'≈':>10}  "
-                  f"{'#th':>4}  {'Ven':>3}  Representative theory")
+                  f"{'#th':>4}  {'Ven':>3}  "
+                  f"{'type₀':>{t0w}}  {'type₁':>{t1w}}  "
+                  f"Representative theory")
             print(f"  {'─'*100}")
         m0 = r["matter0"] or "—"
         m1 = r["matter1"] or "—"
@@ -867,8 +827,10 @@ def cmd_classes(args: argparse.Namespace) -> None:
             a_ex = "—"
             a_num = "         —"
         ven = "Y" if r["veneziano_any"] else "N"
+        t0s, t1s = type_pairs[r["class_id"]]
         print(f"  {r['class_id']:>5}  {a_ex:<{a_exact_w}}  "
-              f"{a_num}  {r['n_theories']:>4}  {ven:>3}  {rep}")
+              f"{a_num}  {r['n_theories']:>4}  {ven:>3}  "
+              f"{t0s:>{t0w}}  {t1s:>{t1w}}  {rep}")
         total += 1
 
     print(f"\n  Total: {total} classes")
@@ -878,30 +840,56 @@ def cmd_classes(args: argparse.Namespace) -> None:
 
 # ── Show ──────────────────────────────────────────────────────────────────────
 
+_R_EDGE_RE = re.compile(r"R_edge_\d+_\d+_\w+")
+
+
+def _display_R_numerical(s: str | None) -> str:
+    """Rewrite R_edge_i_j_rep labels as R_bif for display."""
+    if not s:
+        return "—"
+    return _R_EDGE_RE.sub("R_bif", s)
+
+
 def _print_theory_table(theories) -> None:
     """Print a table of theories (shared by cmd_show and _show_diverged)."""
     if not theories:
         print("  (none)")
         return
 
+    def _pair_str(t):
+        m0, m1 = t["rank0_mult"], t["rank1_mult"]
+        if (m0, m1) == (1, 1):
+            return t["gauge_pair"]
+        return f"{t['gauge_pair']}({m0},{m1})"
+
+    r_strings = [_display_R_numerical(t["R_numerical"]) for t in theories]
+
     m0w = max(len(t["matter0"] or "—") for t in theories)
     m1w = max(len(t["matter1"] or "—") for t in theories)
     ew  = max(len(t["edges"]   or "—") for t in theories)
     d0w = max(len(t["delta0"]  or "—") for t in theories)
     d1w = max(len(t["delta1"]  or "—") for t in theories)
-    rw  = max(len(t["R_numerical"] or "—") for t in theories)
+    rw  = max(len(s) for s in r_strings)
+    gw  = max(len(_pair_str(t)) for t in theories)
+    bBw = max(len((t["B_cond_B"] if "B_cond_B" in t.keys() else None) or "—") for t in theories)
+    bAw = max(len((t["B_cond_A"] if "B_cond_A" in t.keys() else None) or "—") for t in theories)
     m0w = max(m0w, 8);  m1w = max(m1w, 8)
     ew  = max(ew,  5);  d0w = max(d0w, 7);  d1w = max(d1w, 7)
+    gw  = max(gw, 5)
+    bBw = max(bBw, 10); bAw = max(bAw, 10)
     rw  = min(rw, 60)   # cap R_numerical display width
 
     hdr = (f"  {'ID':>5}  "
+           f"{'Pair':<{gw}}  "
            f"{'Matter(0)':<{m0w}}  "
            f"{'Matter(1)':<{m1w}}  "
            f"{'Edges':<{ew}}  "
            f"{'delta(0)':>{d0w}}  "
            f"{'delta(1)':>{d1w}}  "
            f"{'N_f bound(0)':<14}  "
+           f"{'B_cond_B':<{bBw}}  "
            f"{'N_f bound(1)':<14}  "
+           f"{'B_cond_A':<{bAw}}  "
            f"{'a/N²':>10}  "
            f"{'c/N²':>10}  "
            f"{'a/c':>8}  "
@@ -910,25 +898,30 @@ def _print_theory_table(theories) -> None:
     print(hdr)
     print("  " + "─" * (len(hdr) - 2))
 
-    for t in theories:
+    for t, r_full in zip(theories, r_strings):
         m0  = t["matter0"]     or "—"
         m1  = t["matter1"]     or "—"
         e   = t["edges"]       or "—"
         d0  = t["delta0"]      or "—"
         d1  = t["delta1"]      or "—"
+        bA  = (t["B_cond_A"] if "B_cond_A" in t.keys() else None) or "—"
+        bB  = (t["B_cond_B"] if "B_cond_B" in t.keys() else None) or "—"
         a_s = f"{t['a_over_N2']:.6f}" if t["a_over_N2"] is not None else "—"
         c_s = f"{t['c_over_N2']:.6f}" if t["c_over_N2"] is not None else "—"
         ac_s = f"{t['a_over_c']:.5f}" if t["a_over_c"] is not None else "—"
         ven = "Y" if t["veneziano"] else "N"
-        r_s = (t["R_numerical"] or "—")[:rw]
+        r_s = r_full[:rw]
         print(f"  {t['theory_id']:>5}  "
+              f"{_pair_str(t):<{gw}}  "
               f"{m0:<{m0w}}  "
               f"{m1:<{m1w}}  "
               f"{e:<{ew}}  "
               f"{d0:>{d0w}}  "
               f"{d1:>{d1w}}  "
               f"{t['nf_bound0']:<14}  "
+              f"{bB:<{bBw}}  "
               f"{t['nf_bound1']:<14}  "
+              f"{bA:<{bAw}}  "
               f"{a_s:>10}  "
               f"{c_s:>10}  "
               f"{ac_s:>8}  "
@@ -937,15 +930,41 @@ def _print_theory_table(theories) -> None:
 
 
 def _show_diverged(args: argparse.Namespace) -> None:
-    """Show all theories with class_id IS NULL (optimizer diverged)."""
+    """Show all nonSCFT theories (class_id IS NULL), with optional filters."""
     con = sqlite3.connect(args.db)
     con.row_factory = sqlite3.Row
+
+    conditions = ["class_id IS NULL"]
+    params: dict = {}
+    pair = getattr(args, "pair", None)
+    if pair:
+        conditions.append("gauge_pair = :pair")
+        params["pair"] = _normalize_pair(pair)
+    rank = getattr(args, "rank", None)
+    if rank:
+        conditions.append("rank0_mult = :m0 AND rank1_mult = :m1")
+        params["m0"], params["m1"] = rank
+    ven = getattr(args, "veneziano", None)
+    if ven is True:
+        conditions.append("veneziano = 1")
+    elif ven is False:
+        conditions.append("veneziano = 0")
+
+    where = "WHERE " + " AND ".join(conditions)
     theories = con.execute(
-        "SELECT * FROM theory WHERE class_id IS NULL "
-        "ORDER BY gauge_pair, matter0, matter1"
+        f"SELECT * FROM theory {where} "
+        "ORDER BY gauge_pair, rank0_mult, rank1_mult, matter0, matter1",
+        params,
     ).fetchall()
     con.close()
-    print(f"\nDiverged theories (class_id IS NULL): {len(theories)}")
+
+    filt_parts = []
+    if pair:            filt_parts.append(f"pair={_normalize_pair(pair)}")
+    if rank:            filt_parts.append(f"rank={rank[0]},{rank[1]}")
+    if ven is True:     filt_parts.append("veneziano")
+    elif ven is False:  filt_parts.append("no-veneziano")
+    filt = f"  [filter: {', '.join(filt_parts)}]" if filt_parts else ""
+    print(f"\nnonSCFT theories (class_id IS NULL): {len(theories)}{filt}")
     print("─" * 100)
     _print_theory_table(theories)
 
@@ -1012,9 +1031,12 @@ def cmd_search(args: argparse.Namespace) -> None:
     conditions = []
     params: dict = {}
 
+    if getattr(args, "id", None) is not None:
+        conditions.append("theory_id = :tid")
+        params["tid"] = args.id
     if args.pair:
         conditions.append("gauge_pair = :pair")
-        params["pair"] = args.pair.upper().replace("X", "-")
+        params["pair"] = _normalize_pair(args.pair)
     if args.matter0:
         conditions.append("matter0 LIKE :m0")
         params["m0"] = f"%{args.matter0}%"
@@ -1075,13 +1097,15 @@ def cmd_search(args: argparse.Namespace) -> None:
         e  = r["edges"]   or "—"
         d0 = r["delta0"]  or "—"
         d1 = r["delta1"]  or "—"
-        print(f"  {r['theory_id']:>5}  {r['class_id']:>4}  {r['gauge_pair']:<7}  "
+        cid = r["class_id"] if r["class_id"] is not None else "—"
+        a_s = f"{r['a_over_N2']:>10.6f}" if r["a_over_N2"] is not None else f"{'—':>10}"
+        print(f"  {r['theory_id']:>5}  {cid:>4}  {r['gauge_pair']:<7}  "
               f"{m0:<{m0w}}  "
               f"{m1:<{m1w}}  "
               f"{e:<{ew}}  "
               f"{d0:>{d0w}}  "
               f"{d1:>{d1w}}  "
-              f"{r['a_over_N2']:>10.6f}")
+              f"{a_s}")
 
     print(f"\n  {len(rows)} theories found.")
 
@@ -1235,7 +1259,7 @@ def cmd_morphologies(args: argparse.Namespace) -> None:
         # Build ordered group keys: (pair, m0, m1)
         pair_filter = getattr(args, "pair", None)
         if pair_filter:
-            pair_filter = pair_filter.upper().replace("×", "-").replace("x", "-")
+            pair_filter = _normalize_pair(pair_filter)
         rank_filter = getattr(args, "rank", None)  # (m0, m1) tuple or None
         ven_filter = getattr(args, "veneziano", None)  # True, False, or None
 
@@ -1344,6 +1368,25 @@ def cmd_stats(args: argparse.Namespace) -> None:
 _FUND_DIM_COEFF = {"SU": 1, "SO": 1, "Sp": 2}
 # T(fund) exact: SU→1/2, SO→1, Sp→1/2
 _FUND_T = {"SU": Fraction(1, 2), "SO": Fraction(1), "Sp": Fraction(1, 2)}
+
+
+def _node_types(gauge_pair: str, m0: int, m1: int,
+                N_rank2_0: float, N_rank2_1: float, N_bif: int
+                ) -> tuple[Fraction, Fraction]:
+    """Per-node 'type' = Σ T_a(R_i)/T(adj_a) at large N.
+
+    Rank-2 matter at node a contributes N_rank2_a directly (stored values are
+    already T(R)/rank_a). Each bifundamental contributes
+        T(fund_a) · dim(fund_other) / rank_a = fund_T[G_a] · fund_dim[G_other]
+                                              · m_other / m_a.
+    AF at node a requires type_a < 3.
+    """
+    g0, g1 = gauge_pair.split("-")
+    n0 = Fraction(int(round(2 * N_rank2_0)), 2)
+    n1 = Fraction(int(round(2 * N_rank2_1)), 2)
+    bif0 = _FUND_T[g0] * _FUND_DIM_COEFF[g1] * Fraction(m1, m0)
+    bif1 = _FUND_T[g1] * _FUND_DIM_COEFF[g0] * Fraction(m0, m1)
+    return n0 + N_bif * bif0, n1 + N_bif * bif1
 
 
 def _parse_R_bif(R_str: str | None) -> float | None:
@@ -1711,10 +1754,19 @@ def main() -> None:
     # show
     p = sub.add_parser("show", help="Show all theories in a universality class")
     p.add_argument("class_id", type=_parse_class_id,
-                   help="Class ID (from 'classes') or 'null' for diverged theories")
+                   help="Class ID (from 'classes') or 'null' for nonSCFT theories")
+    p.add_argument("--pair", help="Filter by gauge pair (only when class_id=null), e.g. SU-SU")
+    p.add_argument("--rank", type=_parse_rank,
+                   help="Filter by rank multipliers (only when class_id=null), e.g. '2,1'")
+    vg = p.add_mutually_exclusive_group()
+    vg.add_argument("--veneziano",    dest="veneziano", action="store_true",  default=None,
+                    help="Only theories requiring Veneziano limit (class_id=null)")
+    vg.add_argument("--no-veneziano", dest="veneziano", action="store_false",
+                    help="Only theories not requiring Veneziano limit (class_id=null)")
 
     # search
     p = sub.add_parser("search", help="Filter theories by properties")
+    p.add_argument("--id", type=int, help="Lookup a single theory by theory_id")
     p.add_argument("--pair",    help="Gauge pair, e.g. SU-SU")
     p.add_argument("--matter0", help="Substring match on matter at node 0")
     p.add_argument("--matter1", help="Substring match on matter at node 1")
