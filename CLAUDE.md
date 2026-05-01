@@ -4,19 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Classification of 4D N=1 asymptotically free quiver gauge theories that admit a large N limit and flow to non-trivial IR superconformal fixed points. Currently documentation-only; code implementation is a future step.
+Classification of 4D N=1 asymptotically free quiver gauge theories that admit a large N limit and flow to non-trivial IR superconformal fixed points.
 
 ## Repository Structure
 
-Six markdown files, each corresponding to one module of the classification pipeline:
-
 ```
-README.md                    ← pipeline overview and key references
-module1_beta_functions.md    ← one-loop b_0 computation and large N constraints
-module2_quiver_generation.md ← quiver enumeration, anomaly cancellation
-module3_a_maximization.md    ← IR R-charges via Intriligator-Wecht a-maximization
-module4_ir_fixed_points.md   ← boundary analysis for non-trivial IR fixed points
-module5_classification.md    ← full pipeline and output format
+README.md                       ← pipeline overview and key references
+quivers.db                      ← pre-built database (4560 theories, 135 classes)
+
+# Core pipeline
+beta_functions.py               ← Module 1: one-loop b_0 computation
+quiver_generation.py            ← Module 2: quiver enumeration, anomaly cancellation
+a_maximization.py               ← Module 3: numerical a-max at fixed (N, N_f)
+a_maximization_large_N.py       ← Module 3: exact symbolic large-N a-max
+two_node_db.py                  ← Module 5: SQLite DB + CLI for two-node classification
+
+docs/                           ← module documentation (module1–5 .md files)
+scripts/                        ← dump scripts that generate paper/sections/generated/
+paper/
+  main.tex, references.bib      ← LaTeX paper
+  sections/                     ← hand-written section files
+  sections/generated/           ← auto-generated TeX (run scripts/ to regenerate)
+  figures/
+results/                        ← analysis output (classification JSONs, tables)
+archive/                        ← DB backups, one-off scripts, build artifacts
 ```
 
 ## Physics Conventions

@@ -1,8 +1,8 @@
 {
   "project_reference": {
-    "project_md_updated": null,
-    "core_research_question": null,
-    "current_focus": null
+    "project_md_updated": "2026-04-14",
+    "core_research_question": "What is the complete classification of 4D N=1 asymptotically free quiver gauge theories (1-node and 2-node) that admit a large N limit, with their IR superconformal data?",
+    "current_focus": "Phase 3 \u2014 Conformal window analysis"
   },
   "project_contract": {
     "schema_version": 1,
@@ -288,27 +288,126 @@
     }
   },
   "position": {
-    "current_phase": null,
-    "current_phase_name": null,
-    "total_phases": null,
-    "current_plan": null,
-    "total_plans_in_phase": null,
-    "status": null,
-    "last_activity": null,
-    "last_activity_desc": null,
-    "progress_percent": 0,
+    "current_phase": "3",
+    "current_phase_name": "Conformal window analysis",
+    "total_phases": 6,
+    "current_plan": "1",
+    "total_plans_in_phase": 1,
+    "status": "Phase complete \u2014 ready for verification",
+    "last_activity": "2026-04-15",
+    "last_activity_desc": "Conformal window: 237 nodes classified, 79 inside, 7 validation checks pass",
+    "progress_percent": 100,
     "paused_at": null
   },
   "active_calculations": [],
-  "intermediate_results": [],
+  "intermediate_results": [
+    "67 single-node theories with exact symbolic R-charges and central charges",
+    "SU universality: effective_T = n_adj + n_tensor/2 determines universality class",
+    "Type II: a/N\u00b2 = c/N\u00b2 = (27/128)\u00b7dim(G)/N\u00b2, R_rank2 = 1/2",
+    "Type III: a/N\u00b2 = c/N\u00b2 = (1/4)\u00b7dim(G)/N\u00b2, R_rank2 = 2/3",
+    "Type I SO/Sp: a = c = 0 at leading order",
+    "253 two-node universality classes: 242 with superconformal data + 11 below-window classes (one per gauge-pair/rank sector, 478 theories, a=c=R=None)",
+    "Non-unitary fraction: SU-SO 14.8%, SU-SU 8.2%, SU-Sp 10.8%, SO/Sp pairs 0%",
+    "237 N_rank2=0 nodes classified: 79 inside (33%), 130 below (55%), 18 lower boundary, 10 upper boundary",
+    "SO-SO highest inside fraction (56%), SU-Sp lowest (23%)",
+    "7 morphologies with both nodes inside conformal window out of 38 with both N_rank2=0",
+    "Rank multipliers increase inside fraction: 39% for rank!=(1,1) vs 28% for rank(1,1)"
+  ],
   "open_questions": [
-    "How to present the 135 classes compactly in JHEP format (tables vs appendix)",
-    "Whether distribution of a/c ratios reveals interesting structure worth highlighting"
+    "Why does a/c never exceed 1.0 for two-node unitary theories?",
+    "Why is non-unitary fraction zero for orthosymplectic-only pairs?",
+    "Class 31: which value (exact or numerical) is correct for c?",
+    "How to present the 326 classes compactly in JHEP format (tables vs appendix)"
   ],
   "performance_metrics": {
-    "rows": []
+    "rows": [
+      {
+        "label": "01-01",
+        "duration": "~12 min",
+        "tasks": "2",
+        "files": "6"
+      },
+      {
+        "label": "02-01",
+        "duration": "~5 min",
+        "tasks": "2",
+        "files": "4"
+      },
+      {
+        "label": "03-01",
+        "duration": "~8 min",
+        "tasks": "2",
+        "files": "4"
+      }
+    ]
   },
-  "decisions": [],
+  "decisions": [
+    {
+      "phase": null,
+      "summary": "[Init]: Skip Module 4 for this paper \u2014 focus on Modules 1-3 results first",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[Init]: Numerical values sufficient \u2014 59 classes without exact symbolic results are acceptable",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[Init]: SQCD conformal window only for N_rank2=0 nodes",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[Init]: Target JHEP",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[01-01]: SU universality class determined by (effective_T, |delta|) not (n_rank2, n_adj)",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[01-01]: Type I Veneziano theories (SU with A or S alone) give negative leading-order a/N\u00b2 \u2014 subleading artifact",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[01-01]: S+2A+3Abar included in classification despite absence from paper Table 2",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[02-01]: Use exact symbolic c when available (181 classes), numerical otherwise (145)",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[02-01]: Class 31 discrepancy documented, not treated as error",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[02-01]: 7537 classified theories (220 unclassified excluded from counts)",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[03-01]: Strict inequality 3/2 < x < 3 for inside classification; boundary values at x=3/2 and x=3 reported separately",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[03-01]: Per-node classification (not per-morphology); general formula x = N_bif * T_lead * m_other/m_self with rank multipliers",
+      "rationale": null
+    },
+    {
+      "phase": null,
+      "summary": "[03-01]: Below-window nodes (x < 3/2) \u2192 a, c, R set to None; 84 classes and 571 theories affected",
+      "rationale": null
+    }
+  ],
   "approximations": [],
   "convention_lock": {
     "metric_signature": null,
@@ -335,8 +434,10 @@
   "pending_todos": [],
   "blockers": [],
   "session": {
-    "last_date": null,
-    "stopped_at": null,
-    "resume_file": null
-  }
+    "last_date": "2026-04-15",
+    "stopped_at": "Phase 3 plan 01 complete, awaiting verification",
+    "resume_file": ".gpd/phases/03-conformal-window-analysis/03-01-SUMMARY.md"
+  },
+  "_version": 1,
+  "_synced_at": "2026-04-15T12:49:04.231617+00:00"
 }

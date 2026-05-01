@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# DB backups
+*.db.bak*
+*.db.bak_*
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+
+# GPD internal
+.gpd/state.json.bak
+.gpd/**/.DS_Store

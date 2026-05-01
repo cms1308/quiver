@@ -814,7 +814,8 @@ LaunchKernels[];
 
 processTheory[th_] := Module[
   {{idx, Amat, bvec, Fnull, nfree, Fmat, R0, dims, gaugino,
-    svars, R, r1, trR, trR3, a, c, grad, hess, sols, avals, best, Ropt}},
+    svars, R, r1, trR, trR3, a, c, grad, hess, sols, solsSym,
+    freeParams, avals, best, Ropt}},
   idx = th["idx"];
   If[th["trivial"],
     Return[<|"idx" -> idx, "a" -> th["a0"], "c" -> th["c0"], "R" -> {{}}|>]
@@ -826,6 +827,9 @@ processTheory[th_] := Module[
   nfree = Length[Fnull];
   Fmat  = Transpose[Fnull];    (* n_R × n_free, so R = R0 + Fmat.svars *)
   R0    = LinearSolve[Amat, bvec];  (* exact particular solution *)
+  If[!ListQ[R0],
+    Return[<|"idx" -> idx, "a" -> "NONE"|>]
+  ];
   dims    = th["dims"];
   gaugino = th["gaugino"];
   If[nfree == 0,
@@ -848,14 +852,37 @@ processTheory[th_] := Module[
   c     = (1/32)*(9*trR3 - 5*trR);
   grad  = Table[D[a, svars[[j]]], {{j, nfree}}];
   hess  = Outer[D[a, #1, #2]&, svars, svars];
-  sols  = NSolve[Thread[grad == 0], svars, Reals,
-                 WorkingPrecision -> {wp}];
-  (* Keep only local maxima: all Hessian eigenvalues <= 0.
-     Use tolerance 0 (not 1e-8) to avoid accepting saddle points
-     that slip through due to QR convergence failures. *)
+  sols  = Quiet[NSolve[Thread[grad == 0], svars, Reals,
+                       WorkingPrecision -> {wp}]];
+  If[!ListQ[sols], sols = {{}}];
+  (* Keep only local maxima: Hessian is negative definite. *)
   sols  = Select[sols,
-    AllTrue[Eigenvalues[N[hess /. #, {wp}]], # <= 0 &] &];
-  If[sols == {{}},
+    NegativeDefiniteMatrixQ[N[hess /. #, {wp}]] &];
+  If[Length[sols] == 0,
+    (* Fallback: symbolic Solve — handles flat directions NSolve misses.
+       Use complex Solve (much faster than Reals domain for quadratic systems);
+       any remaining free parameters (flat directions) are pinned to 0. Then
+       filter out complex solutions and accept negative-semidefinite Hessians
+       (zero eigenvalues come from flat directions). *)
+    solsSym = TimeConstrained[
+      Quiet[Solve[Thread[grad == 0], svars]],
+      120, {{}}];
+    If[ListQ[solsSym] && Length[solsSym] > 0,
+      (* Residual variables after substitution: unsolved svars (flat directions
+         within svars) AND external parameters like C[_] from Solve. *)
+      freeParams = Variables[svars /. solsSym];
+      If[Length[freeParams] > 0,
+        solsSym = (Join[#, Thread[freeParams -> 0]]&) /@ solsSym];
+      solsSym = Select[solsSym,
+        Function[rules,
+          AllTrue[N[svars /. rules, {wp}],
+            NumericQ[#] && Abs[Im[#]] < 10^-10 &]]];
+      sols = Select[solsSym,
+        Function[rules,
+          NegativeSemidefiniteMatrixQ[N[hess /. rules, {wp}]]]];
+    ];
+  ];
+  If[Length[sols] == 0,
     Return[<|"idx" -> idx, "a" -> "NONE"|>]
   ];
   avals = N[a /. sols, {wp}];
