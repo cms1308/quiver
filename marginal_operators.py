@@ -184,20 +184,38 @@ def _multisets_up_to(labels: list[str], max_degree: int) -> list[dict[str, int]]
     return [m for m in out if sum(m.values()) >= 1]
 
 
+_LABEL_PROBE_N = (10, 20, 30)
+
+
+def _all_labels_via_build(quiver: Quiver) -> set[str]:
+    """Union of build_fields labels across multiple N probes — captures
+    fund/antifund identity changes when chiral excess flips sign with N."""
+    out: set[str] = set()
+    for N in _LABEL_PROBE_N:
+        try:
+            for f in build_fields(quiver, N=N, N_f=0):
+                out.add(f.label)
+        except Exception:
+            pass
+    return out
+
+
 def _node_intra_labels(quiver: Quiver, node: int) -> list[str]:
-    """Labels for fields living entirely at `node` (rank-2/adj only)."""
-    return [f"node{node}_{rep}" for rep, c in quiver.node_matter[node].items() if c > 0]
+    """Labels for fields living entirely at `node`. Includes rank-2/adj from
+    `node_matter` plus fund/antifund/V derived by `build_fields` when chiral
+    excess or N_f forces them."""
+    out = []
+    for label in _all_labels_via_build(quiver):
+        if not label.startswith("node"):
+            continue
+        if int(label[4:].split("_", 1)[0]) == node:
+            out.append(label)
+    return sorted(out)
 
 
 def _all_field_labels(quiver: Quiver) -> list[str]:
     """All field labels in the quiver (intra-node + edges)."""
-    out: list[str] = []
-    for i in range(quiver.n_nodes):
-        out.extend(_node_intra_labels(quiver, i))
-    for e in quiver.edges:
-        out.append(_edge_label(e))
-    # dedup edges of identical (src,dst,rep) — they are flavor-degenerate
-    return sorted(set(out))
+    return sorted(_all_labels_via_build(quiver))
 
 
 def _enumerate_single_node(quiver: Quiver, max_degree: int) -> list[CandidateOp]:
@@ -371,6 +389,31 @@ def is_marginal_at_all_N(
     return True
 
 
+def _r_values_sane(R: dict[str, float]) -> bool:
+    """Reject obviously diverged a-max output (R outside a generous bound)."""
+    return all(-0.5 <= v <= 2.5 for v in R.values())
+
+
+def find_marginal_ops(
+    quiver: Quiver,
+    N_list: tuple[int, ...] = (10, 20, 30),
+    max_degree: int = 6,
+    tol: float = 1e-6,
+    N_f: int = 0,
+) -> list[CandidateOp]:
+    """Enumerate candidates, evaluate R at each N, return ops with R=2 at
+    every tested N. Returns [] if a-max fails to converge at any tested N
+    (detected as R-charges outside the physical [0,2] range)."""
+    R_per_N: dict[int, dict[str, float]] = {}
+    for N in N_list:
+        R = r_values_at_N(quiver, N, N_f=N_f)
+        if not _r_values_sane(R):
+            return []
+        R_per_N[N] = R
+    candidates = enumerate_candidates(quiver, max_degree=max_degree)
+    return [op for op in candidates if is_marginal_at_all_N(op, R_per_N, tol=tol)]
+
+
 def find_marginal_singlet_ops(
     quiver: Quiver,
     N_list: tuple[int, ...] = (10, 20, 30),
@@ -378,8 +421,10 @@ def find_marginal_singlet_ops(
     tol: float = 1e-6,
     N_f: int = 0,
 ) -> list[CandidateOp]:
-    """End-to-end: enumerate, evaluate R at each N, filter to flavor-singlet
-    operators that are marginal at every N. Returns filtered list."""
+    """Same as find_marginal_ops but additionally filtered by the heuristic
+    flavor-singlet rule (lone field from a multiplet of size ≥ 2 → not singlet).
+    The check is incomplete (misses U(1) phases on multiplicity-1 fields and
+    finer rep-theory of multi-field flavor tensors)."""
     R_per_N = {N: r_values_at_N(quiver, N, N_f=N_f) for N in N_list}
     candidates = enumerate_candidates(quiver, max_degree=max_degree)
     multiplets = _flavor_multiplets(quiver)
@@ -388,6 +433,62 @@ def find_marginal_singlet_ops(
         if is_marginal_at_all_N(op, R_per_N, tol=tol)
         and is_flavor_singlet(op, multiplets)
     ]
+
+
+# ── Compact pretty-printing ───────────────────────────────────────────────────
+
+_REP_UNI = {
+    "adj": "adj", "S": "S", "Sbar": "S̄", "A": "A", "Abar": "Ā",
+    "V": "V", "fund": "□", "antifund": "□̄",
+}
+_EDGE_REP_UNI = {
+    "pm": "(+−)", "pp": "(++)", "mm": "(−−)",
+    "p": "(+)", "m": "(−)", "std": "",
+}
+_SUPER = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
+_SUB = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
+
+
+def _label_short(label: str) -> str:
+    if label.startswith("node"):
+        node, rep = label[4:].split("_", 1)
+        return _REP_UNI.get(rep, rep) + node.translate(_SUB)
+    parts = label.split("_")
+    src, dst, rep = parts[1], parts[2], "_".join(parts[3:])
+    return f"Q{_EDGE_REP_UNI.get(rep, rep)}{src.translate(_SUB)}{dst.translate(_SUB)}"
+
+
+def op_short(op: CandidateOp) -> str:
+    """Compact one-line operator notation, e.g. 'tr(adj₁³)' or 'tr(Q(++)₀₁ Q(−−)₀₁ adj₁²)'."""
+    if op.kind == "bifund-loop" and op.word is not None:
+        parts = [_label_short(lbl) for lbl in op.word]
+        return "tr(" + " ".join(parts) + ")"
+    parts = []
+    for label, mult in op.factors:
+        s = _label_short(label)
+        if mult > 1:
+            s += str(mult).translate(_SUPER)
+        parts.append(s)
+    return "tr(" + " ".join(parts) + ")"
+
+
+def ops_short_summary(ops: list[CandidateOp], max_chars: int = 60) -> str:
+    """Render a list of ops as a semicolon-separated string, truncated."""
+    if not ops:
+        return "—"
+    strs = [op_short(op) for op in ops]
+    out = "; ".join(strs)
+    if len(out) > max_chars:
+        # truncate keeping count visible
+        kept = []
+        used = 0
+        for s in strs:
+            if used + len(s) + 2 > max_chars - 6:
+                break
+            kept.append(s)
+            used += len(s) + 2
+        out = "; ".join(kept) + f"; …+{len(strs) - len(kept)}"
+    return out
 
 
 # ── DB row → Quiver reconstruction ────────────────────────────────────────────

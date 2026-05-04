@@ -1,10 +1,10 @@
 % Auto-generated from quivers.db by scripts/dump_marginal_operators.py
 % Requires: \usepackage{booktabs,longtable,amssymb,amsmath}
-\section*{Always-marginal flavor-singlet operators (finite $N$)}
+\section*{Always-marginal operators (finite $N$)}
 
-Operators built from chiral matter fields with $R[O]=2$ at every $N\in\{10,20,30\}$ (numerical $a$-maximization, $|R-2|<10^{-6}$). Flavor singlets are candidates for exactly marginal deformations; non-singlets would generate flavor-current beta functions.
+Single-trace gauge-invariant chiral operators with $R[O]=2$ at every $N\in\{10,20,30\}$ (numerical $a$-maximization, $|R-2|<10^{-6}$). Flavor-singlet filtering is deferred — see module 6 docs.
 
-Total theories with at least one always-marginal flavor singlet: \textbf{367} of \textbf{386} reporting any marginal.
+Total theories with at least one always-marginal operator: \textbf{350}.
 
 \begin{longtable}{rrlllr}
 \toprule
@@ -22,6 +22,7 @@ class & theory & gauge & matter & operator & deg \\
 9 & 228 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 9 & 279 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 9 & 280 & SU-SU & A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
@@ -54,13 +55,12 @@ class & theory & gauge & matter & operator & deg \\
 9 & 299 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 11 & 312 & SU-SU & A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 11 & 317 & SU-SU & S \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 11 & 350 & SU-SU & A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 11 & 355 & SU-SU & S \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 13 & 490 & SU-SU & — \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
-13 & 491 & SU-SU & S̄ \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 13 & 492 & SU-SU & — \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
@@ -68,8 +68,6 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-13 & 493 & SU-SU & S̄ \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 13 & 494 & SU-SU & — \| A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
@@ -82,35 +80,61 @@ class & theory & gauge & matter & operator & deg \\
 21 & 786 & SU-SU & adj \| 2adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{2}\right)$ & 4 \\
 21 & 787 & SU-SU & adj + A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 26 & 916 & SU-SU & A + 2Ā \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
-26 & 922 & SU-SU & S̄ + 2A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
-26 & 926 & SU-SU & S + S̄ + A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 26 & 928 & SU-SU & adj + A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 26 & 1008 & SU-SU & A + 2Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
-26 & 1014 & SU-SU & S̄ + 2A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
-26 & 1018 & SU-SU & S + S̄ + A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 26 & 1020 & SU-SU & adj + A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 33 & 1428 & SU-SU & 2A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 33 & 1434 & SU-SU & S + A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 33 & 1474 & SU-SU & 2A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 33 & 1480 & SU-SU & S + A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
 44 & 2124 & SU-SU & S + S̄ + A + Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,S_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 44 & 2126 & SU-SU & 2adj \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-44 & 2128 & SU-SU & A + 3Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
+44 & 2128 & SU-SU & A + 3Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+44 & 2131 & SU-SU & A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 44 & 2132 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
-44 & 2143 & SU-SU & A + 3Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
+44 & 2143 & SU-SU & A + 3Ā \| 2adj & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 44 & 2145 & SU-SU & adj + S̄ + Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 44 & 2147 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 44 & 2149 & SU-SU & S + S̄ + A + Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,S_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 44 & 2151 & SU-SU & 2adj \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}\right)$ & 3 \\
 44 & 2153 & SU-SU & A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 44 & 2154 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
@@ -121,12 +145,20 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
-44 & 2157 & SU-SU & A + 3Ā \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+44 & 2157 & SU-SU & A + 3Ā \| adj + S + A & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
 44 & 2160 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
+44 & 2161 & SU-SU & A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 44 & 2162 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}\right)$ & 3 \\
 44 & 21136 & SU-SU & adj + S̄ + Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
@@ -138,51 +170,142 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,A_{1}\,\bar{A}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
+44 & 21187 & SU-SU & S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\,\bar{S}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\,\bar{A}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 44 & 21193 & SU-SU & adj + S̄ + Ā \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
-47 & 2486 & SU-SU & S + S̄ + A + Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+44 & 21194 & SU-SU & S̄ + Ā \| S + A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,S_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,A_{1}\right)$ & 3 \\
+47 & 2482 & SU-SU & S + S̄ + A + Ā \| S + S̄ + A + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2486 & SU-SU & S + S̄ + A + Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,S_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
-47 & 2488 & SU-SU & S + S̄ + A + Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-47 & 2526 & SU-SU & adj + S̄ + Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+47 & 2488 & SU-SU & S + S̄ + A + Ā \| 2adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,S_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2526 & SU-SU & adj + S̄ + Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2527 & SU-SU & adj + S̄ + Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2537 & SU-SU & 2adj \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-47 & 2551 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-47 & 2577 & SU-SU & A + 3Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2551 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
+47 & 2559 & SU-SU & S + S̄ + A + Ā \| S + A & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+47 & 2577 & SU-SU & A + 3Ā \| adj & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
 47 & 2595 & SU-SU & adj + S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
-47 & 2606 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+47 & 2605 & SU-SU & S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,\square_{0}\,\square_{1}\right)$ & 3 \\
+47 & 2606 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2611 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
-47 & 2692 & SU-SU & S + S̄ + A + Ā \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
+47 & 2614 & SU-SU & S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2619 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2685 & SU-SU & S + S̄ + A + Ā \| S + S̄ + A + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+47 & 2692 & SU-SU & S + S̄ + A + Ā \| adj + S + A & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,S_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
-47 & 2693 & SU-SU & S + S̄ + A + Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-47 & 2731 & SU-SU & adj + S̄ + Ā \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+47 & 2693 & SU-SU & S + S̄ + A + Ā \| 2adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,S_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+47 & 2731 & SU-SU & adj + S̄ + Ā \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2732 & SU-SU & adj + S̄ + Ā \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2742 & SU-SU & 2adj \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+47 & 2765 & SU-SU & A + 3Ā \| S̄ + Ā & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
+47 & 2766 & SU-SU & A + 3Ā \| S + A & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 47 & 2800 & SU-SU & adj \| S + S̄ + A + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,S_{1}\,\bar{S}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\bar{A}_{1}\,S_{1}\right)$ & 3 \\
@@ -191,34 +314,69 @@ class & theory & gauge & matter & operator & deg \\
 47 & 2802 & SU-SU & adj \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2813 & SU-SU & adj + S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 47 & 2814 & SU-SU & adj + S̄ + Ā \| S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
-47 & 2824 & SU-SU & S̄ + Ā \| S + A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+47 & 2824 & SU-SU & S̄ + Ā \| S + A & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,S_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,A_{1}\right)$ & 3 \\
-47 & 2825 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+47 & 2825 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,\square_{0}\,\square_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2830 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
+47 & 2834 & SU-SU & S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 47 & 2836 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 47 & 2843 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-47 & 2860 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-47 & 2884 & SU-SU & S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\,\bar{S}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
+47 & 2846 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+47 & 2860 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
+47 & 2868 & SU-SU & S + S̄ + A + Ā \| S + A & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+47 & 2884 & SU-SU & S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\,\bar{S}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\,\bar{A}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
-47 & 2885 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+47 & 2885 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{10}\,\square_{0}\,\bar{\square}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
@@ -226,36 +384,145 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}\right)$ & 3 \\
-47 & 2907 & SU-SU & A + 3Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+47 & 2893 & SU-SU & — \| S̄ + Ā & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\,\bar{S}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,Q^{\square\bar{\square}}_{10}\,\bar{A}_{1}\right)$ & 3 \\
+47 & 2895 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2907 & SU-SU & A + 3Ā \| adj & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
 47 & 2925 & SU-SU & adj + S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+47 & 2930 & SU-SU & S̄ + Ā \| S + A & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 47 & 2931 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-47 & 2949 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
+47 & 2937 & SU-SU & — \| S + A & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,S_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,A_{1}\right)$ & 3 \\
+47 & 2948 & SU-SU & S̄ + Ā \| S + A & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{10}\,\square_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2949 & SU-SU & S̄ + Ā \| adj & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 47 & 2954 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}\right)$ & 3 \\
 47 & 2956 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-49 & 3352 & SU-SU & S + A \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-49 & 3354 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
+47 & 2959 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+47 & 2962 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+47 & 2963 & SU-SU & S̄ + Ā \| S + A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+47 & 2968 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+49 & 3352 & SU-SU & S + A \| adj + S̄ + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+49 & 3354 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+49 & 3362 & SU-SU & S + S̄ + A + Ā \| S + A & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+49 & 3376 & SU-SU & S + A \| S̄ + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+49 & 3377 & SU-SU & S + A \| S + A & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
 49 & 3389 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
-49 & 3425 & SU-SU & S + A \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-49 & 3426 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+49 & 3391 & SU-SU & — \| S̄ + Ā & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+49 & 3394 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+49 & 3425 & SU-SU & S + A \| adj + S + A & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+49 & 3426 & SU-SU & S + A \| 2adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+49 & 3434 & SU-SU & S + S̄ + A + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
 49 & 3462 & SU-SU & adj \| S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
 49 & 3463 & SU-SU & adj \| S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+49 & 3467 & SU-SU & — \| S̄ + Ā & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
 49 & 3469 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+49 & 3475 & SU-SU & S + A \| S̄ + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+49 & 3476 & SU-SU & S + A \| S + A & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+49 & 3478 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
 49 & 3490 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+49 & 3494 & SU-SU & — \| S + A & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
 49 & 3495 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+49 & 3497 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+49 & 3499 & SU-SU & — \| S + A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+49 & 3502 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+51 & 3543 & SU-SU & S + A \| S + A & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+51 & 3545 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
+51 & 3548 & SU-SU & S + A \| S̄ + Ā & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+51 & 3550 & SU-SU & — \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
 53 & 3573 & SU-SO & S + S̄ \| — & $\mathrm{tr}\!\left(S_{0}^{2}\,\bar{S}_{0}^{2}\right)$ & 4 \\
 53 & 3574 & SU-SO & adj \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,\mathrm{adj}_{0}^{2}\right)$ & 4 \\
 71 & 3711 & SU-Sp & — \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\right)$ & 4 \\
@@ -325,17 +592,11 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 153 & 4739 & SU-SU & 2S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
-153 & 4740 & SU-SU & S + A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 153 & 4741 & SU-SU & S + S̄ + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
-153 & 4742 & SU-SU & S + 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 153 & 4743 & SU-SU & 2S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 153 & 4744 & SU-SU & adj + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
-153 & 4745 & SU-SU & adj + S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 153 & 4746 & SU-SU & adj + S + S̄ \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
@@ -345,26 +606,16 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 153 & 4749 & SU-SU & 2S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-153 & 4750 & SU-SU & S + A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 153 & 4751 & SU-SU & S + S̄ + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-153 & 4752 & SU-SU & S + 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 153 & 4753 & SU-SU & 2S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 153 & 4754 & SU-SU & adj + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-153 & 4755 & SU-SU & adj + S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 153 & 4756 & SU-SU & adj + S + S̄ \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 153 & 4757 & SU-SU & 2adj \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-158 & 4922 & SU-SU & A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
-158 & 4923 & SU-SU & S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 158 & 4924 & SU-SU & 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 158 & 4925 & SU-SU & S + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
@@ -373,14 +624,8 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 158 & 4927 & SU-SU & S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
-158 & 4928 & SU-SU & adj + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
 158 & 4929 & SU-SU & adj + S \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
-158 & 4930 & SU-SU & A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-158 & 4931 & SU-SU & S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 158 & 4932 & SU-SU & 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 158 & 4933 & SU-SU & S + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
@@ -389,28 +634,22 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 158 & 4935 & SU-SU & S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-158 & 4936 & SU-SU & adj + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 158 & 4937 & SU-SU & adj + S \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
 160 & 4942 & SU-SU & 2A + 2Ā \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4944 & SU-SU & 2S̄ + 2A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4946 & SU-SU & S + A + 2Ā \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4948 & SU-SU & S + S̄ + A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
-160 & 4950 & SU-SU & S + 2S̄ + A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4952 & SU-SU & 2S + 2S̄ \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4954 & SU-SU & adj + A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
-160 & 4956 & SU-SU & adj + S̄ + A \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4958 & SU-SU & adj + S + S̄ \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4960 & SU-SU & 2adj \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4962 & SU-SU & 2A + 2Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4964 & SU-SU & 2S̄ + 2A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4966 & SU-SU & S + A + 2Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4968 & SU-SU & S + S̄ + A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
-160 & 4970 & SU-SU & S + 2S̄ + A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4972 & SU-SU & 2S + 2S̄ \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4974 & SU-SU & adj + A + Ā \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
-160 & 4976 & SU-SU & adj + S̄ + A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4978 & SU-SU & adj + S + S̄ \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 160 & 4980 & SU-SU & 2adj \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 167 & 5401 & SU-SU & 2A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
@@ -447,7 +686,9 @@ class & theory & gauge & matter & operator & deg \\
 182 & 5926 & SU-SU & 2A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 182 & 5928 & SU-SU & S + A \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
 182 & 5930 & SU-SU & 2S \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
-189 & 6232 & SU-SU & S + S̄ + A + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+189 & 6232 & SU-SU & S + S̄ + A + Ā \| adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,S_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{S}_{0}\,\mathrm{adj}_{1}\right)$ & 3 \\
@@ -455,6 +696,8 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 189 & 6240 & SU-SU & adj + S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
@@ -462,28 +705,40 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 189 & 6244 & SU-SU & 2adj \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 194 & 6376 & SU-SU & adj + S̄ + Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 194 & 6394 & SU-SU & adj + S̄ + Ā \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 200 & 6518 & SU-SU & adj + S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 200 & 6536 & SU-SU & adj + S̄ + Ā \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
-204 & 6624 & SU-SU & S + A \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+204 & 6624 & SU-SU & S + A \| adj & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
 221 & 6725 & SU-Sp & A + Ā \| — & $\mathrm{tr}\!\left(A_{0}^{2}\,\bar{A}_{0}^{2}\right)$ & 4 \\
 221 & 6728 & SU-Sp & adj \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,\mathrm{adj}_{0}^{2}\right)$ & 4 \\
 224 & 6758 & SU-Sp & adj \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,\mathrm{adj}_{0}^{2}\right)$ & 4 \\
 224 & 6759 & SU-Sp & adj \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,\mathrm{adj}_{0}^{2}\right)$ & 4 \\
+240 & 7026 & SU-Sp & A \| — & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
 250 & 7070 & SU-SO & — \| S & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
@@ -491,15 +746,30 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
 316 & 7782 & SU-SU & adj + S̄ + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 317 & 7793 & SU-SU & adj + S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 317 & 7805 & SU-SU & adj + S̄ + Ā \| S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 320 & 7827 & SU-SU & adj + S̄ + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 320 & 7833 & SU-SU & adj + S̄ + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 329 & 7865 & SU-Sp & adj \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
-338 & 7926 & SU-Sp & adj + A + Ā \| — & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{0}\right)$ & 3 \\
- &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+338 & 7922 & SU-Sp & S + 2S̄ + A \| — & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+338 & 7926 & SU-Sp & adj + A + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{A}_{0}\,\mathrm{adj}_{0}\right)$ & 3 \\
+353 & 8064 & SU-Sp & S̄ + A + 2Ā \| — & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 377 & 8250 & SU-SU & A + Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
@@ -539,39 +809,26 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 384 & 8335 & SU-SU & adj \| A + Ā & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
-384 & 8336 & SU-SU & adj \| S̄ + A & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 384 & 8337 & SU-SU & adj \| S + S̄ & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 384 & 8338 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 384 & 8352 & SU-SU & adj \| A + Ā & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
-384 & 8353 & SU-SU & adj \| S̄ + A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 384 & 8354 & SU-SU & adj \| S + S̄ & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 384 & 8355 & SU-SU & adj \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 391 & 8465 & SU-SU & adj \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
-391 & 8466 & SU-SU & adj \| S & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 391 & 8475 & SU-SU & adj \| A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
-391 & 8476 & SU-SU & adj \| S & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{3}\right)$ & 5 \\
 398 & 8540 & SU-SU & 2A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 398 & 8541 & SU-SU & 2S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
-398 & 8542 & SU-SU & S + A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 398 & 8543 & SU-SU & S + S̄ + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
-398 & 8544 & SU-SU & S + 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 398 & 8545 & SU-SU & 2S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 398 & 8546 & SU-SU & adj + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
-398 & 8547 & SU-SU & adj + S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 398 & 8548 & SU-SU & adj + S + S̄ \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
@@ -586,22 +843,13 @@ class & theory & gauge & matter & operator & deg \\
 398 & 8551 & SU-SU & 2S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
-398 & 8552 & SU-SU & S + A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 398 & 8553 & SU-SU & S + S̄ + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
-398 & 8554 & SU-SU & S + 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 398 & 8555 & SU-SU & 2S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 398 & 8556 & SU-SU & adj + A + Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
-398 & 8557 & SU-SU & adj + S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 398 & 8558 & SU-SU & adj + S + S̄ \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
@@ -611,10 +859,8 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 408 & 8831 & SU-SU & adj \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{\square}_{0}^{2}\right)$ & 4 \\
 411 & 8858 & SU-SU & A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
-411 & 8859 & SU-SU & S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 411 & 8860 & SU-SU & 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
@@ -629,16 +875,10 @@ class & theory & gauge & matter & operator & deg \\
 411 & 8863 & SU-SU & S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
-411 & 8864 & SU-SU & adj + A \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 411 & 8865 & SU-SU & adj + S \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 6 \\
 411 & 8866 & SU-SU & A + 2Ā \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
-411 & 8867 & SU-SU & S̄ + 2A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 411 & 8868 & SU-SU & 2S̄ + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
@@ -651,9 +891,6 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 411 & 8871 & SU-SU & S + 2S̄ \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
-411 & 8872 & SU-SU & adj + A \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 411 & 8873 & SU-SU & adj + S \| — & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
@@ -678,23 +915,50 @@ class & theory & gauge & matter & operator & deg \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 6 \\
 495 & 12015 & SU-SU & adj + S̄ + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 495 & 12018 & SU-SU & adj + S̄ + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{S}_{0}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\bar{A}_{0}\right)$ & 3 \\
 506 & 12447 & SU-SU & adj + S̄ + Ā \| S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 506 & 12459 & SU-SU & adj + S̄ + Ā \| S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 510 & 12511 & SU-SU & adj \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
 510 & 12514 & SU-SU & adj \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}\right)$ & 3 \\
 522 & 12890 & SU-SU & adj + S̄ + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 522 & 12908 & SU-SU & adj + S̄ + Ā \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
 533 & 13047 & SU-SU & adj \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\square}_{01}\,\bar{\square}_{0}\,\bar{\square}_{1}\right)$ & 3 \\
 533 & 13050 & SU-SU & adj \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
-547 & 13141 & SU-SO & adj + S + S̄ \| — & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{0}\right)$ & 3 \\
- &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,\bar{\square}_{0}\,\square_{1}\right)$ & 3 \\
+547 & 13132 & SU-SO & S + A + 2Ā \| — & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+547 & 13141 & SU-SO & adj + S + S̄ \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{\square}_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{0}\,\bar{S}_{0}\,\mathrm{adj}_{0}\right)$ & 3 \\
 805 & 18880 & SU-SU & adj + S̄ + Ā \| adj + S̄ + Ā & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{1}\,\square_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{1}\,\square_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 805 & 18916 & SU-SU & adj + S̄ + Ā \| adj + S + A & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{S}_{0}\,\square_{0}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(\bar{A}_{0}\,\square_{0}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(S_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
+ &  &  &  & $\mathrm{tr}\!\left(A_{1}\,\bar{\square}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}\,\mathrm{adj}_{1}^{2}\right)$ & 3 \\
  &  &  &  & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{2}\,\mathrm{adj}_{1}\right)$ & 3 \\
 843 & 19333 & SU-Sp & — \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
@@ -703,46 +967,6 @@ class & theory & gauge & matter & operator & deg \\
 843 & 19334 & SU-Sp & — \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\right)$ & 6 \\
-— & 19540 & SU-SU & — \| A + Ā & $\mathrm{tr}\!\left(A_{1}\,\bar{A}_{1}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,A_{1}\,\bar{A}_{1}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}^{2}\,Q^{\square\square}_{01}^{2}\,A_{1}\,\bar{A}_{1}\right)$ & 6 \\
-— & 19544 & SU-SU & — \| S + S̄ & $\mathrm{tr}\!\left(S_{1}\,\bar{S}_{1}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,S_{1}\,\bar{S}_{1}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}^{2}\,Q^{\square\square}_{01}^{2}\,S_{1}\,\bar{S}_{1}\right)$ & 6 \\
-— & 19556 & SU-SU & — \| A + Ā & $\mathrm{tr}\!\left(A_{1}\,\bar{A}_{1}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,A_{1}\,\bar{A}_{1}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}^{2}\,Q^{\square\bar{\square}}_{10}^{2}\,A_{1}\,\bar{A}_{1}\right)$ & 6 \\
-— & 19560 & SU-SU & — \| S + S̄ & $\mathrm{tr}\!\left(S_{1}\,\bar{S}_{1}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,S_{1}\,\bar{S}_{1}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}^{2}\,Q^{\square\bar{\square}}_{10}^{2}\,S_{1}\,\bar{S}_{1}\right)$ & 6 \\
-— & 19600 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-— & 19616 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}^{2}\,Q^{\square\square}_{01}^{2}\,\mathrm{adj}_{1}^{2}\right)$ & 6 \\
-— & 19618 & SU-SU & — \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}^{2}\,Q^{\square\square}_{01}^{2}\,\mathrm{adj}_{1}^{2}\right)$ & 6 \\
-— & 19674 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{3}\right)$ & 3 \\
-— & 19726 & SU-SU & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}^{2}\,Q^{\square\bar{\square}}_{10}^{2}\,\mathrm{adj}_{1}^{2}\right)$ & 6 \\
-— & 19728 & SU-SU & — \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}^{2}\right)$ & 4 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}^{2}\,Q^{\square\bar{\square}}_{10}^{2}\,\mathrm{adj}_{1}^{2}\right)$ & 6 \\
-— & 19825 & SU-Sp & adj \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
-— & 19829 & Sp-Sp & — \| A & $\mathrm{tr}\!\left(A_{1}^{2}\right)$ & 2 \\
-— & 19830 & Sp-Sp & — \| 2A & $\mathrm{tr}\!\left(A_{1}^{2}\right)$ & 2 \\
-— & 19831 & Sp-Sp & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
-— & 19832 & Sp-Sp & — \| 2adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
-— & 19860 & SU-SO & adj \| — & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,\mathrm{adj}_{0}\right)$ & 3 \\
-— & 19969 & SU-SU & — \| adj & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{1}\right)$ & 3 \\
-— & 20042 & SU-SU & — \| adj & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{1}\right)$ & 3 \\
-— & 20095 & SU-Sp & — \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}\,Q^{\square}_{01}\,A_{1}\right)$ & 3 \\
- &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}}_{01}^{2}\,Q^{\square}_{01}^{2}\,A_{1}\right)$ & 5 \\
-— & 20321 & SU-SU & 2adj \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
-— & 20407 & SU-SU & 2adj \| — & $\mathrm{tr}\!\left(\mathrm{adj}_{0}^{3}\right)$ & 3 \\
-— & 21103 & SO-SO & — \| S & $\mathrm{tr}\!\left(S_{1}^{2}\right)$ & 2 \\
-— & 21104 & SO-SO & — \| adj & $\mathrm{tr}\!\left(\mathrm{adj}_{1}^{2}\right)$ & 2 \\
 — & 21137 & SU-SU & — \| A + Ā & $\mathrm{tr}\!\left(A_{1}\,\bar{A}_{1}\right)$ & 2 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\right)$ & 4 \\
@@ -763,9 +987,5 @@ class & theory & gauge & matter & operator & deg \\
 — & 21197 & SU-SU & — \| A + Ā & $\mathrm{tr}\!\left(A_{1}\,\bar{A}_{1}\right)$ & 2 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
  &  &  &  & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\right)$ & 4 \\
-— & 21222 & SU-SU & adj \| A & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{4}\right)$ & 6 \\
-— & 21223 & SU-SU & adj \| A + Ā & $\mathrm{tr}\!\left(Q^{\bar{\square}\bar{\square}}_{01}\,Q^{\square\square}_{01}\,\mathrm{adj}_{0}^{4}\right)$ & 6 \\
-— & 21249 & SU-SU & adj \| A & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{4}\right)$ & 6 \\
-— & 21250 & SU-SU & adj \| A + Ā & $\mathrm{tr}\!\left(Q^{\square\bar{\square}}_{01}\,Q^{\square\bar{\square}}_{10}\,\mathrm{adj}_{0}^{4}\right)$ & 6 \\
 \bottomrule
 \end{longtable}

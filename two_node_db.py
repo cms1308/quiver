@@ -34,6 +34,9 @@ from a_maximization_large_N import (
     build_fields_large_N,
     _fmt_matter, _fmt_edges, _fmt_linear, _fmt_expr, _fmt_R,
 )
+from marginal_operators import (
+    quiver_from_row, find_marginal_ops, ops_short_summary,
+)
 
 DEFAULT_DB = "quivers.db"
 TOL = 1e-5
@@ -850,8 +853,33 @@ def _display_R_numerical(s: str | None) -> str:
     return _R_EDGE_RE.sub("R_bif", s)
 
 
-def _print_theory_table(theories) -> None:
-    """Print a table of theories (shared by cmd_show and _show_diverged)."""
+def _compute_marginal_ops(theories, max_degree: int = 6,
+                          N_list: tuple[int, ...] = (10, 20, 30)) -> list:
+    """Compute the always-marginal operators for each theory in the list.
+
+    Returns a list parallel to `theories`. Theories with no IR fixed point
+    (a-max diverges) get an empty list."""
+    out = []
+    for t in theories:
+        if t["a_over_N2"] is None:
+            out.append([])
+            continue
+        try:
+            q = quiver_from_row(dict(t))
+            ops = find_marginal_ops(q, N_list=N_list, max_degree=max_degree)
+        except Exception:
+            ops = []
+        out.append(ops)
+    return out
+
+
+def _print_theory_table(theories, marginal_ops_per_theory=None) -> None:
+    """Print a table of theories (shared by cmd_show and _show_diverged).
+
+    If `marginal_ops_per_theory` is provided (parallel list of CandidateOp lists,
+    one per theory), an additional `Marginal ops` column is appended showing
+    operators with R=2 at every N in {10,20,30}.
+    """
     if not theories:
         print("  (none)")
         return
@@ -863,6 +891,11 @@ def _print_theory_table(theories) -> None:
         return f"{t['gauge_pair']}({m0},{m1})"
 
     r_strings = [_display_R_numerical(t["R_numerical"]) for t in theories]
+    show_marginals = marginal_ops_per_theory is not None
+    if show_marginals:
+        marg_strings = [ops_short_summary(ops, max_chars=80) for ops in marginal_ops_per_theory]
+    else:
+        marg_strings = ["" for _ in theories]
 
     m0w = max(len(t["matter0"] or "—") for t in theories)
     m1w = max(len(t["matter1"] or "—") for t in theories)
@@ -878,6 +911,8 @@ def _print_theory_table(theories) -> None:
     gw  = max(gw, 5)
     bBw = max(bBw, 10); bAw = max(bAw, 10)
     rw  = min(rw, 60)   # cap R_numerical display width
+    mw  = max((len(s) for s in marg_strings), default=0) if show_marginals else 0
+    mw  = min(max(mw, 14), 80)
 
     hdr = (f"  {'ID':>5}  "
            f"{'Pair':<{gw}}  "
@@ -895,10 +930,12 @@ def _print_theory_table(theories) -> None:
            f"{'a/c':>8}  "
            f"{'Ven':>3}  "
            f"{'R-charges':<{rw}}")
+    if show_marginals:
+        hdr += f"  {'Marginal ops':<{mw}}"
     print(hdr)
     print("  " + "─" * (len(hdr) - 2))
 
-    for t, r_full in zip(theories, r_strings):
+    for t, r_full, m_full in zip(theories, r_strings, marg_strings):
         m0  = t["matter0"]     or "—"
         m1  = t["matter1"]     or "—"
         e   = t["edges"]       or "—"
@@ -911,22 +948,25 @@ def _print_theory_table(theories) -> None:
         ac_s = f"{t['a_over_c']:.5f}" if t["a_over_c"] is not None else "—"
         ven = "Y" if t["veneziano"] else "N"
         r_s = r_full[:rw]
-        print(f"  {t['theory_id']:>5}  "
-              f"{_pair_str(t):<{gw}}  "
-              f"{m0:<{m0w}}  "
-              f"{m1:<{m1w}}  "
-              f"{e:<{ew}}  "
-              f"{d0:>{d0w}}  "
-              f"{d1:>{d1w}}  "
-              f"{t['nf_bound0']:<14}  "
-              f"{bB:<{bBw}}  "
-              f"{t['nf_bound1']:<14}  "
-              f"{bA:<{bAw}}  "
-              f"{a_s:>10}  "
-              f"{c_s:>10}  "
-              f"{ac_s:>8}  "
-              f"{ven:>3}  "
-              f"{r_s:<{rw}}")
+        line = (f"  {t['theory_id']:>5}  "
+                f"{_pair_str(t):<{gw}}  "
+                f"{m0:<{m0w}}  "
+                f"{m1:<{m1w}}  "
+                f"{e:<{ew}}  "
+                f"{d0:>{d0w}}  "
+                f"{d1:>{d1w}}  "
+                f"{t['nf_bound0']:<14}  "
+                f"{bB:<{bBw}}  "
+                f"{t['nf_bound1']:<14}  "
+                f"{bA:<{bAw}}  "
+                f"{a_s:>10}  "
+                f"{c_s:>10}  "
+                f"{ac_s:>8}  "
+                f"{ven:>3}  "
+                f"{r_s:<{rw}}")
+        if show_marginals:
+            line += f"  {m_full[:mw]:<{mw}}"
+        print(line)
 
 
 def _show_diverged(args: argparse.Namespace) -> None:
@@ -1019,7 +1059,8 @@ def cmd_show(args: argparse.Namespace) -> None:
     print(f"  Veneziano: {ven_s}")
     print("─" * 100)
 
-    _print_theory_table(theories)
+    marginal_ops = _compute_marginal_ops(theories) if not args.no_marginals else None
+    _print_theory_table(theories, marginal_ops_per_theory=marginal_ops)
 
 
 # ── Search ────────────────────────────────────────────────────────────────────
@@ -1763,6 +1804,8 @@ def main() -> None:
                     help="Only theories requiring Veneziano limit (class_id=null)")
     vg.add_argument("--no-veneziano", dest="veneziano", action="store_false",
                     help="Only theories not requiring Veneziano limit (class_id=null)")
+    p.add_argument("--no-marginals", action="store_true",
+                   help="Skip the marginal-operator column (faster)")
 
     # search
     p = sub.add_parser("search", help="Filter theories by properties")

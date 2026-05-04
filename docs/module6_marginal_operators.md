@@ -69,13 +69,27 @@ A `CandidateOp` is a multiset of field labels (matching the labels used by
 Operators of degree ≥ 2 are emitted (a single trace of one field is either
 identically zero, e.g. $\mathrm{tr}(\Phi^a T^a) = 0$, or non-singlet).
 
-## Flavor singlet check
+## Flavor singlet check (deferred)
 
-A multiplet of size $n \ge 2$ is identified for each rank-2 rep with count
-$n \ge 2$ at a node, and for each group of identical bifundamental edges
-with multiplicity $n \ge 2$. An operator is a flavor singlet iff every
-multiplet of size $n \ge 2$ contributes 0 or ≥ 2 fields (a lone field from
-a multiplet of size $n \ge 2$ carries uncontracted flavor charge).
+A naïve "multiplets of size $\ge 2$ carry flavor charge, multiplicity-1
+fields are flavor-trivial" rule is implemented in `is_flavor_singlet` but
+**is not used by default** because it is incomplete:
+
+- Every chiral field with multiplicity 1 still carries a $U(1)$ flavor (a
+  phase rotation), and only specific operator combinations are
+  $U(1)$-neutral.
+- For multiplets of size $n \ge 2$, the operator decomposes under $U(n)$
+  into reps; only the singlet rep has zero flavor charge. Different cyclic
+  orderings of the same multiset can sit in different $U(n)$ reps.
+
+Identifying the genuine flavor-singlet subset requires explicit
+$U(1)^k \times \prod_m U(n_m)$ rep-decomposition (Young tableau
+bookkeeping). This is left as future work.
+
+The `find_marginal_ops` helper and `scripts/dump_marginal_operators.py`
+report **all** always-marginal operators; users analyse flavor charges by
+hand. The `is_flavor_singlet` heuristic is retained in the module but
+unused by the default pipeline.
 
 ## Trivial gauge-anomaly marginals
 
@@ -111,13 +125,21 @@ python3 tests/test_marginal_operators.py
 ## Results summary (max-degree = 6, N ∈ {10, 20, 30})
 
 Of 21,315 theories in `quivers.db`:
-- 386 theories have at least one always-marginal operator
-- 367 have at least one always-marginal flavor-singlet
+- 15,743 processed (5,572 skipped where finite-N a-max diverges or class is null)
+- 350 theories have at least one always-marginal operator
 
 Class 44 (R_bif = 2/3 leading-N marginal class) shows $\mathrm{tr}(\mathrm{adj}^3)$
 marginal (R_adj = 2/3 at every N). Class 9 features bifundamentals with
-R_bif = 1/2 yielding $\mathrm{tr}((Q\bar{Q})^2) = 2$ and $\mathrm{tr}(\mathrm{adj}^2)$
-when adj is at the unitarity-saturated R = 1.
+R_bif = 1/2 yielding $\mathrm{tr}((Q\bar{Q})^2)$ and $\mathrm{tr}(\mathrm{adj}^2)$
+when adj is at R = 1.
+
+To inspect per-theory results inline, run:
+
+```
+python3 two_node_db.py show <class_id>
+```
+
+— a `Marginal ops` column is appended to the theory table.
 
 ## Scope cuts
 

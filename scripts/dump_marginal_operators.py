@@ -1,15 +1,18 @@
-"""Sweep quivers.db, find always-marginal flavor-singlet operators per theory.
+"""Sweep quivers.db, find always-marginal operators per theory.
 
 For each theory:
   1. Reconstruct Quiver from DB row.
-  2. Run finite-N a-maximization at N ∈ {10, 20, 30}.
+  2. Run finite-N a-maximization at N ∈ {10, 20, 30} (skip if a-max diverges).
   3. Enumerate single-trace gauge-invariant operators up to max-degree.
-  4. Filter to operators with |R − 2| < 1e-6 at every tested N AND flavor singlet.
+  4. Filter to operators with |R − 2| < 1e-6 at every tested N.
   5. Dump to a TeX longtable.
 
-A flavor-singlet operator marginal at every tested N is a candidate exactly
-marginal deformation; the count exceeds the number of independent gauge
-anomaly conditions iff there are non-trivial conformal manifold directions.
+Note: flavor-singlet filtering is intentionally NOT applied here. The naïve
+"only multiplets of size ≥ 2 carry flavor charge" rule is incorrect — every
+field with multiplicity 1 carries a U(1) flavor (a phase rotation), and
+multi-field operators decompose under U(n) reps in a way that requires
+explicit Young-tableau bookkeeping. Identifying the flavor-singlet subset is
+deferred to a separate analysis.
 """
 
 from __future__ import annotations
@@ -24,13 +27,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from marginal_operators import (
     CandidateOp,
-    _flavor_multiplets,
     enumerate_candidates,
-    is_flavor_singlet,
     is_marginal_at_all_N,
     op_R_at_N,
     quiver_from_row,
     r_values_at_N,
+    _r_values_sane,
 )
 
 DB = Path(__file__).parent.parent / "quivers.db"
@@ -102,35 +104,41 @@ def sweep(
     rows = list(con.execute(sql, params))
 
     results: list[dict] = []
-    n_failed = 0
+    n_skipped = 0
     n_processed = 0
     t0 = time.time()
     for row in rows:
         try:
             q = quiver_from_row(dict(row))
         except Exception as e:
-            n_failed += 1
+            n_skipped += 1
             if verbose:
                 print(f"  theory_id={row['theory_id']}: parse failure: {e}", file=sys.stderr)
             continue
+        if row["a_over_N2"] is None:
+            n_skipped += 1
+            continue
         try:
-            R_per_N = {N: r_values_at_N(q, N) for N in N_list}
+            R_per_N: dict[int, dict[str, float]] = {}
+            sane = True
+            for N in N_list:
+                R = r_values_at_N(q, N)
+                if not _r_values_sane(R):
+                    sane = False
+                    break
+                R_per_N[N] = R
+            if not sane:
+                n_skipped += 1
+                continue
         except Exception as e:
-            n_failed += 1
+            n_skipped += 1
             if verbose:
                 print(f"  theory_id={row['theory_id']}: a-max failure: {e}", file=sys.stderr)
             continue
         cands = enumerate_candidates(q, max_degree=max_degree)
-        multiplets = _flavor_multiplets(q)
-        marginals = []
-        for op in cands:
-            if not is_marginal_at_all_N(op, R_per_N, tol=tol):
-                continue
-            singlet = is_flavor_singlet(op, multiplets)
-            marginals.append((op, singlet))
+        marginals = [op for op in cands if is_marginal_at_all_N(op, R_per_N, tol=tol)]
         n_processed += 1
         if marginals:
-            singlet_marginals = [op for op, s in marginals if s]
             results.append({
                 "theory_id": row["theory_id"],
                 "class_id": row["class_id"],
@@ -138,15 +146,13 @@ def sweep(
                 "matter0": row["matter0"],
                 "matter1": row["matter1"],
                 "edges": row["edges"],
-                "n_marginal_total": len(marginals),
-                "n_marginal_singlet": len(singlet_marginals),
+                "n_marginal": len(marginals),
                 "marginals": marginals,
-                "R_per_N": {N: {k: float(v) for k, v in r.items()} for N, r in R_per_N.items()},
             })
-        if verbose and n_processed % 200 == 0:
+        if verbose and n_processed % 500 == 0:
             print(f"  ... processed {n_processed}/{len(rows)} ({time.time()-t0:.1f}s)", file=sys.stderr)
 
-    print(f"Sweep complete: {n_processed} processed, {n_failed} failed, "
+    print(f"Sweep complete: {n_processed} processed, {n_skipped} skipped, "
           f"{len(results)} with marginals  ({time.time()-t0:.1f}s)", file=sys.stderr)
     return results
 
@@ -158,18 +164,15 @@ def write_tex(results: list[dict], out_path: Path, N_list: tuple[int, ...]) -> N
     with out_path.open("w") as f:
         f.write("% Auto-generated from quivers.db by scripts/dump_marginal_operators.py\n")
         f.write("% Requires: \\usepackage{booktabs,longtable,amssymb,amsmath}\n")
-        f.write("\\section*{Always-marginal flavor-singlet operators (finite $N$)}\n\n")
+        f.write("\\section*{Always-marginal operators (finite $N$)}\n\n")
 
-        f.write("Operators built from chiral matter fields with $R[O]=2$ at every $N\\in")
+        f.write("Single-trace gauge-invariant chiral operators with $R[O]=2$ at every $N\\in")
         f.write(f"\\{{{','.join(str(N) for N in N_list)}\\}}$ ")
-        f.write("(numerical $a$-maximization, $|R-2|<10^{-6}$). Flavor singlets ")
-        f.write("are candidates for exactly marginal deformations; non-singlets ")
-        f.write("would generate flavor-current beta functions.\n\n")
-        f.write(f"Total theories with at least one always-marginal flavor singlet: "
-                f"\\textbf{{{sum(1 for r in results if r['n_marginal_singlet'] > 0)}}} of "
-                f"\\textbf{{{len(results)}}} reporting any marginal.\n\n")
+        f.write("(numerical $a$-maximization, $|R-2|<10^{-6}$). Flavor-singlet ")
+        f.write("filtering is deferred — see module 6 docs.\n\n")
+        f.write(f"Total theories with at least one always-marginal operator: "
+                f"\\textbf{{{len(results)}}}.\n\n")
 
-        # Group by class_id
         by_class: dict = {}
         for r in results:
             by_class.setdefault(r["class_id"], []).append(r)
@@ -180,12 +183,12 @@ def write_tex(results: list[dict], out_path: Path, N_list: tuple[int, ...]) -> N
         f.write("\\midrule\n\\endhead\n")
         for cls_id in sorted(by_class.keys(), key=lambda x: (x is None, x)):
             for r in by_class[cls_id]:
-                singlets = [op for op, s in r["marginals"] if s]
-                if not singlets:
+                ops = r["marginals"]
+                if not ops:
                     continue
                 matter_str = f"{r['matter0']} \\| {r['matter1']}"
                 cls_str = str(r["class_id"]) if r["class_id"] is not None else "—"
-                for i, op in enumerate(singlets):
+                for i, op in enumerate(ops):
                     cls_cell = cls_str if i == 0 else ""
                     th_cell = str(r["theory_id"]) if i == 0 else ""
                     gp_cell = r["gauge_pair"] if i == 0 else ""
@@ -200,23 +203,17 @@ def write_tex(results: list[dict], out_path: Path, N_list: tuple[int, ...]) -> N
 
 def write_summary_text(results: list[dict], N_list: tuple[int, ...]) -> None:
     """Print a summary to stdout."""
-    n_with_singlet = sum(1 for r in results if r["n_marginal_singlet"] > 0)
     print(f"\nTheories with marginal operators: {len(results)}")
-    print(f"Theories with flavor-singlet marginal operators: {n_with_singlet}")
     print(f"Tested N values: {N_list}")
     print()
-    # Top 20 by class
-    print("First 20 theories with flavor-singlet marginals:")
-    print(f"{'theory':>6} {'class':>5} {'pair':<6} {'matter (0|1)':<30} {'#sing':>5} {'op example'}")
+    print("First 20 theories with marginal operators:")
+    print(f"{'theory':>6} {'class':>5} {'pair':<6} {'matter (0|1)':<30} {'#ops':>4} {'op example'}")
     shown = 0
     for r in results:
-        if r["n_marginal_singlet"] == 0:
-            continue
-        singlets = [op for op, s in r["marginals"] if s]
-        first = singlets[0]
+        first = r["marginals"][0]
         m_str = f"{r['matter0']} | {r['matter1']}"[:30]
         print(f"{r['theory_id']:>6} {str(r['class_id']):>5} {r['gauge_pair']:<6} "
-              f"{m_str:<30} {r['n_marginal_singlet']:>5}  "
+              f"{m_str:<30} {r['n_marginal']:>4}  "
               f"deg={first.degree} {_factors_str(first)}")
         shown += 1
         if shown >= 20:
