@@ -18,8 +18,9 @@ quiver_generation.py            ← Module 2: quiver enumeration, anomaly cancel
 a_maximization.py               ← Module 3: numerical a-max at fixed (N, N_f)
 a_maximization_large_N.py       ← Module 3: exact symbolic large-N a-max
 two_node_db.py                  ← Module 5: SQLite DB + CLI for two-node classification
+marginal_operators.py           ← Module 6: gauge-invariant op enumeration + always-marginal singlet search
 
-docs/                           ← module documentation (module1–5 .md files)
+docs/                           ← module documentation (module1–6 .md files)
 scripts/                        ← dump scripts that generate paper/sections/generated/
 paper/
   main.tex, references.bib      ← LaTeX paper

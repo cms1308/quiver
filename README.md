@@ -45,6 +45,7 @@ archive/                        ← DB backups, one-off scripts
 | 3 | IR R-charges via a-maximization | [docs/module3](docs/module3_a_maximization.md) | `a_maximization.py`, `a_maximization_large_N.py` |
 | 4 | Non-trivial IR fixed point analysis | [docs/module4](docs/module4_ir_fixed_points.md) | — |
 | 5 | Classification & database | [docs/module5](docs/module5_classification.md) | `two_node_db.py` |
+| 6 | Marginal operator enumeration | [docs/module6](docs/module6_marginal_operators.md) | `marginal_operators.py` |
 
 ---
 
@@ -101,6 +102,7 @@ The auto-generated LaTeX sections in `paper/sections/generated/` are produced by
 python3 scripts/dump_tex_tables.py          # classification_tables.tex
 python3 scripts/dump_no_veneziano_tables.py # no_veneziano_tables.tex
 python3 scripts/dump_nf_bcond_table.py      # nf_bcond_table.tex
+python3 scripts/dump_marginal_operators.py --all --tex  # marginal_operators.tex
 ```
 
 ---
