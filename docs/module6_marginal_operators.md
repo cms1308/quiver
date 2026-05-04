@@ -106,6 +106,35 @@ to the conformal manifold count — they are *not* genuine exactly marginal
 deformations beyond the gauge anomaly. Subtracting them from the per-theory
 count gives the dimension of the conformal manifold.
 
+## Max-N_f saturation mode
+
+For theories that are not (yet) conformal at the default N_f (anomaly-only)
+matter content, the gauge coupling can be turned conformal at the UV by
+adding extra (fund, antifund) pairs / vectors / fundamentals until $b_0 = 0$
+at each node independently:
+
+- SU(N): $N_f$ pairs of $(\square, \bar\square)$, each contributing $1$ to the
+  total Dynkin sum.
+- SO(N): $N_f$ vectors $V$, each contributing $1$.
+- Sp(N): $N_f$ pairs ($2\,N_f$ fundamentals), each contributing $1$.
+
+`nf_max_per_node(quiver, N)` returns the per-node integer ceiling such that
+$b_0 \le 0$. `build_fields_max_Nf` and `r_values_max_Nf` build the
+augmented field list and run a-max with these counts. `find_marginal_ops_max_Nf`
+runs the full marginal search including the added matter as candidate
+operator constituents.
+
+In `two_node_db.py show <class>`, pass `--max-nf` to switch to this mode:
+
+```
+python3 two_node_db.py show 1 --max-nf --marg-degree 4
+```
+
+This typically pins all matter R-charges at the SQCD-free value $R = 2/3$
+(b_0 = 0 saturation forces R = 2/3 for unbroken flavor symmetry), so cubic
+mesons of the form $\mathrm{tr}(\rho_{\,\text{rank-2}}\, \square^2)$ and
+$\mathrm{tr}(Q\, \bar{\square}_0\, \bar{\square}_1)$ become marginal candidates.
+
 ## Usage
 
 ```bash

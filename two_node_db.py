@@ -35,7 +35,8 @@ from a_maximization_large_N import (
     _fmt_matter, _fmt_edges, _fmt_linear, _fmt_expr, _fmt_R,
 )
 from marginal_operators import (
-    quiver_from_row, find_marginal_ops, ops_short_summary,
+    quiver_from_row, find_marginal_ops, find_marginal_ops_max_Nf,
+    ops_short_summary,
 )
 
 DEFAULT_DB = "quivers.db"
@@ -854,19 +855,27 @@ def _display_R_numerical(s: str | None) -> str:
 
 
 def _compute_marginal_ops(theories, max_degree: int = 6,
-                          N_list: tuple[int, ...] = (10, 20, 30)) -> list:
+                          N_list: tuple[int, ...] = (10, 20, 30),
+                          max_nf: bool = False) -> list:
     """Compute the always-marginal operators for each theory in the list.
+
+    If `max_nf` is True, run a-max with N_f saturated to b_0 = 0 at each node
+    independently (so fund/antifund/V/f added by saturation are included in
+    the operator search). Otherwise use the anomaly-only matter content.
 
     Returns a list parallel to `theories`. Theories with no IR fixed point
     (a-max diverges) get an empty list."""
     out = []
     for t in theories:
-        if t["a_over_N2"] is None:
+        if t["a_over_N2"] is None and not max_nf:
             out.append([])
             continue
         try:
             q = quiver_from_row(dict(t))
-            ops = find_marginal_ops(q, N_list=N_list, max_degree=max_degree)
+            if max_nf:
+                ops, _ = find_marginal_ops_max_Nf(q, N_list=N_list, max_degree=max_degree)
+            else:
+                ops = find_marginal_ops(q, N_list=N_list, max_degree=max_degree)
         except Exception:
             ops = []
         out.append(ops)
@@ -1059,7 +1068,12 @@ def cmd_show(args: argparse.Namespace) -> None:
     print(f"  Veneziano: {ven_s}")
     print("─" * 100)
 
-    marginal_ops = _compute_marginal_ops(theories) if not args.no_marginals else None
+    if args.no_marginals:
+        marginal_ops = None
+    else:
+        marginal_ops = _compute_marginal_ops(
+            theories, max_degree=args.marg_degree, max_nf=args.max_nf
+        )
     _print_theory_table(theories, marginal_ops_per_theory=marginal_ops)
 
 
@@ -1806,6 +1820,11 @@ def main() -> None:
                     help="Only theories not requiring Veneziano limit (class_id=null)")
     p.add_argument("--no-marginals", action="store_true",
                    help="Skip the marginal-operator column (faster)")
+    p.add_argument("--max-nf", action="store_true",
+                   help="Saturate N_f → b_0=0 at each node before searching marginals "
+                        "(adds extra fund/antifund/V/f to the operator search)")
+    p.add_argument("--marg-degree", type=int, default=6,
+                   help="Max operator degree for marginal search (default 6)")
 
     # search
     p = sub.add_parser("search", help="Filter theories by properties")

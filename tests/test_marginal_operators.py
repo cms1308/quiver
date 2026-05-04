@@ -147,6 +147,28 @@ def test_op_R_evaluation():
         assert r is not None, f"{op.factors} produced None"
 
 
+def test_max_nf_saturation():
+    # SU-SU with one ++ bifund and Ā at each node: not conformal at default
+    # N_f=0; saturating each node to b_0=0 should yield R=2/3 for all matter
+    # (free SQCD-like) and produce cubic mesonic marginals.
+    q = Quiver(
+        ["SU", "SU"],
+        edges=[Edge(0, 1, "++")],
+        node_matter=[{"Abar": 1}, {"Abar": 1}],
+    )
+    from marginal_operators import (
+        find_marginal_ops_max_Nf, nf_max_per_node, r_values_max_Nf,
+    )
+    Nf = nf_max_per_node(q, 10)
+    assert all(n > 0 for n in Nf), f"expected positive N_f at every node, got {Nf}"
+    R, _ = r_values_max_Nf(q, 10)
+    # All matter should have R ≈ 2/3 at the b_0=0 saturation
+    for label, r in R.items():
+        assert abs(r - 2/3) < 1e-6, f"{label}: R={r}, expected 2/3"
+    ops, _ = find_marginal_ops_max_Nf(q, max_degree=4)
+    assert len(ops) >= 1, "expected at least one marginal operator at max-N_f"
+
+
 def test_marginal_filter_consistency():
     # The gauge-anomaly Konishi-like operator at any conformal SU node has
     # multiplicities (n_i) ∝ T_a(rep_i) and should be marginal at every N

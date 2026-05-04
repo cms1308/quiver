@@ -24,8 +24,16 @@ from collections import Counter
 from dataclasses import dataclass, field
 from itertools import product
 
-from quiver_generation import Edge, Quiver
-from a_maximization import a_maximize, build_fields
+import numpy as np
+from scipy.linalg import null_space
+from scipy.optimize import minimize as _minimize
+
+from quiver_generation import Edge, Quiver, _nf_bound_at_N
+from a_maximization import (
+    a_maximize, build_fields, ChiralField,
+    anomaly_matrix, a_trial, dim_rep,
+)
+from beta_functions import T_rep
 
 
 # ── Field/half-edge bookkeeping ────────────────────────────────────────────────
@@ -200,12 +208,16 @@ def _all_labels_via_build(quiver: Quiver) -> set[str]:
     return out
 
 
-def _node_intra_labels(quiver: Quiver, node: int) -> list[str]:
+def _node_intra_labels(quiver: Quiver, node: int,
+                       all_labels: set[str] | None = None) -> list[str]:
     """Labels for fields living entirely at `node`. Includes rank-2/adj from
     `node_matter` plus fund/antifund/V derived by `build_fields` when chiral
-    excess or N_f forces them."""
+    excess or N_f forces them. Pass `all_labels` to override the discovery
+    (e.g. include max-N_f fund/antifund/V)."""
+    if all_labels is None:
+        all_labels = _all_labels_via_build(quiver)
     out = []
-    for label in _all_labels_via_build(quiver):
+    for label in all_labels:
         if not label.startswith("node"):
             continue
         if int(label[4:].split("_", 1)[0]) == node:
@@ -213,16 +225,20 @@ def _node_intra_labels(quiver: Quiver, node: int) -> list[str]:
     return sorted(out)
 
 
-def _all_field_labels(quiver: Quiver) -> list[str]:
+def _all_field_labels(quiver: Quiver,
+                      all_labels: set[str] | None = None) -> list[str]:
     """All field labels in the quiver (intra-node + edges)."""
-    return sorted(_all_labels_via_build(quiver))
+    if all_labels is None:
+        all_labels = _all_labels_via_build(quiver)
+    return sorted(all_labels)
 
 
-def _enumerate_single_node(quiver: Quiver, max_degree: int) -> list[CandidateOp]:
+def _enumerate_single_node(quiver: Quiver, max_degree: int,
+                           all_labels: set[str] | None = None) -> list[CandidateOp]:
     out: list[CandidateOp] = []
     multiplets = _flavor_multiplets(quiver)
     for i in range(quiver.n_nodes):
-        labels = _node_intra_labels(quiver, i)
+        labels = _node_intra_labels(quiver, i, all_labels=all_labels)
         if not labels:
             continue
         for ms in _multisets_up_to(labels, max_degree):
@@ -296,11 +312,12 @@ def _canonical_cycle(word: tuple[str, ...]) -> tuple[str, ...]:
     return min(rotations)
 
 
-def _enumerate_mixed(quiver: Quiver, max_degree: int) -> list[CandidateOp]:
+def _enumerate_mixed(quiver: Quiver, max_degree: int,
+                     all_labels: set[str] | None = None) -> list[CandidateOp]:
     """General enumerator: multisets drawn from intra-node + edge labels with
     gauge invariance at every node. Subsumes single-node and bifund-loop;
     deduplicated against those by (factors, kind=…)."""
-    labels = _all_field_labels(quiver)
+    labels = _all_field_labels(quiver, all_labels=all_labels)
     if not labels:
         return []
     out: list[CandidateOp] = []
@@ -324,13 +341,18 @@ def _enumerate_mixed(quiver: Quiver, max_degree: int) -> list[CandidateOp]:
     return out
 
 
-def enumerate_candidates(quiver: Quiver, max_degree: int = 6) -> list[CandidateOp]:
+def enumerate_candidates(quiver: Quiver, max_degree: int = 6,
+                         all_labels: set[str] | None = None) -> list[CandidateOp]:
     """Enumerate distinct gauge-invariant single-trace candidate operators
     of degree ≥ 2. Degree-1 trace operators are either identically zero
     (Tr T^a = 0 for all gauge generators) or non-singlet (any rank > 0
-    representation needs index contraction)."""
+    representation needs index contraction).
+
+    `all_labels` overrides automatic label discovery — pass the union of
+    labels from a custom field-builder (e.g. `_all_labels_max_Nf`) to include
+    fund/antifund/V/f added by N_f saturation."""
     cands: dict[tuple, CandidateOp] = {}
-    for op in _enumerate_single_node(quiver, max_degree):
+    for op in _enumerate_single_node(quiver, max_degree, all_labels=all_labels):
         if op.degree < 2:
             continue
         cands[(op.kind, op.factors, op.word)] = op
@@ -338,11 +360,16 @@ def enumerate_candidates(quiver: Quiver, max_degree: int = 6) -> list[CandidateO
         if op.degree < 2:
             continue
         cands[(op.kind, op.factors, op.word)] = op
-    for op in _enumerate_mixed(quiver, max_degree):
+    for op in _enumerate_mixed(quiver, max_degree, all_labels=all_labels):
         if op.degree < 2:
             continue
         cands[(op.kind, op.factors, op.word)] = op
     return list(cands.values())
+
+
+def _enumerate_with_labels(quiver: Quiver, max_degree: int,
+                           all_labels: set[str]) -> list[CandidateOp]:
+    return enumerate_candidates(quiver, max_degree=max_degree, all_labels=all_labels)
 
 
 # ── Flavor singlet check ──────────────────────────────────────────────────────
@@ -433,6 +460,126 @@ def find_marginal_singlet_ops(
         if is_marginal_at_all_N(op, R_per_N, tol=tol)
         and is_flavor_singlet(op, multiplets)
     ]
+
+
+# ── Max-N_f mode: saturate b_0 = 0 at each node ───────────────────────────────
+
+def nf_max_per_node(quiver: Quiver, N: int) -> list[int]:
+    """Max N_f at each node such that b_0 ≤ 0 there. Floor of the AF bound;
+    clamped at 0 (no negative N_f). For nodes already at b_0 = 0 with the
+    anomaly-required matter alone, this returns 0."""
+    out: list[int] = []
+    for i in range(quiver.n_nodes):
+        f = _nf_bound_at_N(quiver, i, N)
+        out.append(max(0, int(f)))
+    return out
+
+
+def build_fields_max_Nf(
+    quiver: Quiver, N: int, Nf_per_node: list[int]
+) -> list[ChiralField]:
+    """Build chiral fields with per-node N_f added on top of the anomaly-required
+    fund/antifund/V/f matter. Mirrors a_maximization.build_fields but allows
+    each gauge node to carry a different N_f (so each node can independently
+    saturate b_0 = 0)."""
+    fields = build_fields(quiver, N=N, N_f=0)
+    by_label = {f.label: f for f in fields}
+    next_idx = max((f.R_index for f in fields), default=-1) + 1
+    mults = quiver.rank_multipliers
+
+    def _bump(node: int, rep: str, count: int) -> None:
+        nonlocal next_idx
+        if count <= 0:
+            return
+        g = quiver.gauge_types[node]
+        N_i = mults[node] * N
+        d_extra = count * dim_rep(g, rep, N_i)
+        T_extra = count * float(T_rep(g, rep, N_i))
+        lbl = f"node{node}_{rep}"
+        f = by_label.get(lbl)
+        if f is None:
+            f = ChiralField(label=lbl, R_index=next_idx, dim=d_extra,
+                            T_contributions={node: T_extra})
+            fields.append(f)
+            by_label[lbl] = f
+            next_idx += 1
+        else:
+            f.dim += d_extra
+            f.T_contributions[node] = f.T_contributions.get(node, 0) + T_extra
+
+    for i, g in enumerate(quiver.gauge_types):
+        Nf = Nf_per_node[i]
+        if Nf <= 0:
+            continue
+        if g == "SU":
+            _bump(i, "fund", Nf)
+            _bump(i, "antifund", Nf)
+        elif g == "SO":
+            _bump(i, "V", Nf)
+        elif g == "Sp":
+            _bump(i, "fund", 2 * Nf)
+    return fields
+
+
+def r_values_max_Nf(quiver: Quiver, N: int) -> tuple[dict[str, float], list[int]]:
+    """Run a-max with N_f saturated to b_0 = 0 at each node independently.
+    Returns (R_charges by label, Nf_per_node)."""
+    Nf_per_node = nf_max_per_node(quiver, N)
+    fields = build_fields_max_Nf(quiver, N, Nf_per_node)
+    A, b = anomaly_matrix(fields, quiver, N)
+    R0, *_ = np.linalg.lstsq(A, b, rcond=None)
+    F = null_space(A)
+    n_free = F.shape[1]
+    if n_free == 0:
+        s_opt = np.zeros(0)
+    else:
+        def neg_a(s: np.ndarray) -> float:
+            R = R0 + F @ s
+            return -a_trial(R, fields, quiver, N)
+        s_opt = _minimize(neg_a, x0=np.zeros(n_free), method="BFGS").x
+    R_opt = R0 + F @ s_opt
+    return {f.label: float(R_opt[f.R_index]) for f in fields}, Nf_per_node
+
+
+def _all_labels_max_Nf(quiver: Quiver) -> set[str]:
+    """Union of build_fields_max_Nf labels across N probes; captures
+    fund/antifund identity changes as chiral excess flips sign with N."""
+    out: set[str] = set()
+    for N in _LABEL_PROBE_N:
+        try:
+            Nf_per_node = nf_max_per_node(quiver, N)
+            for f in build_fields_max_Nf(quiver, N, Nf_per_node):
+                out.add(f.label)
+        except Exception:
+            pass
+    return out
+
+
+def enumerate_candidates_max_Nf(quiver: Quiver, max_degree: int = 6) -> list[CandidateOp]:
+    """Same enumeration as `enumerate_candidates`, but the available label
+    set is taken from build_fields_max_Nf so that fund/antifund/V/f added by
+    saturating b_0 = 0 are eligible to appear in operators."""
+    return _enumerate_with_labels(quiver, max_degree, _all_labels_max_Nf(quiver))
+
+
+def find_marginal_ops_max_Nf(
+    quiver: Quiver,
+    N_list: tuple[int, ...] = (10, 20, 30),
+    max_degree: int = 6,
+    tol: float = 1e-6,
+) -> tuple[list[CandidateOp], dict[int, list[int]]]:
+    """Like find_marginal_ops, but with N_f saturating b_0 = 0 per node.
+    Returns (marginal ops, per-N Nf_per_node mapping)."""
+    R_per_N: dict[int, dict[str, float]] = {}
+    Nf_per_N: dict[int, list[int]] = {}
+    for N in N_list:
+        R, Nf_pn = r_values_max_Nf(quiver, N)
+        if not _r_values_sane(R):
+            return [], {}
+        R_per_N[N] = R
+        Nf_per_N[N] = Nf_pn
+    candidates = enumerate_candidates_max_Nf(quiver, max_degree=max_degree)
+    return [op for op in candidates if is_marginal_at_all_N(op, R_per_N, tol=tol)], Nf_per_N
 
 
 # ── Compact pretty-printing ───────────────────────────────────────────────────
