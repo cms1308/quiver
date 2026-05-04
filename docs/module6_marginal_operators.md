@@ -130,10 +130,26 @@ In `two_node_db.py show <class>`, pass `--max-nf` to switch to this mode:
 python3 two_node_db.py show 1 --max-nf --marg-degree 4
 ```
 
-This typically pins all matter R-charges at the SQCD-free value $R = 2/3$
-(b_0 = 0 saturation forces R = 2/3 for unbroken flavor symmetry), so cubic
-mesons of the form $\mathrm{tr}(\rho_{\,\text{rank-2}}\, \square^2)$ and
-$\mathrm{tr}(Q\, \bar{\square}_0\, \bar{\square}_1)$ become marginal candidates.
+**At b_0 = 0 saturation, R = 2/3 for all matter — always.** The unconstrained
+maximum of $a_{\text{trial}}$ is at $R_i = 2/3$ for every chiral
+representation, and the anomaly-free condition
+
+$$
+\sum_i T_a(\rho_i)\,R_i = 2\,T(\text{adj}_a)
+$$
+
+is automatically satisfied by $R_i = 2/3$ once $b_0 = 0$ forces
+$\sum_i T_a(\rho_i) = 3\,T(\text{adj}_a)$. So max-N_f marginal operators
+are simply degree-3 SQCD-style mesons: $\mathrm{tr}(\rho\,\square\,\bar{\square})$,
+$\mathrm{tr}(\mathrm{adj}^3)$, $\mathrm{tr}(Q_{ab}\,\bar{\square}_a\,\bar{\square}_b)$,
+each with $R = 3 \cdot 2/3 = 2$.
+
+**Caveat — `compute_b0` mixed-rank bug.** `beta_functions.compute_b0` calls
+`T_bifund(g, neighbor, N)` without passing per-side rank multipliers, so for
+quivers with `rank_multipliers != [1,1,...]` (e.g. SU(2N) × Sp(N)) it
+miscounts the bifundamental contribution. `marginal_operators._b0_at_node`
+fixes this by computing T contributions with the correct per-node effective
+rank.
 
 ## Usage
 

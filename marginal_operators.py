@@ -28,12 +28,38 @@ import numpy as np
 from scipy.linalg import null_space
 from scipy.optimize import minimize as _minimize
 
-from quiver_generation import Edge, Quiver, _nf_bound_at_N
+from quiver_generation import Edge, Quiver, chiral_excess_coeffs
 from a_maximization import (
     a_maximize, build_fields, ChiralField,
     anomaly_matrix, a_trial, dim_rep,
 )
-from beta_functions import T_rep
+from beta_functions import T_rep, T_adj, T_bifund
+
+
+def _b0_at_node(quiver: Quiver, node: int, N: int) -> float:
+    """One-loop b_0 at a node with the anomaly-required matter only (no extra
+    N_f). Uses the per-node effective rank m_i * N and the *neighbor's*
+    effective rank for bifundamental T contributions — fixing the
+    mixed-rank bug in beta_functions.compute_b0."""
+    g = quiver.gauge_types[node]
+    mults = quiver.rank_multipliers
+    N_i = mults[node] * N
+    b0 = 3 * T_adj(g, N_i)
+    for rep, count in quiver.node_matter[node].items():
+        b0 -= count * T_rep(g, rep, N_i)
+    for e in quiver.edges:
+        if node not in (e.src, e.dst):
+            continue
+        j = e.dst if node == e.src else e.src
+        N_j = mults[j] * N
+        T_i, _ = T_bifund(g, quiver.gauge_types[j], N=N_i, N_a=N_i, N_b=N_j)
+        b0 -= T_i
+    # SU node: the anomaly-required |delta| fund/antifund pairs contribute |delta|/2
+    if g == "SU":
+        a, b = chiral_excess_coeffs(quiver, node)
+        delta = a * N + b
+        b0 -= abs(delta) / 2
+    return float(b0)
 
 
 # ── Field/half-edge bookkeeping ────────────────────────────────────────────────
@@ -465,14 +491,11 @@ def find_marginal_singlet_ops(
 # ── Max-N_f mode: saturate b_0 = 0 at each node ───────────────────────────────
 
 def nf_max_per_node(quiver: Quiver, N: int) -> list[int]:
-    """Max N_f at each node such that b_0 ≤ 0 there. Floor of the AF bound;
-    clamped at 0 (no negative N_f). For nodes already at b_0 = 0 with the
-    anomaly-required matter alone, this returns 0."""
-    out: list[int] = []
-    for i in range(quiver.n_nodes):
-        f = _nf_bound_at_N(quiver, i, N)
-        out.append(max(0, int(f)))
-    return out
+    """Max N_f at each node such that b_0 ≤ 0 there. Returns floor of
+    `_b0_at_node`, clamped at 0. Each unit of N_f decreases b_0 by 1 (one
+    pair of fund/antifund for SU; one vector for SO; one pair = two
+    fundamentals for Sp), so N_f^max = floor(b_0_anomaly_only)."""
+    return [max(0, int(_b0_at_node(quiver, i, N))) for i in range(quiver.n_nodes)]
 
 
 def build_fields_max_Nf(
