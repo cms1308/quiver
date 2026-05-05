@@ -148,6 +148,19 @@ def _bound_rhs_only(nf_bound_str: str) -> str:
     return s if s else "-"
 
 
+def _node_bound_segment(nf_bound_str: str, comparison: str) -> str:
+    """Per-node bound segment in TeX (without surrounding $).
+
+    If the node is already at b_0 = 0 with anomaly-only matter, the bound is
+    'N_f = 0' (no extra fundamentals possible). Otherwise use the chosen
+    comparison (\\le or <) with the bound RHS."""
+    if not nf_bound_str:
+        return "-"
+    if "conformal" in nf_bound_str:
+        return "N_f = 0"
+    return f"N_f {comparison} {_bound_rhs_only(nf_bound_str)}"
+
+
 # ── operator pretty-printing ──────────────────────────────────────────────────
 
 def _op_tex(op) -> str:
@@ -297,15 +310,9 @@ def main() -> None:
 
             edges_tex = _edges_tex(q.edges, swap)
             comparison = "\\le" if _max_nf_has_marginal(q) else "<"
-            conformal_1 = af_first and "conformal" in af_first
-            conformal_2 = af_second and "conformal" in af_second
-            if conformal_1 or conformal_2:
-                # Simultaneous AF requires N_f = 0 if either node is already at b_0 = 0
-                af_combined = "$N_f = 0$"
-            else:
-                af1_rhs = _bound_rhs_only(af_first)
-                af2_rhs = _bound_rhs_only(af_second)
-                af_combined = f"$N_f {comparison} {af1_rhs};\\; {af2_rhs}$"
+            seg1 = _node_bound_segment(af_first, comparison)
+            seg2 = _node_bound_segment(af_second, comparison)
+            af_combined = f"${seg1};\\; {seg2}$"
 
             try:
                 ops = find_marginal_ops(q, N_list=N_LIST, max_degree=MAX_DEGREE)
