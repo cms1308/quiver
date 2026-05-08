@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from marginal_operators import (
     quiver_from_row, find_marginal_ops, find_marginal_ops_max_Nf,
     op_short, _r_values_sane, r_values_max_Nf,
+    display_conj_nodes, per_node_conjugate_op, per_node_conjugate_quiver,
 )
 from quiver_generation import Edge, Quiver
 
@@ -189,9 +190,10 @@ def _op_label_tex(label: str) -> str:
         }.get(rep, rep)
         return f"{rep_t}_{{{node}}}"
     parts = label.split("_")
-    src, dst, rep = parts[1], parts[2], "_".join(parts[3:])
-    rep_t = _EDGE_REP_TEX.get(rep, rep)
-    return f"Q^{{{rep_t}}}_{{{int(src)+1}{int(dst)+1}}}"
+    rep = "_".join(parts[3:])
+    # Internal labels use p/m for ±; convert back to ± for display.
+    rep_display = rep.replace("p", "+").replace("m", "-")
+    return f"Q^{{{rep_display}}}"
 
 
 def _ops_tex(ops, swap: bool, max_chars: int = 80) -> str:
@@ -265,13 +267,14 @@ def main() -> None:
         f.write("\\section*{SU(N)$\\times$SU(N) non-Veneziano theories: marginal operators}\n\n")
         f.write(
             "Matter at each node (with anomaly-required $\\square$/$\\bar{\\square}$ "
-            "from $\\delta$), bifundamental representations $Q^{r}$ "
-            "($r\\in\\{++,+-,--\\}$), one-loop AF condition $b_0^{(a)}(\\mathcal{O})>0$ "
-            "rewritten as $N_f \\Box \\alpha N+\\gamma$ per node at the $\\mathcal{O}$ point, "
-            "and always-marginal operators at the IR fixed point ($|R-2|<10^{-6}$, "
-            "$N\\in\\{10,20,30\\}$). Comparison $\\Box$ is $\\le$ if a marginal exists at "
-            "$b_0=0$ saturation (max-$N_f$), $<$ otherwise. The matter-richer node is placed "
-            "second.\n\n"
+            "from $\\delta$), bifundamental representations $Q^{r}$ with $r\\in\\{+-,-+\\}$ "
+            "(homochiral pairs $Q^{++}/Q^{--}$ are re-expressed via charge conjugation on "
+            "node $2$ when no $+-$ edge already exists), one-loop AF condition "
+            "$b_0^{(a)}(\\mathcal{O})>0$ rewritten as $N_f \\Box \\alpha N+\\gamma$ per node "
+            "at the $\\mathcal{O}$ point, and always-marginal operators at the IR fixed point "
+            "($|R-2|<10^{-6}$, $N\\in\\{10,20,30\\}$). Comparison $\\Box$ is $\\le$ if a "
+            "marginal exists at $b_0=0$ saturation (max-$N_f$), $<$ otherwise. The "
+            "matter-richer node is placed second.\n\n"
         )
         f.write("\\footnotesize\n")
         f.write("\\setlength{\\tabcolsep}{4pt}\n")
@@ -296,22 +299,28 @@ def main() -> None:
             d1a = r["delta1_a"] or 0
             d1b = r["delta1_b"] or 0
 
-            count0 = _matter_count(q.node_matter[0], d0a, d0b)
-            count1 = _matter_count(q.node_matter[1], d1a, d1b)
+            # Display-time conjugation: re-express ++/-- only theories via +-/-+.
+            conj_nodes = display_conj_nodes(q)
+            q_disp = per_node_conjugate_quiver(q, conj_nodes) if conj_nodes else q
+            d0a_d, d0b_d = (-d0a, -d0b) if 0 in conj_nodes else (d0a, d0b)
+            d1a_d, d1b_d = (-d1a, -d1b) if 1 in conj_nodes else (d1a, d1b)
+
+            count0 = _matter_count(q_disp.node_matter[0], d0a_d, d0b_d)
+            count1 = _matter_count(q_disp.node_matter[1], d1a_d, d1b_d)
             swap = count0 > count1
 
             if swap:
-                m_first  = _matter_with_delta_tex(q.node_matter[1], d1a, d1b)
-                m_second = _matter_with_delta_tex(q.node_matter[0], d0a, d0b)
+                m_first  = _matter_with_delta_tex(q_disp.node_matter[1], d1a_d, d1b_d)
+                m_second = _matter_with_delta_tex(q_disp.node_matter[0], d0a_d, d0b_d)
                 af_first  = r["nf_bound1"]
                 af_second = r["nf_bound0"]
             else:
-                m_first  = _matter_with_delta_tex(q.node_matter[0], d0a, d0b)
-                m_second = _matter_with_delta_tex(q.node_matter[1], d1a, d1b)
+                m_first  = _matter_with_delta_tex(q_disp.node_matter[0], d0a_d, d0b_d)
+                m_second = _matter_with_delta_tex(q_disp.node_matter[1], d1a_d, d1b_d)
                 af_first  = r["nf_bound0"]
                 af_second = r["nf_bound1"]
 
-            edges_tex = _edges_tex(q.edges, swap)
+            edges_tex = _edges_tex(q_disp.edges, swap)
             comparison = "\\le" if _max_nf_has_marginal(q) else "<"
             seg1 = _node_bound_segment(af_first, comparison)
             seg2 = _node_bound_segment(af_second, comparison)
@@ -321,6 +330,8 @@ def main() -> None:
                 ops = find_marginal_ops(q, N_list=N_LIST, max_degree=MAX_DEGREE)
             except Exception:
                 ops = []
+            if conj_nodes:
+                ops = [per_node_conjugate_op(op, conj_nodes) for op in ops]
             ops_tex = _ops_tex(ops, swap, max_chars=110)
 
             f.write(

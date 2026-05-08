@@ -83,6 +83,98 @@ def _edge_label(e: Edge) -> str:
     return f"edge_{e.src}_{e.dst}_{rep}"
 
 
+# ── Display-time charge conjugation ──────────────────────────────────────────
+
+_DISPLAY_CONJ_REP = {
+    "S": "Sbar", "Sbar": "S",
+    "A": "Abar", "Abar": "A",
+    "fund": "antifund", "antifund": "fund",
+    "adj": "adj", "V": "V",
+}
+
+
+def display_conj_nodes(q: Quiver) -> frozenset[int]:
+    """Pick a subset of nodes to charge-conjugate at display time, so that
+    bifundamental edges read as ``+-`` / ``-+`` (one upper one lower at each
+    end) wherever possible.
+
+    Rule: if any SU-SU edge already has rep == ``+-``, leave the quiver as is
+    (no conjugation). Otherwise, if all SU-SU edges are homochiral
+    (``++``/``--``), conjugate node 1 — every ``++`` becomes ``+-`` and every
+    ``--`` becomes ``-+``. Returns frozenset() when no transform is helpful.
+    """
+    su_su_reps = [
+        e.rep for e in q.edges
+        if e.rep in ("+-", "++", "--")
+    ]
+    if not su_su_reps or "+-" in su_su_reps:
+        return frozenset()
+    return frozenset({1})
+
+
+def per_node_conjugate_op(op, conj_nodes: frozenset[int]):
+    """Return a CandidateOp with all field labels charge-conjugated at the
+    listed nodes. Edge labels use internal p/m tokens; chirality is flipped
+    on the conjugated end without re-orienting (src, dst)."""
+    def conj_label(lbl: str) -> str:
+        if lbl.startswith("node"):
+            idx_s, rep = lbl[4:].split("_", 1)
+            if int(idx_s) in conj_nodes:
+                rep = _DISPLAY_CONJ_REP.get(rep, rep)
+            return f"node{idx_s}_{rep}"
+        parts = lbl.split("_")
+        src = int(parts[1])
+        dst = int(parts[2])
+        rep = "_".join(parts[3:])
+        if rep == "std":
+            return lbl  # SO/Sp self-conjugate
+        chars = list(rep)  # e.g. ['p','p'] or ['p','m'] or ['p'] or ['m']
+        if src in conj_nodes and chars:
+            chars[0] = "m" if chars[0] == "p" else "p"
+        if dst in conj_nodes and len(chars) > 1:
+            chars[1] = "m" if chars[1] == "p" else "p"
+        return f"edge_{src}_{dst}_{''.join(chars)}"
+    new_factors = tuple(sorted(
+        ((conj_label(lbl), m) for lbl, m in op.factors),
+        key=lambda x: x[0],
+    ))
+    new_word = tuple(conj_label(l) for l in op.word) if op.word else None
+    return op.__class__(
+        factors=new_factors, kind=op.kind, word=new_word,
+        degree=op.degree, flavor_signature=op.flavor_signature,
+    )
+
+
+def per_node_conjugate_quiver(q: Quiver, conj_nodes: frozenset[int]) -> Quiver:
+    """Return a Quiver with charge conjugation applied at the listed nodes.
+    Matter reps are mapped via _DISPLAY_CONJ_REP; edges keep (src, dst) but
+    have their chirality flipped on the conjugated end."""
+    new_matter = []
+    for i, m in enumerate(q.node_matter):
+        if i in conj_nodes:
+            new_matter.append({_DISPLAY_CONJ_REP.get(r, r): n for r, n in m.items()})
+        else:
+            new_matter.append(dict(m))
+    new_edges = []
+    for e in q.edges:
+        rep = e.rep
+        if rep == "std":
+            new_edges.append(Edge(e.src, e.dst, rep))
+            continue
+        chars = list(rep)
+        if e.src in conj_nodes and chars:
+            chars[0] = "-" if chars[0] == "+" else "+"
+        if e.dst in conj_nodes and len(chars) > 1:
+            chars[1] = "-" if chars[1] == "+" else "+"
+        new_edges.append(Edge(e.src, e.dst, "".join(chars)))
+    return Quiver(
+        gauge_types=list(q.gauge_types),
+        edges=new_edges,
+        node_matter=new_matter,
+        rank_multipliers=list(q.rank_multipliers),
+    )
+
+
 def _half_edge_balance(quiver: Quiver, node: int, label: str) -> tuple[int, int]:
     """Return (upper, lower) index-slot count contributed at `node` by one
     copy of the field referenced by `label`. SU nodes use upper/lower

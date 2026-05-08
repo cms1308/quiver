@@ -33,7 +33,11 @@ from marginal_operators import (
     quiver_from_row,
     r_values_at_N,
     _r_values_sane,
+    display_conj_nodes,
+    per_node_conjugate_op,
+    per_node_conjugate_quiver,
 )
+from a_maximization_large_N import _fmt_matter
 
 DB = Path(__file__).parent.parent / "quivers.db"
 OUT = Path(__file__).parent.parent / "paper/sections/generated/marginal_operators.tex"
@@ -58,16 +62,12 @@ def _label_to_tex(label: str) -> str:
         sym = _REP_TEX.get(rep, rep)
         return f"{sym}_{{{node}}}"
     parts = label.split("_")
-    src, dst, rep = parts[1], parts[2], "_".join(parts[3:])
-    rep_tex = {
-        "pm": r"\square\bar{\square}",
-        "pp": r"\square\square",
-        "mm": r"\bar{\square}\bar{\square}",
-        "p":  r"\square",
-        "m":  r"\bar{\square}",
-        "std": "V",
-    }.get(rep, rep)
-    return f"Q^{{{rep_tex}}}_{{{src}{dst}}}"
+    rep = "_".join(parts[3:])
+    if rep == "std":
+        return "Q^{V}"
+    # Internal labels use p/m for ±; convert back to ± for display.
+    rep_display = rep.replace("p", "+").replace("m", "-")
+    return f"Q^{{{rep_display}}}"
 
 
 def _op_to_tex(op: CandidateOp) -> str:
@@ -139,15 +139,25 @@ def sweep(
         marginals = [op for op in cands if is_marginal_at_all_N(op, R_per_N, tol=tol)]
         n_processed += 1
         if marginals:
+            conj_nodes = display_conj_nodes(q)
+            if conj_nodes:
+                q_disp = per_node_conjugate_quiver(q, conj_nodes)
+                matter0_disp = _fmt_matter(q_disp.node_matter[0])
+                matter1_disp = _fmt_matter(q_disp.node_matter[1])
+                marginals_disp = [per_node_conjugate_op(op, conj_nodes) for op in marginals]
+            else:
+                matter0_disp = row["matter0"]
+                matter1_disp = row["matter1"]
+                marginals_disp = marginals
             results.append({
                 "theory_id": row["theory_id"],
                 "class_id": row["class_id"],
                 "gauge_pair": row["gauge_pair"],
-                "matter0": row["matter0"],
-                "matter1": row["matter1"],
+                "matter0": matter0_disp,
+                "matter1": matter1_disp,
                 "edges": row["edges"],
-                "n_marginal": len(marginals),
-                "marginals": marginals,
+                "n_marginal": len(marginals_disp),
+                "marginals": marginals_disp,
             })
         if verbose and n_processed % 500 == 0:
             print(f"  ... processed {n_processed}/{len(rows)} ({time.time()-t0:.1f}s)", file=sys.stderr)
