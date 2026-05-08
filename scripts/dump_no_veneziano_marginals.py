@@ -107,7 +107,7 @@ _EDGE_REP_SHORT = {
 
 
 def _edges_tex(edges: list[Edge], swap: bool) -> str:
-    """Compact edge notation: Q^{rep}_{ij} with multiplicity prefix."""
+    """Compact edge notation: Q^{rep} with multiplicity prefix."""
     from collections import Counter
     c: Counter = Counter()
     for e in edges:
@@ -116,7 +116,7 @@ def _edges_tex(edges: list[Edge], swap: bool) -> str:
     parts = []
     for (src, dst, rep), n in sorted(c.items()):
         rep_t = _EDGE_REP_SHORT.get(rep, rep)
-        edge_t = f"Q^{{{rep_t}}}_{{{src+1}{dst+1}}}"
+        edge_t = f"Q^{{{rep_t}}}"
         parts.append(edge_t if n == 1 else f"{n}\\!\\cdot\\!{edge_t}")
     return r"\,".join(parts) if parts else "-"
 
@@ -264,9 +264,10 @@ def main() -> None:
         f.write("\\begin{landscape}\n")
         f.write("\\section*{SU(N)$\\times$SU(N) non-Veneziano theories: marginal operators}\n\n")
         f.write(
-            "Matter (with anomaly-required $\\square$/$\\bar{\\square}$ from $\\delta$), "
-            "bifundamental edges $Q^{r}_{ij}$ ($r\\in\\{++,+-,--\\}$, $i\\to j$), "
-            "AF bound $N_f \\Box \\alpha N+\\gamma$ at the $\\mathcal{O}$ point per node, "
+            "Matter at each node (with anomaly-required $\\square$/$\\bar{\\square}$ "
+            "from $\\delta$), bifundamental representations $Q^{r}$ "
+            "($r\\in\\{++,+-,--\\}$), one-loop AF condition $b_0^{(a)}(\\mathcal{O})>0$ "
+            "rewritten as $N_f \\Box \\alpha N+\\gamma$ per node at the $\\mathcal{O}$ point, "
             "and always-marginal operators at the IR fixed point ($|R-2|<10^{-6}$, "
             "$N\\in\\{10,20,30\\}$). Comparison $\\Box$ is $\\le$ if a marginal exists at "
             "$b_0=0$ saturation (max-$N_f$), $<$ otherwise. The matter-richer node is placed "
@@ -276,8 +277,10 @@ def main() -> None:
         f.write("\\setlength{\\tabcolsep}{4pt}\n")
         f.write("\\begin{longtable}{@{}rrllllp{0.34\\linewidth}@{}}\n")
         f.write("\\toprule\n")
-        f.write("cls & th. & matter (1) & matter (2) & edges "
-                "& $N_f$ bd. (1, 2) & marginal ops \\\\\n")
+        f.write("cls & th. & matter $(\\mathbf{R}_1,\\mathbf{1})$ "
+                "& matter $(\\mathbf{1},\\mathbf{R}_2)$ & bifundamental "
+                "& $b_0^{(1)}(\\mathcal{O})>0$;\\; $b_0^{(2)}(\\mathcal{O})>0$ "
+                "& marginal ops \\\\\n")
         f.write("\\midrule\n\\endhead\n")
 
         n_processed = 0
