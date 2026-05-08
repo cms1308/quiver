@@ -10,7 +10,7 @@ Classification of 4D N=1 asymptotically free quiver gauge theories that admit a 
 
 ```
 README.md                       ← pipeline overview and key references
-quivers.db                      ← pre-built database (4560 theories, 135 classes)
+quivers.db                      ← pre-built database (12539 theories, 876 classes)
 
 # Core pipeline
 beta_functions.py               ← Module 1: one-loop b_0 computation

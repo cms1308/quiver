@@ -562,23 +562,59 @@ def _quiver_signature(q: Quiver) -> tuple:
 
 
 def _conjugate_signature(q: Quiver) -> tuple:
-    """Signature of the charge-conjugate quiver."""
-    conj_edges = []
+    """Signature of the charge-conjugate quiver (all nodes conjugated)."""
+    return _per_node_conjugate_signature(q, frozenset(range(len(q.gauge_types))))
+
+
+def _per_node_conjugate_signature(q: Quiver, conj_nodes: frozenset[int]) -> tuple:
+    """Signature after conjugating only the nodes listed in ``conj_nodes``.
+
+    SU(N) has a Z_2 outer automorphism (□ ↔ □̄, S ↔ S̄, A ↔ Ā) that acts
+    independently on each gauge factor of a product gauge group; SO/Sp reps
+    are real / pseudo-real so per-node conjugation is trivial there.
+
+    Edge transformation depends on which side(s) are conjugated:
+      "+-": conj src only → "--" same direction; conj dst only → "++" same;
+            conj both → "+-" reversed.
+      "++": conj src only → "+-" reversed; conj dst only → "+-" same;
+            conj both → "--" undirected.
+      "--": conj src only → "+-" same; conj dst only → "+-" reversed;
+            conj both → "++" undirected.
+      "+"  / "-": flip iff the SU side of the edge is conjugated.
+      "std": invariant.
+    """
+    new_edges = []
     for e in q.edges:
-        if e.rep == "+-":
-            conj_edges.append((e.dst, e.src, "+-"))
-        elif e.rep == "++":
-            conj_edges.append(_ne(e.src, e.dst, "--"))
-        elif e.rep == "--":
-            conj_edges.append(_ne(e.src, e.dst, "++"))
-        elif e.rep == "+":
-            conj_edges.append((e.src, e.dst, "-"))
-        elif e.rep == "-":
-            conj_edges.append((e.src, e.dst, "+"))
+        c_s = e.src in conj_nodes
+        c_d = e.dst in conj_nodes
+        if e.rep in ("+-", "++", "--"):
+            chir_s = +1 if e.rep[0] == "+" else -1
+            chir_d = +1 if e.rep[1] == "+" else -1
+            if c_s:
+                chir_s = -chir_s
+            if c_d:
+                chir_d = -chir_d
+            if chir_s == +1 and chir_d == +1:
+                new_edges.append(_ne(e.src, e.dst, "++"))
+            elif chir_s == -1 and chir_d == -1:
+                new_edges.append(_ne(e.src, e.dst, "--"))
+            elif chir_s == +1 and chir_d == -1:
+                new_edges.append((e.src, e.dst, "+-"))
+            else:  # (-1, +1) — direction reversed
+                new_edges.append((e.dst, e.src, "+-"))
+        elif e.rep in ("+", "-"):
+            gs = q.gauge_types[e.src]
+            gd = q.gauge_types[e.dst]
+            su_side_conj = (gs == "SU" and c_s) or (gd == "SU" and c_d)
+            new_rep = ("-" if e.rep == "+" else "+") if su_side_conj else e.rep
+            new_edges.append(_ne(e.src, e.dst, new_rep))
         else:
-            conj_edges.append(_ne(e.src, e.dst, e.rep))
-    edges = tuple(sorted(conj_edges))
-    matter = tuple(tuple(sorted(_conjugate_matter(m).items())) for m in q.node_matter)
+            new_edges.append(_ne(e.src, e.dst, e.rep))
+    edges = tuple(sorted(new_edges))
+    matter = tuple(
+        tuple(sorted((_conjugate_matter(m) if i in conj_nodes else m).items()))
+        for i, m in enumerate(q.node_matter)
+    )
     return (tuple(q.gauge_types), edges, matter, tuple(q.rank_multipliers))
 
 
@@ -622,26 +658,48 @@ def _dedup_symmetries(
     seen: set[tuple] = set()
     unique: list[tuple[Quiver, list[tuple[Fraction, Fraction]]]] = []
     for q, bounds in results:
-        sig      = _quiver_signature(q)
-        conj_sig = _conjugate_signature(q)
-
-        if len(q.gauge_types) >= 2:
-            swap_sig = _node_swap_signature(q)
-            q_swap = Quiver(
-                [q.gauge_types[1], q.gauge_types[0]],
-                [Edge(1 - e.src, 1 - e.dst, e.rep) for e in q.edges],
-                [dict(q.node_matter[1]), dict(q.node_matter[0])],
-                rank_multipliers=[q.rank_multipliers[1], q.rank_multipliers[0]],
-            )
-            swap_conj_sig = _conjugate_signature(q_swap)
-            canonical = min(sig, conj_sig, swap_sig, swap_conj_sig, key=_canonical_key)
-        else:
-            canonical = min(sig, conj_sig, key=_canonical_key)
-        # Only keep this quiver if it IS the canonical form and we haven't seen it yet
-        if sig == canonical and canonical not in seen:
+        canonical = _orbit_canonical_signature(q)
+        if _quiver_signature(q) == canonical and canonical not in seen:
             seen.add(canonical)
             unique.append((q, bounds))
     return unique
+
+
+def _orbit_canonical_signature(q: Quiver) -> tuple:
+    """Minimum signature over the full physical equivalence group:
+    (Z_2)^k charge conjugations on each node × S_k node permutations.
+
+    For 2-node quivers this is 8 candidates. SO/Sp nodes have trivial
+    conjugation action, but we still compare all 2^k conj subsets — the
+    redundant ones simply collide on the same signature.
+    """
+    n = len(q.gauge_types)
+    candidates: list[tuple] = []
+
+    # Identity + per-node conj subsets on the original ordering
+    for conj in _powerset(range(n)):
+        candidates.append(_per_node_conjugate_signature(q, conj))
+
+    # Plus their node-swapped counterparts (k=2 only for now)
+    if n == 2:
+        q_swap = Quiver(
+            [q.gauge_types[1], q.gauge_types[0]],
+            [Edge(1 - e.src, 1 - e.dst, e.rep) for e in q.edges],
+            [dict(q.node_matter[1]), dict(q.node_matter[0])],
+            rank_multipliers=[q.rank_multipliers[1], q.rank_multipliers[0]],
+        )
+        for conj in _powerset(range(n)):
+            candidates.append(_per_node_conjugate_signature(q_swap, conj))
+
+    return min(candidates, key=_canonical_key)
+
+
+def _powerset(iterable) -> list[frozenset[int]]:
+    items = list(iterable)
+    out = [frozenset()]
+    for x in items:
+        out += [s | {x} for s in out]
+    return out
 
 
 def _dedup_conjugation(

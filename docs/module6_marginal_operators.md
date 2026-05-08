@@ -169,7 +169,7 @@ python3 tests/test_marginal_operators.py
 
 ## Results summary (max-degree = 6, N ∈ {10, 20, 30})
 
-Of 21,315 theories in `quivers.db`:
+Of 12,539 theories in `quivers.db`:
 - 15,743 processed (5,572 skipped where finite-N a-max diverges or class is null)
 - 350 theories have at least one always-marginal operator
 

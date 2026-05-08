@@ -69,7 +69,7 @@ These references should be consulted for the exact conformal windows, anomaly-fr
 
 ### 2b. Two-Node Quivers (Classified)
 
-The full two-node classification is stored in `quivers.db` (built by `two_node_db.py`). It contains **4560 theories in 135 universality classes** across all six gauge pair types (SU-SU, SU-SO, SU-Sp, SO-SO, SO-Sp, Sp-Sp).
+The full two-node classification is stored in `quivers.db` (built by `two_node_db.py`). It contains **12539 theories in 876 universality classes** across all six gauge pair types (SU-SU, SU-SO, SU-Sp, SO-SO, SO-Sp, Sp-Sp).
 
 Each class has:
 - Exact symbolic R-charges and $a/N^2$ (76 classes) or numerical approximation (59 classes)
@@ -77,7 +77,7 @@ Each class has:
 - AF bound $N_f < \alpha N + \gamma$ per node
 
 **Key structural features:**
-- SU-SU quivers dominate: 79 classes, 3366 theories
+- SU-SU quivers dominate: 525 classes, 8884 theories
 - Many classes contain dozens of theories that differ only in their rank-2 matter composition but share the same large-N physics
 - Edge configurations include multiple bifundamentals, mixed chirality ($++$, $--$, $+-$), and multi-edges up to multiplicity 2
 
@@ -197,7 +197,7 @@ Notes: [special properties, known dual, etc.]
 19 quivers parametrized by $N_f$. Exact large-N R-charges and $a/N^2$ computed symbolically for all. These reproduce known SQCD and Kutasov-type conformal windows.
 
 ### 2-node theories (complete, pending Module 4 IR filter)
-4560 theories in 135 universality classes. Exact symbolic results for 76 classes; numerical approximation for 59 classes (sympy solver timeout at 30s due to 4+ free parameters in the a-function). The Module 4 boundary analysis ($\mathcal{B}_a < 0$) has not yet been applied to filter for non-trivial IR fixed points.
+12539 theories in 876 universality classes (11390 SCFT + 1149 non-SCFT after the Module 4 / boundary-condition filter). Exact symbolic results for the smaller-rank classes; numerical approximation otherwise (sympy solver timeout at 30s due to 4+ free parameters in the a-function).
 
 ### $k \geq 3$-node theories (not yet enumerated)
 The enumeration infrastructure (`enumerate_quivers(n_nodes)`) supports arbitrary $n_\text{nodes}$, but the combinatorial explosion grows rapidly. The 3-node enumeration has been tested and produces a large number of candidates.
@@ -244,13 +244,13 @@ SQLite database + CLI for browsing two-node quiver universality classes.
 
 **Build pipeline (3 phases):**
 1. **Enumerate + fast scan** (~3 min): generate all 6099 two-node quivers via `enumerate_quivers(2)`, compute numerical $a/N^2$ for each with `a_maximize_large_N_fast`
-2. **Cluster into universality classes**: group by gauge pair, cluster by numerical $a/N^2$ within tolerance $10^{-5}$. Produces 135 classes across 4560 valid theories (theories with $a/N^2 > 2$ are filtered out).
-3. **Exact symbolic solve**: for each of the 135 classes, pick the representative with fewest fields, run `a_maximize_large_N` with 30s timeout. Validate exact result against numerical (reject if $|\text{exact} - \text{numerical}| > 0.001$). Result: 76 exact classes, 59 numerical-only.
+2. **Cluster into universality classes**: group by gauge pair and rank multipliers, cluster by numerical $a/N^2$ within tolerance $10^{-5}$. Produces 876 classes across 12539 valid theories (theories with $a/N^2 > 2$ are filtered out).
+3. **Exact symbolic solve**: for each class, pick the representative with fewest fields, run `a_maximize_large_N` with 30s timeout. Validate exact result against numerical (reject if $|\text{exact} - \text{numerical}| > 0.001$).
 
 **CLI commands:**
 ```bash
 python two_node_db.py build                    # build database
-python two_node_db.py classes                  # list all 135 classes
+python two_node_db.py classes                  # list all 876 classes
 python two_node_db.py classes --pair SU-SU     # filter by gauge pair
 python two_node_db.py show 7                   # show all theories in class 7
 python two_node_db.py search --matter0 adj     # search by node matter
@@ -262,15 +262,15 @@ python two_node_db.py stats                    # database summary
 
 ### Classification Numbers
 
-| Gauge Pair | Classes | Theories |
-|------------|---------|----------|
-| SU–SU | 79 | 3366 |
-| SU–SO | 27 | 588 |
-| SU–Sp | 18 | 354 |
-| SO–SO | 4 | 56 |
-| SO–Sp | 4 | 112 |
-| Sp–Sp | 3 | 84 |
-| **Total** | **135** | **4560** |
+| Gauge Pair | Classes | SCFT Theories |
+|------------|---------|---------------|
+| SU–SU | 525 | 8884 |
+| SU–Sp | 163 | 1293 |
+| SU–SO | 139 | 1024 |
+| SO–Sp | 22 | 82 |
+| Sp–Sp | 17 | 71 |
+| SO–SO | 10 | 36 |
+| **Total** | **876** | **11390** |
 
 ---
 

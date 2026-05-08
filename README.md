@@ -14,7 +14,7 @@ The strategy follows hep-th/0502049 and related works on a-maximization and the 
 ## Repository Structure
 
 ```
-quivers.db                      ← pre-built database (4560 theories, 135 classes)
+quivers.db                      ← pre-built database (12539 theories, 876 classes)
 
 # Core pipeline
 beta_functions.py               ← Module 1: one-loop b_0 computation
@@ -87,7 +87,7 @@ Classification & database (Module 5)
 ## Database
 
 `quivers.db` contains the full two-node classification:
-- **4560 theories** across **135 universality classes**
+- **12539 theories** across **876 universality classes**
 - Theories grouped by gauge pair (SU-SU, SU-SO, SU-Sp, SO-SO, SO-Sp, Sp-Sp)
 - Non-Veneziano classes: 9 classes (SU-SU only) with exact symbolic a-maximization results
 - R-charges exact (symbolic) where solvable, numerical otherwise
