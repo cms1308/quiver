@@ -30,10 +30,14 @@ OFFSET = 100_000_000  # safely above any current PK
 
 
 def renumber_theory(con: sqlite3.Connection) -> tuple[int, int]:
-    """Assign theory_id 1..N in order of current theory_id ASC. Returns
-    (n_remapped, max_new)."""
+    """Assign theory_id 1..N grouped by class_id (NULLs at the tail), with
+    existing theory_id as the intra-class tiebreaker. This keeps theories in
+    one universality class contiguous."""
     rows = con.execute(
-        "SELECT theory_id, ROW_NUMBER() OVER (ORDER BY theory_id) AS new_id "
+        "SELECT theory_id, "
+        "ROW_NUMBER() OVER ("
+        "  ORDER BY (class_id IS NULL), class_id, theory_id"
+        ") AS new_id "
         "FROM theory"
     ).fetchall()
     n_real = sum(1 for old, new in rows if old != new)
